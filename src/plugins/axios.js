@@ -1,16 +1,23 @@
+/* eslint-disable no-console */
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import config from '../../vertical'
 import Vue from 'vue'
 
+// eslint-disable-next-line no-unused-vars
 export default (ctx) => {
     const customAxios = axios.create({
-        baseURL: config.AxiosBaseURL
+        baseURL: '/api'
     })
+
+    customAxios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
+    customAxios.defaults.headers.common['x-requested-with'] = 'XMLHttpRequest'
 
     Vue.use(VueAxios, customAxios)
 
     customAxios.interceptors.request.use((config) => {
+        if(!config.url){
+            config.url = 'articles/latest/perfect?p=1'
+        }
         // clear cache
         // if (config.method === 'get') {
         //   let char = '?'
@@ -28,6 +35,7 @@ export default (ctx) => {
             if (response.data.code === 0 || response.data.sc === 0) {
                 return response.data.data
             } else {
+                // eslint-disable-next-line no-console
                 console.log(response.data.msg);
                 /*ctx.store.commit('setSnackBar', {
                     snackBar: true,

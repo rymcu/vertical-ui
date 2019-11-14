@@ -1,9 +1,11 @@
 <template>
     <el-row class="wrapper">
-        <el-col v-for="article in articles" :key="article.oId" style="padding-bottom: 20px;">
+        <el-col :xs="24" :xl="24" v-for="article in articles" :key="article.oId" style="padding-bottom: 1rem;">
             <el-card>
                 <div class="card-body d-flex flex-column">
-                    <h4><router-link :to="{name: 'article', params: {oId: article.oId}}"  v-html="article.articleTitle"></router-link></h4>
+                    <el-link @click="onRouter('comment',article.oId)" :underline="false" style="margin-bottom: .5rem;">
+                        <h4 v-html="article.articleTitle"></h4>
+                    </el-link>
                     <div class="text-muted article-summary-md">{{ article.articlePreviewContent }}</div>
                     <el-row class="pt-5">
                         <el-col :span="1" class="mr-3">
@@ -13,7 +15,7 @@
                         </el-col>
                         <el-col :span="4">
                             <div>
-                                <router-link :to="{name: 'user', params: {userName: article.articleAuthorName}}" class="text-default">{{ article.articleAuthor.userName }}</router-link>
+                                <el-link @click="onRouter('user', article.articleAuthorName)" :underline="false" class="text-default">{{ article.articleAuthor.userName }}</el-link>
                                 <small class="d-block text-muted">{{ article.timeAgo }}</small>
                             </div>
                             <div class="ml-auto text-muted">
@@ -48,7 +50,7 @@
                 this.getData(val);
             },
             async getData(p){
-                const responseTopData = await this.axios.get('articles/latest/perfect?p='+p);
+                const responseTopData = await this.axios.get('/articles/latest/perfect?p='+p);
                 if (responseTopData) {
                     responseTopData.pagination.currentPage = p;
                     this.$set(this, 'articles', responseTopData.articles);
@@ -56,19 +58,30 @@
                 }
             },
             async getFollowers(){
-                const responseTopData = await this.axios.get('tops/users/followers');
+                const responseTopData = await this.axios.get('/tops/users/followers');
                 if(responseTopData){
                     this.$set(this,'followers',responseTopData.users)
                 }
             },
             async getNewbies(){
-                const responseTopData = await this.axios.get('tops/users/newbies');
+                const responseTopData = await this.axios.get('/tops/users/newbies');
                 if(responseTopData){
                     this.$set(this,'newbies',responseTopData.users)
                 }
+            },
+            onRouter (name, data) {
+                this.$router.push(
+                    {
+                        name: name,
+                        query: {
+                            data: data
+                        }
+                    }
+                )
             }
         },
         mounted () {
+            this.$store.commit('setActiveMenu', 'home');
             const p = this.pagination.currentPage;
             this.getData(p);
             this.getFollowers();

@@ -1,10 +1,15 @@
 <template>
-    $END$
+    <el-row>
+        专栏
+    </el-row>
 </template>
 
 <script>
     export default {
-        name: "SpecialColumn"
+        name: "SpecialColumn",
+        mounted () {
+            this.$store.commit('setActiveMenu', 'specialColumn');
+        }
     }
 </script>
 

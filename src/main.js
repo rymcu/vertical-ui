@@ -1,11 +1,20 @@
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
+import router from './router'
 import './plugins/element.js'
+import vueAxios from './plugins/axios'
+
+Vue.use(vueAxios());
 
 Vue.config.productionTip = false
 
+router.afterEach(() => {
+  window.scrollTo(0, 0)
+})
+
 new Vue({
   store,
+  router,
   render: h => h(App)
 }).$mount('#app')
