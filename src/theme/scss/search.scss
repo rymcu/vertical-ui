@@ -1,0 +1,245 @@
+/**
+ * basic.
+ *
+ * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
+ * @version 0.1.1.0, Jan 4, 2018
+ */
+@import 'variables';
+@import "reset";
+@import 'function';
+@import 'form';
+@import 'tip';
+
+.wrapper {
+  min-width: 720px;
+  max-width: 1100px;
+  padding-left: 150px;
+}
+
+.header {
+  height: 88px;
+  width: 100%;
+  background-color: #3b3e43;
+  padding: 22px 0;
+  box-sizing: border-box;
+  position: relative;
+
+  &__logo img {
+    position: absolute;
+    background-color: #fff;
+    border-radius: 43px;
+    height: 44px;
+    width: 44px;
+    top: 22px;
+    left: 50px;
+  }
+
+  &__status {
+    position: absolute;
+    right: 10px;
+    top: 22px;
+    line-height: 44px;
+
+    a {
+      color: rgba(255,255,255,0.87);
+      text-align: center;
+      padding: 14px 10px;
+
+      &:hover {
+        text-decoration: none;
+        color: #fff;
+      }
+    }
+
+    .avatar {
+      height: 44px;
+      width: 44px;
+      display: block;
+      background-size: cover;
+      border-radius: 22px;
+      box-sizing: border-box;
+    }
+  }
+
+  .search {
+    background-color: #fff;
+    height: 44px;
+    width: 632px;
+    vertical-align: top;
+    border-radius: 3px;
+    box-shadow: 0 2px 2px 0 rgba(25,118,210, 0.48), 0 0 0 1px rgba(25,118,210, 0.24);
+    transition: box-shadow 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
+
+    &--focus,
+    &:hover {
+      box-shadow: 0 3px 8px 0 rgba(25,118,210, 0.6), 0 0 0 1px rgba(25,118,210, 0.24);
+    }
+
+    input {
+      border-radius: 3px 0 0 3px;
+      margin: 0;
+      height: 44px;
+      box-sizing: border-box;
+      padding: 10px;
+    }
+
+    button {
+      border-radius: 0 3px 3px 0;
+      cursor: pointer;
+      color: rgba(0, 0, 0, 0.87);
+      padding: 0 20px;
+      line-height: 44px;
+      background-color: rgba(0, 0, 0, 0.02);
+      transition: box-shadow 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
+
+      &:hover {
+        background-color: #eee;
+      }
+
+      &:active {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25) inset;
+      }
+    }
+  }
+}
+
+.articles {
+  margin: 50px 0;
+  min-height: 600px;
+  float: left;
+  width: 632px;
+
+  .article {
+    &__item {
+      border-bottom: 1px solid #eee;
+      padding: 15px;
+    }
+
+    &__title {
+      margin-bottom: 5px;
+      a {
+        font-size: 18px;
+        font-weight: 700;
+        color: #3b3e43;
+        &:hover {
+          color: #000;
+        }
+        &:visited {
+          color: #666;
+        }
+      }
+    }
+  }
+
+  .pipe-content__reset {
+    color: #3b3e43;
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    word-wrap: break-word;
+    &:hover {
+      color: #000;
+      text-decoration: none;
+    }
+    &:visited {
+      color: #666;
+    }
+  }
+}
+
+
+// pagination
+.pagination {
+  text-align: center;
+  font-size: 14px;
+  line-height: 30px;
+  margin-top: 35px;
+  &__item {
+    height: 30px;
+    background-color: #3b3e43;
+    border-radius: 15px;
+    display: inline-block;
+    color: #fff;
+    margin: 0 3px;
+    transition: $transition;
+    min-width: 30px;
+    &:hover {
+      opacity: .7;
+      text-decoration: none;
+    }
+
+    &--active {
+      background: #4285f4;
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+  &__near {
+    visibility: hidden;
+    color: #4d4d4d;
+  }
+
+  &:hover .pagination__near {
+    visibility: visible;
+  }
+}
+
+.footer {
+  font-size: 14px;
+  color: #7d8186;
+  line-height: 24px;
+  padding: 30px 0;
+  background-color: #3b3e43;
+
+  a {
+    color: #afb1b3;
+    &:hover {
+      color: #888f91;
+      text-decoration: none;
+    }
+  }
+}
+
+@media (max-width: 910px) {
+
+  .wrapper {
+    width: 100%;
+    min-width: 100%;
+    box-sizing: border-box;
+    padding-left: 0;
+  }
+
+  .header {
+    padding: 22px 10px;
+
+    .wrapper {
+      padding-left: 54px;
+    }
+
+    &__logo img {
+      left: 10px;
+    }
+
+    &__status {
+      display: none;
+    }
+
+    .search {
+      width: 100%;
+    }
+  }
+
+  .footer {
+    padding: 30px 10px;
+
+    .fn-right {
+      float: none;
+    }
+  }
+
+  .articles {
+    width: 100%;
+    margin-top: 0;
+  }
+}

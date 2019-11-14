@@ -1,0 +1,168 @@
+/**
+ * comment.
+ *
+ * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
+ * @version 0.1.0.0, Nov 6, 2017
+ */
+@import "variables";
+// comment
+.pipe-comment {
+  &__null {
+    cursor: pointer;
+    transition: $transition;
+    text-align: center;
+    &:hover {
+      color: $gray;
+    }
+  }
+
+  &__header {
+    margin-bottom: 20px;
+  }
+
+  &__pagination {
+    margin-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    padding-top: 20px;
+    .pipe-comment__btn {
+      display: inline-block;
+    }
+
+    a.pipe-comment__btn {
+      padding: 5px 10px 5px 0;
+    }
+  }
+
+  &__item {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, .06);
+    &:hover {
+      .pipe-comment__btn {
+        display: inline-block;
+      }
+    }
+  }
+
+  &__avatar {
+    position: absolute;
+    border: 2px solid #fff;
+    height: 57px;
+    width: 57px;
+    border-radius: 50%;
+    display: inline-block;
+    z-index: 10;
+    /*@include image-bg('../../../images/image-bg.svg');
+    &:hover {
+      border-color: rgba(0, 0, 0, .06);
+    }*/
+  }
+
+  &__body {
+    padding-left: 81px;
+
+    & > .fn-clear {
+      line-height: 28px;
+    }
+  }
+
+  &__chevron-down {
+    transform: rotate(180deg);
+  }
+
+  &__reply-icon {
+    line-height: 18px;
+    display: block;
+    &:hover {
+      opacity: .8;
+    }
+    svg {
+      float: left;
+      margin: 4px 5px 0 0;
+      transition: $transition;
+    }
+  }
+
+  &__reply {
+    margin-top: 20px;
+    position: relative;
+  }
+
+  &__btn {
+    cursor: pointer;
+    color: $black;
+    display: none;
+    transition: $transition;
+    font-size: 14px;
+    line-height: 18px;
+    padding: 5px 0 5px 10px;
+    &--danger {
+      color: $red;
+    }
+    svg {
+      margin: 2px 5px 0 0;
+      float: left;
+    }
+
+    &:hover {
+      text-decoration: none;
+      opacity: 0.8;
+    }
+
+    &--none {
+      display: none !important;
+    }
+  }
+}
+
+#pipeCommentBottomComment {
+  padding: 5px 0 5px 10px;
+}
+
+// editor
+.pipe-editor {
+  &__wrap {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 0 10px;
+  }
+
+  position: fixed;
+  bottom: -300px;
+  width: 100%;
+  opacity: 0;
+  background-color: #f1f7fe;
+  padding: 20px 0;
+  transition: $transition;
+  z-index: 100;
+  left: 0;
+
+  #pipeEditorComment {
+    margin-bottom: 15px;
+  }
+
+  #pipeEditorReplyTarget {
+    line-height: 23px;
+    padding: 5px 10px 5px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .pipe-comment__avatar {
+    height: 26px;
+    width: 26px;
+  }
+
+  .pipe-comment__body {
+    padding-left: 36px;
+  }
+
+  .pipe-comment__btn {
+    display: inline-block;
+    padding: 5px 10px 5px 0;
+  }
+
+  .pipe-comment__body>.fn-clear>.fn-right {
+    float: none;
+  }
+}
