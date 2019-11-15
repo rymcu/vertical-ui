@@ -1,18 +1,18 @@
 <template>
     <div class="article__wrapper">
-        <el-col :xl="20">
+        <el-col :xs="24" :sm="24" :xl="24">
             <el-card>
                 <div  class="card-body d-flex flex-column">
                     <h1 v-html="article.articleTitle"></h1>
                     <el-row class="pt-5">
-                        <el-col :span="1" class="mr-3">
+                        <el-col :xs="3" :sm="1" :xl="1" class="mr-3">
                             <div class="avatar avatar-md"
                                  :style="{backgroundImage:'url(' + article.articleAuthor.userAvatarURL + ')'}">
                             </div>
                         </el-col>
-                        <el-col :xl="4">
+                        <el-col :xs="9" :sm="11" :xl="11">
                             <div>
-                                <router-link :to="{name: 'user', params: {userName: article.articleAuthorName}}" class="text-default" >{{ article.articleAuthor.userName }}</router-link>
+                                <el-link @click="onRouter('user', article.articleAuthorName)" :underline="false" class="text-default" >{{ article.articleAuthor.userName }}</el-link>
                                 <small class="d-block text-muted">{{ article.timeAgo }}</small>
                             </div>
                         </el-col>
@@ -36,7 +36,7 @@
                     articleContent: '',
                     timeAgo:'',
                     articleAuthor: {
-                        userAvatarURL: '',
+                        userAvatarURL: 'https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png',
                         userName: ''
                     }
                 },
@@ -44,6 +44,18 @@
                     "paginationPageCount": 0,
                     "paginationPageNums": []
                 }
+            }
+        },
+        methods: {
+            onRouter (name, data) {
+                this.$router.push(
+                    {
+                        name: name,
+                        query: {
+                            data: data
+                        }
+                    }
+                )
             }
         },
         async mounted () {
@@ -68,12 +80,11 @@
     @import '../../theme/scss/basic';
     @import '../../theme/scss/github';
     .article__wrapper {
-        max-width: 768px;
-        width: 90%;
+        max-width: 980px;
         margin: 0 auto;
         display: block;
-        padding-left: 15px;
-        padding-right: 15px;
+        padding-left: 1rem;
+        padding-right: 1rem;
         box-sizing: border-box;
     }
 </style>

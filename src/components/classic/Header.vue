@@ -1,14 +1,14 @@
 <template>
     <el-row type="flex" justify="space-around">
-        <el-col :xs="12" :xl="2" style="padding-top: 1rem;">
+        <el-col :xs="12" :sm="2" :xl="2" style="padding-top: 1rem;">
             <a class="navbar-brand" href="/">
                 <img src="../../assets/rymcu.png" alt="RY MCU" class="navbar-brand-img">
                 <span>RY MCU</span>
             </a>
         </el-col>
-        <el-col :xs="0" :xl="16" style="text-align: center;">
+        <el-col :xs="0" :sm="12" :xl="16" style="text-align: center;">
             <el-row type="flex" justify="center">
-                <el-col :span="8">
+                <el-col :sm="18" :xl="8">
                     <el-menu :default-active="getActiveMenu" style="margin-top: -2px;border: 0;" mode="horizontal" @select="handleSelectMenu">
                         <el-menu-item index="home">首页</el-menu-item>
                         <el-menu-item index="specialColumn">专栏</el-menu-item>
@@ -18,8 +18,8 @@
                 </el-col>
             </el-row>
         </el-col>
-        <el-col :xs="12" :xl="4" style="padding-top: 1rem;">
-            <el-col :xs="24" :xl="18">
+        <el-col :xs="12" :sm="6" :xl="4" style="padding-top: 1rem;">
+            <el-col :xs="24" :sm="24" :md="12" :xl="18">
                 <el-autocomplete
                         v-model="state"
                         size="small"
@@ -29,7 +29,7 @@
                         @select="handleSelect"
                 />
             </el-col>
-            <el-col :xs="0" :xl="6">
+            <el-col :xs="0" :sm="0" :md="12" :lg="12" :xl="6">
                 <el-link :underline="false" style="margin-left: 10px;" @click="toggleLogin">登录</el-link>
                 <el-link :underline="false" style="margin-left: 10px;" href="/register">注册</el-link>
             </el-col>

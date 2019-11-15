@@ -127,11 +127,12 @@ export default {
   }
 
   .wrapper {
-    width: 90%;
+    max-width: 980px;
     margin: 0 auto;
     display: block;
-    min-width: 720px;
-    max-width: 980px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-sizing: border-box;
     float: none;
   }
 

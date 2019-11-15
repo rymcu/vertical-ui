@@ -6,6 +6,7 @@ import Login from '../pages/login/Login'
 import Home from '../pages/home/Home'
 import SpecialColumn from '../pages/SpecialColumn'
 import Comment from '../pages/comment/Comment'
+import User from '../pages/user/User'
 
 Vue.use(Router)
 
@@ -32,6 +33,11 @@ export default new Router({
                     path: '/comment',
                     name: 'comment',
                     component: Comment
+                },
+                {
+                    path: '/user',
+                    name: 'user',
+                    component: User
                 },
                 {
                     path: '/login',
