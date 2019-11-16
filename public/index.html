@@ -13,5 +13,15 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <!--[if le IE 8]>
+    <script>
+      document.getElementsByTagName(
+              'div')[0].innerHTML = '<div class="dialog"><div class="dialog__bg"></div><div class="dialog__main" style="width:768px;top:' +
+              (document.documentElement.clientHeight - 287) / 2 + 'px;left:' +
+              (document.documentElement.clientWidth - 768) / 2 + 'px">'
+              +
+              '<div style="height: 20px" class="dialog__header fn__clear" onselectstart="return false;"><h2>让我们放弃使用那些过时、不安全的浏览器吧！</h2></div><div class="dialog__content"><div class="fn__clear vditor-reset">为了让浏览器更好的发展，人类更加的进步，拥有更好的体验，让我们放弃使用那些过时、不安全的浏览器。<p>你可以下载：</p><ul class="fn__left"><li><a href="http://www.google.com/chrome" target="_blank" rel="noopener">谷歌浏览器</a></li><li><a href="http://www.mozilla.com/" target="_blank" rel="noopener">火狐</a></li><li><a href="http://se.360.cn/" target="_blank" rel="noopener">360</a> 或者 <a href="https://www.baidu.com/s?wd=%E6%B5%8F%E8%A7%88%E5%99%A8" target="_blank" rel="noopener">其它浏览器</a></li></ul><img class="fn__right" alt="Kill IE6" title="Kill IE6" src="https://hacpai.com/images/kill-browser.png"></div></div></div></div>'
+    </script>
+    <![endif]-->
   </body>
 </html>

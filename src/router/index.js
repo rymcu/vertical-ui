@@ -3,8 +3,9 @@ import Router from 'vue-router'
 
 import Index from '../pages/Index'
 import Home from '../pages/home/Home'
-import SpecialColumn from '../pages/SpecialColumn'
+import Tag from '../pages/tag/Tag'
 import Comment from '../pages/comment/Comment'
+import Article from '../pages/article/Article'
 import User from '../pages/user/User'
 import Login from '../pages/login/Login'
 import Register from '../pages/register/Register'
@@ -26,9 +27,14 @@ export default new Router({
                     component: Home
                 },
                 {
-                    path: '/specialColumn',
-                    name: 'specialColumn',
-                    component: SpecialColumn
+                    path: '/tag',
+                    name: 'tag',
+                    component: Tag
+                },
+                {
+                    path: '/article',
+                    name: 'article',
+                    component: Article
                 },
                 {
                     path: '/comment',

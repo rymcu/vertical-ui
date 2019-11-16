@@ -11,7 +11,7 @@
                 <el-col :sm="18" :xl="8">
                     <el-menu :default-active="getActiveMenu" style="margin-top: -2px;border: 0;" mode="horizontal" @select="handleSelectMenu">
                         <el-menu-item index="home">首页</el-menu-item>
-                        <el-menu-item index="specialColumn">专栏</el-menu-item>
+                        <el-menu-item index="tag">专栏</el-menu-item>
                         <el-menu-item index="3">问答</el-menu-item>
                         <el-menu-item index="4">关注</el-menu-item>
                     </el-menu>
