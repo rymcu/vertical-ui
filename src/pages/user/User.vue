@@ -18,7 +18,7 @@
                     <el-col :sm="24" :xl="6" v-for="article in articles" :key="article.oId">
                         <div class="card">
                             <a v-show="article.articleImg1URL" ><img class="card-img-top" style="height: 10rem;" :src="article.articleImg1URL"></a>
-                            <a v-show="!article.articleImg1URL"><img class="card-img-top" style="height: 10rem;" src="https://diycode.b0.upaiyun.com/photo/2018/960a38818560ad229b1a774164e722df.jpg"></a>
+                            <a v-show="!article.articleImg1URL"><img class="card-img-top" style="height: 10rem;" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></a>
                             <div class="card-body d-flex flex-column">
                                 <h4 class="article-header-md"><el-link @click="onRouter('comment',article.oId)" :underline="false" v-html="article.articleTitle"></el-link></h4>
                                 <div class="text-muted article-summary-md">{{ article.articlePreviewContent }}</div>

@@ -59,7 +59,7 @@
                                     _ts.$message(data.message);
                                     return false;
                                 }
-                                localStorage.setItem('user',data.user);
+                                _ts.$store.commit('initLogin',data.user);
                                 _ts.$router.push({
                                     name: 'home'
                                 })
@@ -77,6 +77,9 @@
                     }
                 )
             }
+        },
+        mounted () {
+            this.$store.commit('setActiveMenu', 'login');
         }
     }
 </script>

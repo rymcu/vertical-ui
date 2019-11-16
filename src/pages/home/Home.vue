@@ -42,9 +42,7 @@
                     "paginationPageCount": 0,
                     "paginationPageNums": [],
                     "currentPage": 1
-                },
-                followers: [],
-                newbies: []
+                }
             }
         },
         methods: {
@@ -57,18 +55,6 @@
                     responseTopData.pagination.currentPage = p;
                     this.$set(this, 'articles', responseTopData.articles);
                     this.$set(this, 'pagination', responseTopData.pagination);
-                }
-            },
-            async getFollowers(){
-                const responseTopData = await this.axios.get('/tops/users/followers');
-                if(responseTopData){
-                    this.$set(this,'followers',responseTopData.users)
-                }
-            },
-            async getNewbies(){
-                const responseTopData = await this.axios.get('/tops/users/newbies');
-                if(responseTopData){
-                    this.$set(this,'newbies',responseTopData.users)
                 }
             },
             onRouter (name, data) {
@@ -86,8 +72,6 @@
             this.$store.commit('setActiveMenu', 'home');
             const p = this.pagination.currentPage;
             this.getData(p);
-            this.getFollowers();
-            this.getNewbies();
         }
     }
 </script>

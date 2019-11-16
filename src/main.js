@@ -9,14 +9,14 @@ import vueAxios from './plugins/axios'
 Vue.prototype.qs = Qs;
 Vue.use(vueAxios());
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 router.afterEach(() => {
   window.scrollTo(0, 0)
-})
+});
 
 new Vue({
   store,
   router,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');

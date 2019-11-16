@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     version: '1.0.0',
     isInit: false,
-    name: '',
+    isLogin: false,
+    token: '',
     nickname: '',
     blogTitle: '',
     avatarURL: '',
@@ -32,6 +33,18 @@ export default new Vuex.Store({
     },
     setActiveMenu(state, data){
       state.activeMenu = data
+    },
+    initLogin(state, data){
+      state.isLogin = true;
+      state.avatarURL = data.avatarURL;
+      state.nickname = data.nickname;
+      state.token = data.token;
+    },
+    logout(state){
+      state.isLogin = false;
+      state.avatarURL = '';
+      state.nickname = '';
+      state.token = '';
     }
   },
   actions: {
