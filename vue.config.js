@@ -2,11 +2,11 @@ module.exports = {
     devServer: {
         proxy: {
             '/api/': {
-                target: 'https://hacpai.com',
+                target: 'http://192.168.1.4:8087/vertical/',
                 ws: true,
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/api': '/api/v2'
+                    '^/api': '/api/v1'
                 }
             }
         },

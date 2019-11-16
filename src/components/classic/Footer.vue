@@ -23,11 +23,16 @@
                 systemTitle: '\u7f57\u5409\u7f51\u0020\u002d\u0020\u5185\u5bb9\u5206\u4eab\u751f\u6001\u5e73\u53f0',
                 systemName: 'RY MCU',
                 systemUrl: 'https://rymcu.com',
-                slogan: '\u5929\u4e0b\u7199\u7199\uff0c\u7686\u4e3a\u5229\u6765\uff1b\u5929\u4e0b\u6518\u6518\uff0c\u7686\u4e3a\u5229\u5f80\u3002'
+                slogan: 'rymcu · 嵌入式知识共享平台 Embedded knowledge sharing platform'
             }
         }
     }
 </script>
 
 <style scoped>
+    .footer {
+        font-size: 14px;
+        align-items: center;
+        display: flex;
+    }
 </style>

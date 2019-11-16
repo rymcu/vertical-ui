@@ -2,8 +2,8 @@
     <div class="article__wrapper">
         <el-col :xs="24" :sm="24" :xl="24">
             <el-card>
-                <div  class="card-body d-flex flex-column">
-                    <h1 v-html="article.articleTitle"></h1>
+                <div class="card-body d-flex flex-column pipe-content__reset">
+                    <h1 class="list__title" v-html="article.articleTitle"></h1>
                     <el-row class="pt-5">
                         <el-col :xs="3" :sm="1" :xl="1" class="mr-3">
                             <div class="avatar avatar-md"
@@ -17,7 +17,7 @@
                             </div>
                         </el-col>
                     </el-row>
-                    <div class="pt-7 pipe-content__reset" v-html="article.articleContent" style="overflow: hidden;"></div>
+                    <div class="pt-7" v-html="article.articleContent" style="overflow: hidden;"></div>
                 </div>
             </el-card>
         </el-col>
@@ -60,7 +60,7 @@
         },
         async mounted () {
             this.$store.commit('setActiveMenu', 'comment');
-            const responseTopData = await this.axios.get('/article/'+this.$route.query.data)
+            const responseTopData = await this.axios.get('/article/'+this.$route.query.data);
             if (responseTopData) {
                 this.$set(this, 'article', responseTopData.article);
                 this.$set(this, 'pagination', responseTopData.pagination);
@@ -77,8 +77,6 @@
 </script>
 
 <style lang="scss">
-    @import '../../theme/scss/basic';
-    @import '../../theme/scss/github';
     .article__wrapper {
         max-width: 980px;
         margin: 0 auto;

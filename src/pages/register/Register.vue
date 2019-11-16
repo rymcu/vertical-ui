@@ -5,18 +5,26 @@
                 <el-form-item>
                     <img src="../../assets/rymcu.png" alt="RY MCU" class="icon-rymcu">
                 </el-form-item>
-                <el-form-item label="账号" prop="account" :rules="[{ required: true, message: '请输入账号', trigger: 'blur' }]">
-                    <el-input v-model="user.account" autocomplete="off"></el-input>
+                <el-form-item label="邮箱" prop="email"
+                  :rules="[
+                  { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                  { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }]">
+                    <el-input v-model="user.email" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password" :rules="[{ required: true, message: '请输入密码', trigger: 'blur' }]">
                     <el-input type="password" v-model="user.password" autocomplete="off" show-password></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-link style="float: right;" :underline="false">忘记密码</el-link>
+                <el-form-item label="确认密码" prop="confirmPassword" :rules="[{ required: true, message: '请输入确认密码', trigger: 'blur' }]">
+                    <el-input type="password" v-model="user.confirmPassword" autocomplete="off" show-password></el-input>
+                </el-form-item>
+                <el-form-item label="验证码" prop="code" :rules="[{ required: true, message: '请输入验证码', trigger: 'blur' }]">
+                    <el-input v-model="user.code" maxlength="6" autocomplete="off">
+                        <el-button type="email" size="small" slot="append" @click="sendCode">发送验证码</el-button>
+                    </el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button style="width: 60%;" type="primary" @click="login">立即登录</el-button>
-                    <el-button style="width: 35%;" @click="register">注册</el-button>
+                    <el-button style="width: 60%;" type="primary" @click="register">立即注册</el-button>
+                    <el-button style="width: 35%;" @click="login">登录</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -33,50 +41,63 @@
 
 <script>
     export default {
-        name: "Login",
+        name: "Register",
         data() {
             return {
                 user: {
-                    account: 'ronger-x@outlook.com',
-                    password: '131566'
+                    email: '',
+                    code: '',
+                    password: '',
+                    confirmPassword: ''
                 }
             }
         },
         methods: {
-            login() {
+            sendCode() {
+                let _ts = this;
+                let email = _ts.user.email;
+                if(!email){
+                    return false
+                }
+                let data = {
+                    email: email
+                }
+                _ts.axios.post('/get-email-code', _ts.qs.stringify(data)).then(function (res) {
+                    if (res) {
+                        _ts.$message(res.data.message)
+                    }
+                })
+            },
+            register() {
                 let _ts = this;
                 _ts.$refs.user.validate((valid) => {
                     if (valid) {
                         let data = {
-                            account: _ts.user.account,
-                            password: _ts.user.password
+                            email: _ts.user.email,
+                            password: _ts.user.password,
+                            code: _ts.user.code
                         }
-
-                        _ts.axios.post('/login', _ts.qs.stringify(data)).then(function (res) {
-                            if (res.data) {
-                                let data = res.data
-                                if (data.message) {
-                                    _ts.$message(data.message);
-                                    return false;
-                                }
-                                localStorage.setItem('user',data.user);
-                                _ts.$router.push({
-                                    name: 'home'
-                                })
+                        _ts.axios.post('/register', _ts.qs.stringify(data)).then(function (res) {
+                            if (res) {
+                                _ts.$message(res.message)
                             }
                         })
                     } else {
                         return false;
                     }
                 });
+
             },
-            register() {
+            login() {
                 this.$router.push(
                     {
-                        name: 'register'
+                        name: 'login'
                     }
                 )
             }
+        },
+        mounted () {
+            this.$store.commit('setActiveMenu', 'register');
         }
     }
 </script>

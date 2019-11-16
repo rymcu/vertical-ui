@@ -2,11 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Index from '../pages/Index'
-import Login from '../pages/login/Login'
 import Home from '../pages/home/Home'
 import SpecialColumn from '../pages/SpecialColumn'
 import Comment from '../pages/comment/Comment'
 import User from '../pages/user/User'
+import Login from '../pages/login/Login'
+import Register from '../pages/register/Register'
 
 Vue.use(Router)
 
@@ -43,6 +44,11 @@ export default new Router({
                     path: '/login',
                     name: 'login',
                     component: Login
+                },
+                {
+                    path: '/register',
+                    name: 'register',
+                    component: Register
                 }
             ]
         },

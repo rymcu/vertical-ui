@@ -14,8 +14,8 @@
         </el-col>
         <el-col>
             <div class="wrapper">
-                <div class="row row-cards row-deck" v-for="article in articles" :key="article.oId">
-                    <el-col :sm="24" :xl="6">
+                <el-row class="row-cards row-deck" :gutter="10">
+                    <el-col :sm="24" :xl="6" v-for="article in articles" :key="article.oId">
                         <div class="card">
                             <a v-show="article.articleImg1URL" ><img class="card-img-top" style="height: 10rem;" :src="article.articleImg1URL"></a>
                             <a v-show="!article.articleImg1URL"><img class="card-img-top" style="height: 10rem;" src="https://diycode.b0.upaiyun.com/photo/2018/960a38818560ad229b1a774164e722df.jpg"></a>
@@ -30,7 +30,7 @@
                             </div>
                         </div>
                     </el-col>
-                </div>
+                </el-row>
             </div>
         </el-col>
         <!--<el-col>

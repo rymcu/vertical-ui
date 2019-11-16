@@ -36,7 +36,7 @@ export default (ctx) => {
                 return response.data.data
             } else {
                 // eslint-disable-next-line no-console
-                console.log(response.data.msg);
+                console.log(response.data);
                 /*ctx.store.commit('setSnackBar', {
                     snackBar: true,
                     snackMsg: response.data.msg
