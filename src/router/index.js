@@ -9,6 +9,7 @@ import Article from '../pages/article/Article'
 import User from '../pages/user/User'
 import Login from '../pages/login/Login'
 import Register from '../pages/register/Register'
+import PostArticle from '../pages/article/PostArticle'
 
 Vue.use(Router)
 
@@ -35,6 +36,11 @@ export default new Router({
                     path: '/article',
                     name: 'article',
                     component: Article
+                },
+                {
+                    path: '/postArticle',
+                    name: 'postArticle',
+                    component: PostArticle
                 },
                 {
                     path: '/comment',

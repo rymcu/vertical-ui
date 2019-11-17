@@ -30,7 +30,7 @@
                 />
             </el-col>
             <el-col v-if="isLogin" :xs="0" :sm="8" :xl="6">
-                <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;" href="/login">发帖</el-link>
+                <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;" href="/postArticle">发帖</el-link>
                 <el-link :underline="false" style="margin-left: 10px;">
                     <el-dropdown trigger="click"  @command="handleCommand">
                         <div v-if="avatarURL" class="avatar avatar-md" :style="{backgroundImage:'url(' + avatarURL + ')'}"></div>
