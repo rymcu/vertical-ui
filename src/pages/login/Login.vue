@@ -52,14 +52,13 @@
                             password: _ts.user.password
                         }
 
-                        _ts.axios.post('/login', _ts.qs.stringify(data)).then(function (res) {
-                            if (res.data) {
-                                let data = res.data
-                                if (data.message) {
-                                    _ts.$message(data.message);
+                        _ts.axios.post('/console/login', _ts.qs.stringify(data)).then(function (res) {
+                            if (res) {
+                                if (res.message) {
+                                    _ts.$message(res.message);
                                     return false;
                                 }
-                                _ts.$store.commit('initLogin',data.user);
+                                _ts.$store.commit('initLogin',res.user);
                                 _ts.$router.push({
                                     name: 'home'
                                 })

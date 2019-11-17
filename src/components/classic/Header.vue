@@ -33,8 +33,8 @@
                 <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;" href="/postArticle">发帖</el-link>
                 <el-link :underline="false" style="margin-left: 10px;">
                     <el-dropdown trigger="click"  @command="handleCommand">
-                        <div v-if="avatarURL" class="avatar avatar-md" :style="{backgroundImage:'url(' + avatarURL + ')'}"></div>
-                        <div v-else class="avatar avatar-md" :style="{backgroundImage:'url(https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png)'}"></div>
+                        <el-avatar v-if="avatarURL" size="small" :src="avatarURL"></el-avatar>
+                        <el-avatar v-else size="small" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item command="a">个人中心</el-dropdown-item>
                             <el-dropdown-item command="b">积分</el-dropdown-item>

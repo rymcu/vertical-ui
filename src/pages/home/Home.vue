@@ -1,22 +1,21 @@
 <template>
     <el-row class="wrapper">
         <el-col :xs="24" :sm="24" :xl="24" style="margin: 0 auto;">
-            <el-col v-for="article in articles" :key="article.oId" style="padding-bottom: 1rem;">
+            <el-col v-for="article in articles" :key="article.idArticle" style="padding-bottom: 1rem;">
                 <el-card>
                     <div class="card-body d-flex flex-column">
-                        <el-link @click="onRouter('article',article.oId)" :underline="false" style="margin-bottom: .5rem;">
+                        <el-link @click="onRouter('article',article.idArticle)" :underline="false" style="margin-bottom: .5rem;">
                             <h4 v-html="article.articleTitle"></h4>
                         </el-link>
                         <div class="text-muted article-summary-md">{{ article.articlePreviewContent }}</div>
                         <el-row class="pt-5">
                             <el-col :xs="3" :sm="1" :xl="1" class="mr-3">
-                                <div class="avatar avatar-md"
-                                     :style="{backgroundImage:'url(' + article.articleAuthor.userAvatarURL + ')'}">
-                                </div>
+                                <el-avatar v-if="article.articleAuthorAvatarUrl" size="medium" :src="article.articleAuthorAvatarUrl"></el-avatar>
+                                <el-avatar v-else size="medium" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
                             </el-col>
                             <el-col :xs="9" :sm="11" :xl="11">
                                 <div>
-                                    <el-link @click="onRouter('user', article.articleAuthorName)" :underline="false" class="text-default">{{ article.articleAuthor.userName }}</el-link>
+                                    <el-link @click="onRouter('user', article.articleAuthorName)" :underline="false" class="text-default">{{ article.articleAuthorName }}</el-link>
                                     <small class="d-block text-muted">{{ article.timeAgo }}</small>
                                 </div>
                                 <div class="ml-auto text-muted">
@@ -50,7 +49,7 @@
                 this.getData(val);
             },
             async getData(p){
-                const responseTopData = await this.axios.get('/articles/latest/perfect?p='+p);
+                const responseTopData = await this.axios.get('/article/articles?page='+p);
                 if (responseTopData) {
                     responseTopData.pagination.currentPage = p;
                     this.$set(this, 'articles', responseTopData.articles);

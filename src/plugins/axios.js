@@ -9,15 +9,25 @@ export default (ctx) => {
         baseURL: '/api'
     })
 
-    customAxios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
+    customAxios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
     customAxios.defaults.headers.common['x-requested-with'] = 'XMLHttpRequest'
 
-    Vue.use(VueAxios, customAxios)
+    Vue.use(VueAxios, customAxios);
 
     customAxios.interceptors.request.use((config) => {
-        if(!config.url){
-            config.url = 'articles/latest/perfect?p=1'
+        if(config.url){
+            let token = localStorage.getItem("x-auth-token");
+            if (token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
+                if (!(config.url.indexOf('articles') > -1 || config.url.indexOf('console') > -1)){
+                    //config.headers.common['Authorization'] = `${token}`;
+                    //config.headers.common['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+                }
+            }
+        } else {
+          config.url = '/console/heartbeat'
         }
+
+        console.log(config);
         // clear cache
         // if (config.method === 'get') {
         //   let char = '?'
@@ -27,24 +37,46 @@ export default (ctx) => {
         //   config.url += `${char}${(new Date()).getTime()}`
         // }
         return config
+    }, function (error) {
+        // Do something with request error
+        console.info("error: ");
+        console.info(error);
+        return Promise.reject(error);
     })
 
     customAxios.interceptors.response.use((response) => {
-        if (response.config.method === 'get' || response.config.method === 'delete') {
-            // get and delete use snack tip
-            if (response.data.code === 0 || response.data.sc === 0) {
-                return response.data.data
-            } else {
-                // eslint-disable-next-line no-console
-                console.log(response.data);
-                /*ctx.store.commit('setSnackBar', {
-                    snackBar: true,
-                    snackMsg: response.data.msg
-                })*/
-            }
+        console.log(response);
+        let message;
+        if (typeof(response.data.data) !== 'undefined') {
+            message = response.data.data.message
+        } else if (typeof(response.data) !== 'undefined') {
+            message = response.data.message
+        }
+        if (response.data.success) {
+            return response.data.data
         } else {
-            // other, deal with yourself
-            return response.data
+            if(response.data.code === 0){
+                window.app.$message(message)
+            }else if(response.data.code === 401){
+                window.app.$router.push({
+                    name: 'login',
+                    query: {
+                        historyUrl: window.location.href
+                    }
+                })
+            }else if(response.data.code === 402){
+                window.app.$router.push({
+                    name: 'login',
+                    query: {
+                        historyUrl: window.location.href
+                    }
+                })
+            }else if(response.data.code === 404){
+                window.app.$message('操作失败，请稍后再试......')
+            }else if(response.data.code === 500){
+                window.app.$message('服务器正在开小差，请稍后再试......')
+            }
+            return false
         }
     }, (error) => {
         /*console.log(ctx.app.store.state.locale)

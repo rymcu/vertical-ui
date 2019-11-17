@@ -35,7 +35,7 @@
     import Header from "@/components/classic/Header";
     import Footer from "@/components/classic/Footer";
     export default {
-        name: "Index",
+        name: "index",
         components: {
             Header,
             Footer

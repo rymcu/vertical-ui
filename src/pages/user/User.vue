@@ -15,12 +15,12 @@
         <el-col>
             <div class="wrapper">
                 <el-row class="row-cards row-deck" :gutter="10">
-                    <el-col :sm="24" :xl="6" v-for="article in articles" :key="article.oId">
+                    <el-col :sm="24" :xl="6" v-for="article in articles" :key="article.idArticle">
                         <div class="card">
                             <a v-show="article.articleImg1URL" ><img class="card-img-top" style="height: 10rem;" :src="article.articleImg1URL"></a>
                             <a v-show="!article.articleImg1URL"><img class="card-img-top" style="height: 10rem;" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></a>
                             <div class="card-body d-flex flex-column">
-                                <h4 class="article-header-md"><el-link @click="onRouter('article',article.oId)" :underline="false" v-html="article.articleTitle"></el-link></h4>
+                                <h4 class="article-header-md"><el-link @click="onRouter('article',article.idArticle)" :underline="false" v-html="article.articleTitle"></el-link></h4>
                                 <div class="text-muted article-summary-md">{{ article.articlePreviewContent }}</div>
                                 <div class="d-flex align-items-center pt-5 mt-auto">
                                     <div class="ml-auto text-muted">

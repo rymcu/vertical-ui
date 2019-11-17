@@ -6,13 +6,12 @@
                     <h1 class="list__title" v-html="article.articleTitle"></h1>
                     <el-row class="pt-5">
                         <el-col :xs="3" :sm="1" :xl="1" class="mr-3">
-                            <div class="avatar avatar-md"
-                                 :style="{backgroundImage:'url(' + article.articleAuthor.userAvatarURL + ')'}">
-                            </div>
+                            <el-avatar v-if="article.articleAuthorAvatarUrl" :src="article.articleAuthorAvatarUrl"></el-avatar>
+                            <el-avatar v-else src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
                         </el-col>
                         <el-col :xs="9" :sm="11" :xl="11">
                             <div>
-                                <el-link @click="onRouter('user', article.articleAuthorName)" :underline="false" class="text-default" >{{ article.articleAuthor.userName }}</el-link>
+                                <el-link @click="onRouter('user', article.articleAuthorName)" :underline="false" class="text-default" >{{ article.articleAuthorName }}</el-link>
                                 <small class="d-block text-muted">{{ article.timeAgo }}</small>
                             </div>
                         </el-col>
@@ -35,9 +34,11 @@
                     articleTitle: '',
                     articleContent: '',
                     timeAgo:'',
+                    articleAuthorName:'',
+                    articleAuthorAvatarUrl:'',
                     articleAuthor: {
                         userAvatarURL: 'https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png',
-                        userName: ''
+                        userNickname: ''
                     }
                 },
                 pagination: {
@@ -59,11 +60,13 @@
             }
         },
         async mounted () {
-            this.$store.commit('setActiveMenu', 'comment');
+            this.$store.commit('setActiveMenu', 'article');
             const responseTopData = await this.axios.get('/article/'+this.$route.query.data);
             if (responseTopData) {
+                // eslint-disable-next-line no-console
+                console.log(responseTopData)
                 this.$set(this, 'article', responseTopData.article);
-                this.$set(this, 'pagination', responseTopData.pagination);
+                //this.$set(this, 'pagination', responseTopData.pagination);
                 Vue.nextTick(() => {
                     $('*[data-src]').each(function () {
                         const testImage = this.getAttribute('data-src');

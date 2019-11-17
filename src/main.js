@@ -15,7 +15,7 @@ router.afterEach(() => {
   window.scrollTo(0, 0)
 });
 
-new Vue({
+window.app = new Vue({
   store,
   router,
   render: h => h(App)

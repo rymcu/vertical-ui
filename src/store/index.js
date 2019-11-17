@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    locale: 'zh_CN',
     version: '1.0.0',
     isInit: false,
     isLogin: false,
@@ -39,12 +40,16 @@ export default new Vuex.Store({
       state.avatarURL = data.avatarURL;
       state.nickname = data.nickname;
       state.token = data.token;
+      localStorage.setItem('x-auth-token', data.token);
+      // eslint-disable-next-line no-console
+      console.log(data.token)
     },
     logout(state){
       state.isLogin = false;
       state.avatarURL = '';
       state.nickname = '';
       state.token = '';
+      localStorage.removeItem('x-auth-token');
     }
   },
   actions: {
