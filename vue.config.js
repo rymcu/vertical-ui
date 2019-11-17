@@ -1,8 +1,9 @@
 module.exports = {
     devServer: {
+        port: 8081,
         proxy: {
             '/api/': {
-                target: 'http://192.168.1.4:8087/vertical/',
+                target: 'http://192.168.1.4:8099/vertical/',
                 ws: true,
                 changeOrigin: true,
                 pathRewrite: {
