@@ -58,13 +58,13 @@
         name: "Header",
         computed: {
             getActiveMenu () {
-                return this.$store.state.activeMenu
+                return this.$store.state.activeMenu;
             },
             isLogin () {
-                return this.$store.state.isLogin
+                return this.$store.getters.isLogin;
             },
             avatarURL () {
-                return this.$store.state.avatarURL
+                return this.$store.state.avatarURL;
             }
         },
         data() {

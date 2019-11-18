@@ -40,20 +40,35 @@ export default new Vuex.Store({
       state.avatarURL = data.avatarURL;
       state.nickname = data.nickname;
       state.token = data.token;
+      localStorage.setItem('isLogin', 'true');
+      localStorage.setItem('avatarURL', data.avatarURL);
+      localStorage.setItem('nickname', data.nickname);
       localStorage.setItem('x-auth-token', data.token);
-      // eslint-disable-next-line no-console
-      console.log(data.token)
     },
     logout(state){
       state.isLogin = false;
       state.avatarURL = '';
       state.nickname = '';
       state.token = '';
+      localStorage.removeItem('isLogin');
+      localStorage.removeItem('avatarURL');
+      localStorage.removeItem('nickname');
       localStorage.removeItem('x-auth-token');
     }
   },
   actions: {
   },
   modules: {
+  },
+  getters: {
+    isLogin(state){
+      if (!state.isLogin) {
+        state.isLogin = localStorage.getItem('isLogin');   //从sessionStorage中读取状态
+        state.nickname = localStorage.getItem('nickname');
+        state.avatarURL = localStorage.getItem('avatarURL') !== 'undefined'?localStorage.getItem('avatarURL'):"";
+        state.token = localStorage.getItem('x-auth-token');
+      }
+      return state.isLogin
+    }
   }
 })

@@ -82,7 +82,7 @@
                                 return
                             }
                             LazyLoadImage();
-                            Vditor.highlightRender({style:'github'}, element, document);
+                            Vditor.highlightRender({style:'swapoff'}, element, document);
                         }
                     },
                     upload: {
@@ -127,32 +127,35 @@
                     articleContentHtml: articleContentHtml,
                     articleTags: _ts.value.join(",")
                 };
-                _ts.axios.post('/article/post',_ts.qs.stringify(article)).then(function (res) {
-                    console.log(res);
-                    if(res) {
-                        if (res.message) {
-                            _ts.$message(res.message);
-                            return false;
-                        }
-                        _ts.$router.push({
-                            name: 'article',
-                            query: {
-                                data: res.id
-                            }
-                        })
-                    }
-                })
+                let articleContentText = await _ts.contentEditor.getHTML();
+                console.log(article,articleContentText);
+                // _ts.axios.post('/article/post',_ts.qs.stringify(article)).then(function (res) {
+                //     console.log(res);
+                //     if(res) {
+                //         if (res.message) {
+                //             _ts.$message(res.message);
+                //             return false;
+                //         }
+                //         _ts.$router.push({
+                //             name: 'article',
+                //             query: {
+                //                 data: res.id
+                //             }
+                //         })
+                //     }
+                // })
 
             }
         },
         async mounted () {
-            // const responseData = await this.axios.get('/upload/token?q=1');
-            // if (responseData) {
-            //     this.$set(this, 'tokenURL', {
-            //         token: responseData.uploadToken || '',
-            //         URL: responseData.uploadURL || '',
-            //     })
-            // }
+            const responseData = await this.axios.get('/upload/token?q=1');
+            if (responseData) {
+                console.log(responseData)
+                // this.$set(this, 'tokenURL', {
+                //     token: responseData.uploadToken || '',
+                //     URL: responseData.uploadURL || '',
+                // })
+            }
             this.list = this.states.map(item => {
                 return { value: item, label: item };
             });

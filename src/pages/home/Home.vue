@@ -60,8 +60,8 @@
                 this.$router.push(
                     {
                         name: name,
-                        query: {
-                            data: data
+                        params: {
+                            id: data
                         }
                     }
                 )

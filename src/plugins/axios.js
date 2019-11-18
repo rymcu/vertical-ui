@@ -18,16 +18,14 @@ export default (ctx) => {
         if(config.url){
             let token = localStorage.getItem("x-auth-token");
             if (token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-                if (!(config.url.indexOf('articles') > -1 || config.url.indexOf('console') > -1)){
-                    //config.headers.common['Authorization'] = `${token}`;
-                    //config.headers.common['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+                if (!(config.url.indexOf('articles') > -1 || config.url.indexOf('article/detail') > -1 || config.url.indexOf('console') > -1)){
+                    config.headers.Authorization = `${token}`;
                 }
             }
         } else {
           config.url = '/console/heartbeat'
         }
 
-        console.log(config);
         // clear cache
         // if (config.method === 'get') {
         //   let char = '?'
@@ -38,11 +36,8 @@ export default (ctx) => {
         // }
         return config
     }, function (error) {
-        // Do something with request error
-        console.info("error: ");
-        console.info(error);
         return Promise.reject(error);
-    })
+    });
 
     customAxios.interceptors.response.use((response) => {
         console.log(response);
@@ -58,6 +53,10 @@ export default (ctx) => {
             if(response.data.code === 0){
                 window.app.$message(message)
             }else if(response.data.code === 401){
+                localStorage.removeItem('isLogin');
+                localStorage.removeItem('avatarURL');
+                localStorage.removeItem('nickname');
+                localStorage.removeItem('x-auth-token');
                 window.app.$router.push({
                     name: 'login',
                     query: {

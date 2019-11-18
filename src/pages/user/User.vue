@@ -51,6 +51,7 @@
 <script>
     export default {
         name: "User",
+        props: ["key"],
         data() {
             return {
                 user: {
@@ -71,7 +72,7 @@
                 this.getData(val);
             },
             async getData(p){
-                const responseTopData = await this.axios.get('/user/'+this.$route.query.data+'/articles?p='+p);
+                const responseTopData = await this.axios.get('/user/'+this.key+'/articles?p='+p);
                 if (responseTopData) {
                     responseTopData.pagination.currentPage = p;
                     this.$set(this, 'articles', responseTopData.articles)
@@ -91,7 +92,7 @@
         },
         async mounted () {
             this.$store.commit('setActiveMenu', 'user');
-            const responseTopData = await this.axios.get('/user/'+this.$route.query.data)
+            const responseTopData = await this.axios.get('/user/'+this.key)
             if (responseTopData) {
                 this.user = responseTopData.user
             }

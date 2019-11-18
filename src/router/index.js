@@ -32,9 +32,10 @@ export default new Router({
                     component: Tag
                 },
                 {
-                    path: '/article',
+                    path: '/article/:id',
                     name: 'article',
-                    component: Article
+                    component: Article,
+                    props: true
                 },
                 {
                     path: '/postArticle',
