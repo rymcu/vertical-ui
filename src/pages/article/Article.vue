@@ -64,12 +64,9 @@
         },
         async mounted () {
             this.$store.commit('setActiveMenu', 'article');
-            const responseTopData = await this.axios.get('/article/detail/'+this.id);
+            const responseTopData = await this.axios.get('/console/articles/'+this.id);
             if (responseTopData) {
-                // eslint-disable-next-line no-console
-                console.log(responseTopData)
                 this.$set(this, 'article', responseTopData.article);
-                //this.$set(this, 'pagination', responseTopData.pagination);
                 Vue.nextTick(() => {
                     $('*[data-src]').each(function () {
                         const testImage = this.getAttribute('data-src');

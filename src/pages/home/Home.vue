@@ -49,7 +49,7 @@
                 this.getData(val);
             },
             async getData(p){
-                const responseTopData = await this.axios.get('/article/articles?page='+p);
+                const responseTopData = await this.axios.get('/console/articles?page='+p);
                 if (responseTopData) {
                     responseTopData.pagination.currentPage = p;
                     this.$set(this, 'articles', responseTopData.articles);

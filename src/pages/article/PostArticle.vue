@@ -9,7 +9,7 @@
         <el-col style="margin-top: 1rem;">
             <el-select
                     style="width: 100%;"
-                    v-model="value"
+                    v-model="articleTags"
                     multiple
                     filterable
                     allow-create
@@ -41,12 +41,11 @@
         data() {
             return {
                 tokenURL: {},
-                article: {
-                    articleTitle: '',
-                    articleType: 0
-                },
+                articleTitle: '',
+                articleContent: '',
+                articleType: 0,
+                articleTags: [],
                 options: [],
-                value: [],
                 list: [],
                 loading: false,
                 states: ["Alabama", "Alaska", "Arizona",
@@ -82,7 +81,7 @@
                                 return
                             }
                             LazyLoadImage();
-                            Vditor.highlightRender({style:'swapoff'}, element, document);
+                            Vditor.highlightRender({style:'github'}, element, document);
                         }
                     },
                     upload: {
@@ -93,7 +92,7 @@
                         replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').
                         replace('/\\s/g', ''),
                     },
-                    height: data.height,
+                    //height: data.height,
                     counter: 102400,
                     resize: {
                         enable: data.resize,
@@ -101,6 +100,35 @@
                     lang: this.$store.state.locale,
                     placeholder: data.placeholder,
                 })
+            },
+            setLocalstorage (type) {
+                if (typeof arguments[0] === 'object') {
+                    localStorage.setItem('articleTags', arguments[0]);
+                    return
+                }
+                switch (type) {
+                    case 'title': {
+                        localStorage.setItem('article-title', arguments[0])
+                        break;
+                    }
+                    case 'tags': {
+                        localStorage.setItem('article-tags', arguments[0]);
+                        break;
+                    }
+                }
+            },
+            _setDefaultLocalStorage () {
+                if (localStorage.getItem('article-title')) {
+                    this.title = localStorage.getItem('article-title')
+                    this.$set(this, 'articleTitle', localStorage.getItem('article-title'))
+                } else {
+                    this.$set(this, 'articleTitle', '')
+                }
+                if (localStorage.getItem('article-tags')) {
+                    this.$set(this, 'articleTags', localStorage.getItem('article-tags').split(','))
+                } else {
+                    this.$set(this, 'articleTags', [])
+                }
             },
             remoteMethod(query) {
                 if (query !== '') {
@@ -125,36 +153,34 @@
                     articleTitle: _ts.article.articleTitle,
                     articleContent: articleContent,
                     articleContentHtml: articleContentHtml,
-                    articleTags: _ts.value.join(",")
+                    articleTags: _ts.articleTags.join(",")
                 };
-                let articleContentText = await _ts.contentEditor.getHTML();
-                console.log(article,articleContentText);
-                // _ts.axios.post('/article/post',_ts.qs.stringify(article)).then(function (res) {
-                //     console.log(res);
-                //     if(res) {
-                //         if (res.message) {
-                //             _ts.$message(res.message);
-                //             return false;
-                //         }
-                //         _ts.$router.push({
-                //             name: 'article',
-                //             query: {
-                //                 data: res.id
-                //             }
-                //         })
-                //     }
-                // })
+                _ts.axios.post('/article/post',_ts.qs.stringify(article)).then(function (res) {
+                    if(res) {
+                        if (res.message) {
+                            _ts.$message(res.message);
+                            return false;
+                        }
+                        _ts.contentEditor.clearCache();
+                        _ts.$router.push({
+                            name: 'article',
+                            query: {
+                                data: res.id
+                            }
+                        })
+                    }
+                })
 
             }
         },
         async mounted () {
+            let _ts = this;
             const responseData = await this.axios.get('/upload/token?q=1');
             if (responseData) {
-                console.log(responseData)
-                // this.$set(this, 'tokenURL', {
-                //     token: responseData.uploadToken || '',
-                //     URL: responseData.uploadURL || '',
-                // })
+                this.$set(this, 'tokenURL', {
+                    token: responseData.uploadToken || '',
+                    URL: responseData.uploadURL || '',
+                })
             }
             this.list = this.states.map(item => {
                 return { value: item, label: item };
@@ -163,10 +189,28 @@
             this.contentEditor = this._initEditor({
                 id: 'contentEditor',
                 mode: 'both',
-                height: 480,
+                //height: 480,
                 placeholder: '', //this.$t('inputContent', this.$store.state.locale)
                 resize: false,
             });
+
+            let id = _ts.$route.query.id;
+
+            if (id) {
+                const responseData = await this.axios.get(`/console/articles/${id}`);
+                if (responseData) {
+                    this.$set(this, 'articleTitle', responseData.articleTitle);
+                    this.$set(this, 'articleContent', responseData.articleContent);
+                    this.$set(this, 'articleTags', responseData.articleTags.split(','));
+                    this.contentEditor.setValue(responseData.content)
+                }
+            } else {
+                // set storage
+                this._setDefaultLocalStorage()
+                setTimeout(() => {
+                    document.querySelector('.input-group__input input').focus()
+                }, 100)
+            }
         }
     }
 </script>

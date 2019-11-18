@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vue from 'vue'
@@ -18,7 +17,7 @@ export default (ctx) => {
         if(config.url){
             let token = localStorage.getItem("x-auth-token");
             if (token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-                if (!(config.url.indexOf('articles') > -1 || config.url.indexOf('article/detail') > -1 || config.url.indexOf('console') > -1)){
+                if (!(config.url.indexOf('console') > -1)){
                     config.headers.Authorization = `${token}`;
                 }
             }
@@ -40,7 +39,6 @@ export default (ctx) => {
     });
 
     customAxios.interceptors.response.use((response) => {
-        console.log(response);
         let message;
         if (typeof(response.data.data) !== 'undefined') {
             message = response.data.data.message
