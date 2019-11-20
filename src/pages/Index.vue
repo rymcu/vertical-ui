@@ -28,6 +28,7 @@
                     </el-form-item>
                 </el-form>
         </el-dialog>
+        <el-backtop target=".el-container"></el-backtop>
     </el-container>
 </template>
 

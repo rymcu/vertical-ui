@@ -26,7 +26,8 @@ export default new Vuex.Store({
     tagsItems: [],
     bodySide: '',
     login: false,
-    activeMenu: 'home'
+    activeMenu: 'home',
+    activeTag: 'news'
   },
   mutations: {
     setLogin(state, data){
@@ -35,14 +36,19 @@ export default new Vuex.Store({
     setActiveMenu(state, data){
       state.activeMenu = data
     },
+    setActiveTag(state, data){
+      state.activeTag = data
+    },
     initLogin(state, data){
       state.isLogin = true;
       state.avatarURL = data.avatarURL;
       state.nickname = data.nickname;
       state.token = data.token;
+      state.account = data.account;
       localStorage.setItem('isLogin', 'true');
       localStorage.setItem('avatarURL', data.avatarURL);
       localStorage.setItem('nickname', data.nickname);
+      localStorage.setItem('account', data.account);
       localStorage.setItem('x-auth-token', data.token);
     },
     logout(state){
@@ -50,9 +56,11 @@ export default new Vuex.Store({
       state.avatarURL = '';
       state.nickname = '';
       state.token = '';
+      state.account = '';
       localStorage.removeItem('isLogin');
       localStorage.removeItem('avatarURL');
       localStorage.removeItem('nickname');
+      localStorage.removeItem('account');
       localStorage.removeItem('x-auth-token');
     }
   },
@@ -67,6 +75,7 @@ export default new Vuex.Store({
         state.nickname = localStorage.getItem('nickname');
         state.avatarURL = localStorage.getItem('avatarURL') !== 'undefined'?localStorage.getItem('avatarURL'):"";
         state.token = localStorage.getItem('x-auth-token');
+        state.account = localStorage.getItem('account');
       }
       return state.isLogin
     }

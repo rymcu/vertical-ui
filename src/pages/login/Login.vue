@@ -37,8 +37,8 @@
         data() {
             return {
                 user: {
-                    account: 'ronger-x@outlook.com',
-                    password: '131566'
+                    account: '',
+                    password: ''
                 }
             }
         },

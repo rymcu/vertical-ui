@@ -1,7 +1,12 @@
 <template>
-    <el-row>
+    <el-row class="articles">
         <el-col>
-            <el-input v-model="article.articleTitle" placeholder="请输入标题"></el-input>
+            <el-input
+                v-model="articleTitle"
+                class="article-title"
+                placeholder="请输入标题"
+                @change="setLocalstorage('title')">
+            </el-input>
         </el-col>
         <el-col>
             <div id="contentEditor"></div>
@@ -17,7 +22,8 @@
                     remote
                     :remote-method="remoteMethod"
                     placeholder="请选择文章标签"
-                    :loading="loading">
+                    :loading="loading"
+                    @change="setLocalstorage('tags')">
                 <el-option
                         v-for="item in options"
                         :key="item.value"
@@ -26,14 +32,17 @@
                 </el-option>
             </el-select>
         </el-col>
-        <el-col style="margin-top: 1rem;padding-right:3rem;text-align: right;">
-            <el-button type="primary" @click="postArticle">发布</el-button>
+        <el-col v-if="idEdit" style="margin-top: 1rem;padding-right:3rem;text-align: right;">
+            <el-button type="primary" :loading="doLoading" @click="postArticle">发布</el-button>
+        </el-col>
+        <el-col v-else style="margin-top: 1rem;padding-right:3rem;text-align: right;">
+            <el-button type="danger" @click="deleteArticle">删除</el-button>
+            <el-button type="primary" @click="postArticle">更新</el-button>
         </el-col>
     </el-row>
 </template>
 
 <script>
-    /* eslint-disable no-console,no-useless-escape */
     import { LazyLoadImage } from '../../plugins/utils'
     import Vditor from 'vditor'
     export default {
@@ -41,6 +50,7 @@
         data() {
             return {
                 tokenURL: {},
+                idArticle: 0,
                 articleTitle: '',
                 articleContent: '',
                 articleType: 0,
@@ -48,6 +58,8 @@
                 options: [],
                 list: [],
                 loading: false,
+                doLoading: false,
+                idEdit: false,
                 states: ["Alabama", "Alaska", "Arizona",
                     "Arkansas", "California", "Colorado",
                     "Connecticut", "Delaware", "Florida",
@@ -87,12 +99,11 @@
                     upload: {
                         max: 10 * 1024 * 1024,
                         url: this.tokenURL.URL,
+                        linkToImgUrl: this.tokenURL.URL,
                         token: this.tokenURL.token,
-                        filename: name => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').
-                        replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').
-                        replace('/\\s/g', ''),
+                        filename: name => name.replace(/\?|\\|\/|:|\||<|>|\*|\[|\]|\s+/g, '-')
                     },
-                    //height: data.height,
+                    height: data.height,
                     counter: 102400,
                     resize: {
                         enable: data.resize,
@@ -144,28 +155,58 @@
                     this.options = [];
                 }
             },
+            deleteArticle() {
+                let _ts = this;
+                _ts.doLoading = true;
+                this.$confirm('确定删除吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let id = _ts.$route.query.id;
+                    _ts.axios.delete('/article/delete/'+ id).then(function (res) {
+                        if(res){
+                            _ts.$message(res.message);
+                            return false;
+                        }
+                        localStorage.removeItem('article-title');
+                        localStorage.removeItem('article-tags');
+                        _ts.contentEditor.setValue('');
+                        _ts.$router.push({
+                            name: 'home'
+                        })
+                    })
+                }).catch(() => {
+                    _ts.doLoading = false;
+                });
+
+            },
             async postArticle() {
                 let _ts = this;
+                _ts.doLoading = true;
+                let id = _ts.$route.query.id;
                 let articleContent = _ts.contentEditor.getValue();
                 let articleContentHtml = await _ts.contentEditor.getHTML();
                 let article = {
-                    idArticle: _ts.article.idArticle,
-                    articleTitle: _ts.article.articleTitle,
+                    idArticle: _ts.idArticle,
+                    articleTitle: _ts.articleTitle,
                     articleContent: articleContent,
                     articleContentHtml: articleContentHtml,
                     articleTags: _ts.articleTags.join(",")
                 };
-                _ts.axios.post('/article/post',_ts.qs.stringify(article)).then(function (res) {
+                _ts.axios[id ? 'put' : 'post']('/article/post',_ts.qs.stringify(article)).then(function (res) {
                     if(res) {
                         if (res.message) {
                             _ts.$message(res.message);
                             return false;
                         }
-                        _ts.contentEditor.clearCache();
+                        localStorage.removeItem('article-title');
+                        localStorage.removeItem('article-tags');
+                        _ts.contentEditor.setValue('');
                         _ts.$router.push({
                             name: 'article',
-                            query: {
-                                data: res.id
+                            params: {
+                                id: res.id
                             }
                         })
                     }
@@ -175,7 +216,8 @@
         },
         async mounted () {
             let _ts = this;
-            const responseData = await this.axios.get('/upload/token?q=1');
+            this.$store.commit('setActiveMenu', 'postArticle');
+            const responseData = await this.axios.get('/upload/token');
             if (responseData) {
                 this.$set(this, 'tokenURL', {
                     token: responseData.uploadToken || '',
@@ -189,7 +231,7 @@
             this.contentEditor = this._initEditor({
                 id: 'contentEditor',
                 mode: 'both',
-                //height: 480,
+                height: 480,
                 placeholder: '', //this.$t('inputContent', this.$store.state.locale)
                 resize: false,
             });
@@ -197,18 +239,22 @@
             let id = _ts.$route.query.id;
 
             if (id) {
-                const responseData = await this.axios.get(`/console/articles/${id}`);
+                _ts.idEdit = false;
+                const responseData = await this.axios.get(`/console/update/${id}`);
                 if (responseData) {
-                    this.$set(this, 'articleTitle', responseData.articleTitle);
-                    this.$set(this, 'articleContent', responseData.articleContent);
-                    this.$set(this, 'articleTags', responseData.articleTags.split(','));
-                    this.contentEditor.setValue(responseData.content)
+                    let article = responseData.article;
+                    this.$set(this, 'idArticle', article.idArticle);
+                    this.$set(this, 'articleTitle', article.articleTitle);
+                    this.$set(this, 'articleContent', article.articleContent);
+                    this.$set(this, 'articleTags', (article.articleTags).split(','));
+                    this.contentEditor.setValue(article.articleContent);
                 }
             } else {
+                _ts.idEdit = true;
                 // set storage
-                this._setDefaultLocalStorage()
+                this._setDefaultLocalStorage();
                 setTimeout(() => {
-                    document.querySelector('.input-group__input input').focus()
+                    document.querySelector('.article-title .el-input__inner').focus()
                 }, 100)
             }
         }
@@ -217,4 +263,7 @@
 
 <style lang="scss">
     @import "~vditor/src/assets/scss/classic.scss";
+    .articles {
+        //padding: 0 10px;
+    }
 </style>

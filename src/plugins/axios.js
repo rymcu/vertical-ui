@@ -5,11 +5,13 @@ import Vue from 'vue'
 // eslint-disable-next-line no-unused-vars
 export default (ctx) => {
     const customAxios = axios.create({
-        baseURL: '/api'
-    })
+        baseURL: '/api',
+        timeout:'5000',
+        withCredentials: true
+    });
 
     customAxios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-    customAxios.defaults.headers.common['x-requested-with'] = 'XMLHttpRequest'
+    customAxios.defaults.headers.common['x-requested-with'] = 'XMLHttpRequest';
 
     Vue.use(VueAxios, customAxios);
 
@@ -49,12 +51,9 @@ export default (ctx) => {
             return response.data.data
         } else {
             if(response.data.code === 0){
-                window.app.$message(message)
+                window.app.$message(message);
             }else if(response.data.code === 401){
-                localStorage.removeItem('isLogin');
-                localStorage.removeItem('avatarURL');
-                localStorage.removeItem('nickname');
-                localStorage.removeItem('x-auth-token');
+                window.app.$store.commit('logout');
                 window.app.$router.push({
                     name: 'login',
                     query: {
@@ -62,6 +61,7 @@ export default (ctx) => {
                     }
                 })
             }else if(response.data.code === 402){
+                window.app.$store.commit('logout');
                 window.app.$router.push({
                     name: 'login',
                     query: {

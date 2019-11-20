@@ -1,51 +1,59 @@
 <template>
-    <el-row type="flex" justify="space-around">
-        <el-col :xs="12" :sm="4" :xl="2" style="padding-top: 1rem;">
-            <a class="navbar-brand" href="/">
-                <img src="../../assets/rymcu.png" alt="RY MCU" class="navbar-brand-img">
-                <span>RY MCU</span>
-            </a>
-        </el-col>
-        <el-col :xs="0" :sm="12" :xl="16" style="text-align: center;">
-            <el-row type="flex" justify="center">
-                <el-col :sm="18" :xl="8">
-                    <el-menu :default-active="getActiveMenu" style="margin-top: -2px;border: 0;" mode="horizontal" @select="handleSelectMenu">
-                        <el-menu-item index="home">首页</el-menu-item>
-                        <el-menu-item index="tag">专栏</el-menu-item>
-                        <el-menu-item index="3">问答</el-menu-item>
-                        <el-menu-item index="4">关注</el-menu-item>
-                    </el-menu>
+    <el-row justify="space-between">
+        <el-col>
+            <el-col :xs="16" :sm="4" :xl="2" style="padding-top: 1rem;">
+                <a class="navbar-brand" href="/">
+                    <img src="../../assets/rymcu.png" alt="RY MCU" class="navbar-brand-img">
+                    <span>RY MCU</span>
+                </a>
+            </el-col>
+            <el-col :xs="0" :sm="12" :xl="16" style="text-align: center;">
+                <el-row type="flex" justify="center">
+                    <el-col :sm="18" :xl="8">
+                        <el-menu :default-active="getActiveMenu" style="margin-top: -2px;border: 0;" mode="horizontal" @select="handleSelectMenu">
+                            <el-menu-item index="home">首页</el-menu-item>
+                            <el-menu-item index="tag">专栏</el-menu-item>
+                            <!--<el-menu-item index="3">问答</el-menu-item>
+                            <el-menu-item index="4">关注</el-menu-item>-->
+                        </el-menu>
+                    </el-col>
+                </el-row>
+            </el-col>
+            <el-col :xs="8" :sm="8" :xl="6" style="padding-top: 1rem;">
+                <!--<el-col :xs="24" :sm="16" :xl="12">-->
+                <el-col :xs="0" :sm="0" :xl="0">
+                    <el-autocomplete
+                            v-model="state"
+                            size="small"
+                            :fetch-suggestions="querySearchAsync"
+                            placeholder="搜索帖子、标签和用户"
+                            :trigger-on-focus="false"
+                            @select="handleSelect"
+                    />
                 </el-col>
-            </el-row>
-        </el-col>
-        <el-col :xs="12" :sm="8" :xl="6" style="padding-top: 1rem;">
-            <el-col :xs="24" :sm="16" :xl="12">
-                <el-autocomplete
-                        v-model="state"
-                        size="small"
-                        :fetch-suggestions="querySearchAsync"
-                        placeholder="搜索帖子、标签和用户"
-                        :trigger-on-focus="false"
-                        @select="handleSelect"
-                />
-            </el-col>
-            <el-col v-if="isLogin" :xs="0" :sm="8" :xl="6">
-                <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;" href="/postArticle">发帖</el-link>
-                <el-link :underline="false" style="margin-left: 10px;">
-                    <el-dropdown trigger="click"  @command="handleCommand">
-                        <el-avatar v-if="avatarURL" size="small" :src="avatarURL"></el-avatar>
-                        <el-avatar v-else size="small" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item command="a">个人中心</el-dropdown-item>
-                            <el-dropdown-item command="b">积分</el-dropdown-item>
-                            <el-dropdown-item command="logout" divided>登出</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                </el-link>
-            </el-col>
-            <el-col v-else :xs="0" :sm="8" :xl="6">
-                <el-link :underline="false" style="margin-left: 10px;" href="/login">登录</el-link>
-                <el-link :underline="false" style="margin-left: 10px;" href="/register">注册</el-link>
+                <!--<el-col v-if="isLogin" :xs="0" :sm="8" :xl="6">-->
+                <el-col v-if="isLogin">
+                    <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;" href="/postArticle">发帖</el-link>
+                    <el-link :underline="false" style="margin-left: 10px;">
+                        <el-dropdown trigger="click"  @command="handleCommand">
+                            <el-avatar v-if="avatarURL" size="small" :src="avatarURL"></el-avatar>
+                            <el-avatar v-else size="small" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item style="align-items: center;">
+                                    <el-avatar class="mr-3" v-if="avatarURL" size="small" :src="avatarURL"></el-avatar>
+                                    <el-avatar class="mr-3" v-else size="small" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
+                                    <el-link>{{ nickname }}</el-link>
+                                </el-dropdown-item>
+                                <el-dropdown-item command="info" divided>积分</el-dropdown-item>
+                                <el-dropdown-item command="logout">登出</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </el-link>
+                </el-col>
+                <el-col v-else>
+                    <el-link :underline="false" style="margin-left: 10px;" href="/login">登录</el-link>
+                    <el-link :underline="false" style="margin-left: 10px;" href="/register">注册</el-link>
+                </el-col>
             </el-col>
         </el-col>
     </el-row>
@@ -65,6 +73,9 @@
             },
             avatarURL () {
                 return this.$store.state.avatarURL;
+            },
+            nickname() {
+                return this.$store.state.nickname;
             }
         },
         data() {

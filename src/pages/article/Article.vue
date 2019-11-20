@@ -16,6 +16,14 @@
                                     <small class="d-block text-muted">{{ article.timeAgo }}</small>
                                 </div>
                             </el-col>
+                            <el-col v-if="isAuthor" style="text-align: right">
+                                <el-dropdown trigger="click"  @command="handleCommand">
+                                    <el-link :underline="false"><i class="el-icon-more"></i></el-link>
+                                    <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item command="edit">编辑</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                            </el-col>
                         </el-row>
                         <div class="pt-7 pipe-content__reset" v-html="article.articleContent" style="overflow: hidden;"></div>
                     </article>
@@ -31,6 +39,17 @@
     export default {
         name: "article",
         props: ["id"],
+        computed: {
+            isAuthor() {
+                let account = this.$store.state.nickname;
+                if(account){
+                    if (account === this.article.articleAuthor.userNickname){
+                        return true;
+                    }
+                }
+                return false;
+            }
+        },
         data (){
             return {
                 article: {
@@ -60,11 +79,20 @@
                         }
                     }
                 )
+            },
+            handleCommand() {
+                let _ts = this
+                this.$router.push({
+                    name: 'postArticle',
+                    query: {
+                        id: _ts.article.idArticle
+                    }
+                })
             }
         },
         async mounted () {
             this.$store.commit('setActiveMenu', 'article');
-            const responseTopData = await this.axios.get('/console/articles/'+this.id);
+            const responseTopData = await this.axios.get('/console/article/'+this.id);
             if (responseTopData) {
                 this.$set(this, 'article', responseTopData.article);
                 Vue.nextTick(() => {

@@ -79,7 +79,16 @@
                         }
                         _ts.axios.post('/console/register', _ts.qs.stringify(data)).then(function (res) {
                             if (res) {
-                                _ts.$message(res.message)
+                                _ts.$message(res.message);
+                                if(res.flag && res.flag === 1){
+                                    setTimeout(function () {
+                                        _ts.$router.push(
+                                            {
+                                                name: 'login'
+                                            }
+                                        )
+                                    },1000);
+                                }
                             }
                         })
                     } else {
