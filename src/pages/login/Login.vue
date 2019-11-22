@@ -12,7 +12,7 @@
                     <el-input type="password" v-model="user.password" autocomplete="off" show-password></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-link style="float: right;" :underline="false">忘记密码</el-link>
+                    <el-link style="float: right;" :underline="false" @click="forgetPassword">忘记密码</el-link>
                 </el-form-item>
                 <el-form-item>
                     <el-button style="width: 60%;" type="primary" @click="login">立即登录</el-button>
@@ -28,6 +28,25 @@
                 <p>最后请大家共同爱护这个<i>自由</i>的交流环境，相信这里一定是你注册过的所有社区中用户体验最好的 😍</p>
             </div>
         </el-col>
+        <el-dialog
+                title="找回密码"
+                :visible.sync="forget"
+                width="100%"
+                :before-close="hideForgetPasswordDialog"
+                center>
+            <el-form :model="forgetForm" ref="forgetForm" status-icon label-width="100px" style="align-items: center;">
+                <el-form-item label="邮箱" prop="email"
+                              :rules="[
+                  { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                  { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }]">
+                    <el-input v-model="forgetForm.email" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item style="text-align: center;">
+                    <el-button :loading="loading" @click.native="sendEmailCode" type="success">发送</el-button>
+                    <el-button :loading="loading" @click.native="hideForgetPasswordDialog">取消</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
     </el-row>
 </template>
 
@@ -39,7 +58,12 @@
                 user: {
                     account: '',
                     password: ''
-                }
+                },
+                forgetForm: {
+                    email: ''
+                },
+                forget: false,
+                loading: false
             }
         },
         methods: {
@@ -75,6 +99,30 @@
                         name: 'register'
                     }
                 )
+            },
+            forgetPassword() {
+                this.forget = true;
+            },
+            hideForgetPasswordDialog() {
+                this.forget = false;
+            },
+            sendEmailCode() {
+                let _ts = this;
+                _ts.loading = true;
+                let email = _ts.forgetForm.email;
+                if(!email){
+                    return false
+                }
+                let data = {
+                    email: email
+                };
+                _ts.axios.post('/console/get-forget-email-code', _ts.qs.stringify(data)).then(function (res) {
+                    _ts.loading = true;
+                    _ts.forget = false;
+                    if (res) {
+                        _ts.$message(res.message)
+                    }
+                })
             }
         },
         mounted () {

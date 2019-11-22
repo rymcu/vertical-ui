@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import Index from '../pages/Index'
 import Home from '../pages/home/Home'
+import Topic from '../pages/topic/Topic'
 import Tag from '../pages/tag/Tag'
 import Comment from '../pages/comment/Comment'
 import Article from '../pages/article/Article'
@@ -27,9 +28,16 @@ export default new Router({
                     component: Home
                 },
                 {
-                    path: '/tag',
+                    path: '/topic/:name',
+                    name: 'topic',
+                    component: Topic,
+                    props: true
+                },
+                {
+                    path: '/tag/:tag',
                     name: 'tag',
-                    component: Tag
+                    component: Tag,
+                    props: true
                 },
                 {
                     path: '/article/:id',
@@ -48,9 +56,10 @@ export default new Router({
                     component: Comment
                 },
                 {
-                    path: '/user',
+                    path: '/user/:id',
                     name: 'user',
-                    component: User
+                    component: User,
+                    props: true
                 },
                 {
                     path: '/login',

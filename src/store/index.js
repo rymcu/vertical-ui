@@ -27,6 +27,7 @@ export default new Vuex.Store({
     bodySide: '',
     login: false,
     activeMenu: 'home',
+    activeTopic: '51mcu',
     activeTag: 'news'
   },
   mutations: {
@@ -35,6 +36,9 @@ export default new Vuex.Store({
     },
     setActiveMenu(state, data){
       state.activeMenu = data
+    },
+    setActiveTopic(state, data){
+      state.activeTopic = data
     },
     setActiveTag(state, data){
       state.activeTag = data

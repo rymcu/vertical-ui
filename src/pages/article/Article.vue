@@ -81,7 +81,7 @@
                 )
             },
             handleCommand() {
-                let _ts = this
+                let _ts = this;
                 this.$router.push({
                     name: 'postArticle',
                     query: {

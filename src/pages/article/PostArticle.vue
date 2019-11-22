@@ -5,7 +5,7 @@
                 v-model="articleTitle"
                 class="article-title"
                 placeholder="请输入标题"
-                @change="setLocalstorage('title')">
+                @change="setLocalstorage('title',articleTitle)">
             </el-input>
         </el-col>
         <el-col>
@@ -23,7 +23,7 @@
                     :remote-method="remoteMethod"
                     placeholder="请选择文章标签"
                     :loading="loading"
-                    @change="setLocalstorage('tags')">
+                    @change="setLocalstorage('tags',articleTags)">
                 <el-option
                         v-for="item in options"
                         :key="item.value"
@@ -114,16 +114,16 @@
             },
             setLocalstorage (type) {
                 if (typeof arguments[0] === 'object') {
-                    localStorage.setItem('articleTags', arguments[0]);
+                    localStorage.setItem('articleTags', arguments[1]);
                     return
                 }
                 switch (type) {
                     case 'title': {
-                        localStorage.setItem('article-title', arguments[0])
+                        localStorage.setItem('article-title', arguments[1])
                         break;
                     }
                     case 'tags': {
-                        localStorage.setItem('article-tags', arguments[0]);
+                        localStorage.setItem('article-tags', arguments[1]);
                         break;
                     }
                 }

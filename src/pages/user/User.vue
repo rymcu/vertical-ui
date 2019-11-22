@@ -2,11 +2,12 @@
     <el-row>
         <el-col :xs="24" :xl="24">
             <div class="card card-profile">
-                <div v-if="!user.userHomeBImgURL" class="card-header" :style="{backgroundImage:'url(https://img.hacpai.com/bg/home/1353745196544_1560001814590.jpg)', backgroundSize:'cover', backgroundPosition:'50%'}" ></div>
-                <div v-if="user.userHomeBImgURL" class="card-header" :style="{backgroundImage:'url('+user.userHomeBImgURL+')', backgroundSize:'cover', backgroundPosition:'50%'}" ></div>
+                <div v-if="user.userHomeBImgURL" class="card-header" :style="{backgroundImage:'url('+user.userHomeBImgURL+')', backgroundSize:'percentage', backgroundPosition:'50%'}" ></div>
+                <div v-else class="card-header" :style="{backgroundImage:'url(https://rymcu.com/vertical/article/1574441651963.jpg)', backgroundSize:'cover', backgroundPosition:'50%'}" ></div>
                 <div class="card-body text-center">
-                    <img class="card-profile-img" :src="user.userAvatarURL">
-                    <h3 class="mb-3">{{user.userName}}</h3>
+                    <img v-if="user.userAvatarURL" class="card-profile-img" :src="user.userAvatarURL">
+                    <img v-else class="card-profile-img" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png">
+                    <h3 class="mb-3">{{user.nickname}}</h3>
                     <p class="mb-4" v-html="user.userIntro"></p>
                     <!--<el-button type="primary" plain round><span class="fe fe-plus"></span> 关注</el-button>-->
                 </div>
@@ -17,8 +18,8 @@
                 <el-row class="row-cards row-deck" :gutter="10">
                     <el-col :sm="24" :xl="6" v-for="article in articles" :key="article.idArticle">
                         <div class="card">
-                            <a v-show="article.articleImg1URL" ><img class="card-img-top" style="height: 10rem;" :src="article.articleImg1URL"></a>
-                            <a v-show="!article.articleImg1URL"><img class="card-img-top" style="height: 10rem;" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></a>
+                            <a v-if="article.articleThumbnailUrl" ><img class="card-img-top" style="height: 10rem;" :src="article.articleThumbnailUrl"></a>
+                            <a v-else><img class="card-img-top" style="height: 10rem;" src="https://rymcu.com/vertical/article/1574441170152.jpg"></a>
                             <div class="card-body d-flex flex-column">
                                 <h4 class="article-header-md"><el-link @click="onRouter('article',article.idArticle)" :underline="false" v-html="article.articleTitle"></el-link></h4>
                                 <div class="text-muted article-summary-md">{{ article.articlePreviewContent }}</div>
@@ -50,8 +51,8 @@
 
 <script>
     export default {
-        name: "User",
-        props: ["key"],
+        name: "user",
+        props: ["id"],
         data() {
             return {
                 user: {
@@ -72,7 +73,7 @@
                 this.getData(val);
             },
             async getData(p){
-                const responseTopData = await this.axios.get('/user/'+this.key+'/articles?p='+p);
+                const responseTopData = await this.axios.get('/user/'+this.id+'/articles?page='+p);
                 if (responseTopData) {
                     responseTopData.pagination.currentPage = p;
                     this.$set(this, 'articles', responseTopData.articles)
@@ -92,9 +93,9 @@
         },
         async mounted () {
             this.$store.commit('setActiveMenu', 'user');
-            const responseTopData = await this.axios.get('/user/'+this.key)
+            const responseTopData = await this.axios.get('/user/'+this.id)
             if (responseTopData) {
-                this.user = responseTopData.user
+                this.user = responseTopData
             }
             const p = this.pagination.currentPage;
             this.getData(p);
@@ -103,6 +104,9 @@
 </script>
 
 <style scoped>
+    body {
+        overflow-x: hidden;
+    }
     .card {
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         position: relative;

@@ -114,6 +114,7 @@
         background-attachment: fixed;
         min-height: 280px;
         margin-bottom: 60px;
+        overflow-x: hidden;
     }
 
     .el-footer {

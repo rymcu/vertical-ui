@@ -12,9 +12,9 @@
                     <el-col :sm="18" :xl="8">
                         <el-menu :default-active="getActiveMenu" style="margin-top: -2px;border: 0;" mode="horizontal" @select="handleSelectMenu">
                             <el-menu-item index="home">首页</el-menu-item>
-                            <el-menu-item index="tag">专栏</el-menu-item>
-                            <!--<el-menu-item index="3">问答</el-menu-item>
-                            <el-menu-item index="4">关注</el-menu-item>-->
+                            <el-menu-item index="topic">专题</el-menu-item>
+                            <el-menu-item index="github">开源代码</el-menu-item>
+                            <el-menu-item index="open-source">资料下载</el-menu-item>
                         </el-menu>
                     </el-col>
                 </el-row>
@@ -39,13 +39,13 @@
                             <el-avatar v-if="avatarURL" size="small" :src="avatarURL"></el-avatar>
                             <el-avatar v-else size="small" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item style="align-items: center;">
-                                    <el-avatar class="mr-3" v-if="avatarURL" size="small" :src="avatarURL"></el-avatar>
-                                    <el-avatar class="mr-3" v-else size="small" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
-                                    <el-link>{{ nickname }}</el-link>
+                                <el-dropdown-item command="user" style="align-items: center;">
+                                    <el-avatar class="mr-3" v-if="avatarURL" size="small" style="margin-top: 1rem;" :src="avatarURL"></el-avatar>
+                                    <el-avatar class="mr-3" v-else size="small" style="margin-top: 1rem;" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
+                                    <el-link :underline="false" style="margin-left: 10px;margin-bottom: 1rem;">{{ nickname }}</el-link>
                                 </el-dropdown-item>
-                                <el-dropdown-item command="info" divided>积分</el-dropdown-item>
-                                <el-dropdown-item command="logout">登出</el-dropdown-item>
+                                <!--<el-dropdown-item command="info" divided>积分</el-dropdown-item>-->
+                                <el-dropdown-item command="logout">退出登录</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </el-link>
@@ -113,6 +113,20 @@
                 let activeMenu = _ts.$store.state.activeMenu;
                 if (activeMenu !== item) {
                     this.$store.commit('setActiveMenu', item);
+                    if(item === 'topic'){
+                        _ts.$router.push(
+                            {
+                                name: item,
+                                params: {
+                                    name: '51mcu'
+                                }
+                            }
+                        )
+                    }
+                    if(item == 'github') {
+                        window.open("https://github.com/Hugh-rymcu");
+                        return false;
+                    }
                     _ts.$router.push(
                         {
                             name: item
@@ -128,6 +142,14 @@
             },
             handleCommand(item) {
                 let _ts = this;
+                if(item == 'user'){
+                    this.$router.push({
+                        name: item,
+                        params: {
+                            id: _ts.$store.state.nickname
+                        }
+                    })
+                }
                 if (item === 'logout'){
                     _ts.$store.commit('logout');
                     item = 'login';
