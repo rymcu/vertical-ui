@@ -187,6 +187,9 @@
                 let id = _ts.$route.query.id;
                 let articleContent = _ts.contentEditor.getValue();
                 let articleContentHtml = await _ts.contentEditor.getHTML();
+                if(!(_ts.articleTitle && articleContent)){
+                    _ts.$message("标题/正文不能为空！");
+                }
                 let article = {
                     idArticle: _ts.idArticle,
                     articleTitle: _ts.articleTitle,
