@@ -63,8 +63,6 @@
             async getData(topic,p){
                 const topicNavData = await this.axios.get('/topic/topic-nav');
                 if (topicNavData) {
-                    // eslint-disable-next-line no-console
-                    console.log(topicNavData)
                     this.$set(this, 'topicNavs', topicNavData);
                 }
                 const responseTopData = await this.axios.get('/topic/' + topic + '&page='+p);
