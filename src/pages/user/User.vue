@@ -51,7 +51,7 @@
 
 <script>
     export default {
-        name: "user",
+        name: "User",
         props: ["id"],
         data() {
             return {
@@ -84,8 +84,8 @@
                 this.$router.push(
                     {
                         name: name,
-                        query: {
-                            data: data
+                        params: {
+                            id: data
                         }
                     }
                 )
