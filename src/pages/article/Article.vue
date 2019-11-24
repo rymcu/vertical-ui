@@ -2,8 +2,8 @@
     <div class="article__wrapper">
         <el-col :xs="24" :sm="24" :xl="24">
             <el-card>
-                <div class="card-body d-flex flex-column">
-                    <article class="article__item">
+                <div class="card-body d-flex flex-column article">
+                    <div class="article__item">
                         <h1 class="list__title" v-html="article.articleTitle"></h1>
                         <el-row class="pt-5">
                             <el-col :xs="3" :sm="1" :xl="1" class="mr-3">
@@ -26,7 +26,7 @@
                             </el-col>
                         </el-row>
                         <div class="pt-7 pipe-content__reset" v-html="article.articleContent" style="overflow: hidden;"></div>
-                    </article>
+                    </div>
                 </div>
             </el-card>
         </el-col>
@@ -37,7 +37,7 @@
     import Vue from 'vue';
     import $ from 'jquery';
     export default {
-        name: "article",
+        name: "Article",
         props: ["id"],
         computed: {
             isAuthor() {
@@ -74,8 +74,8 @@
                 this.$router.push(
                     {
                         name: name,
-                        query: {
-                            data: data
+                        params: {
+                            id: data
                         }
                     }
                 )
