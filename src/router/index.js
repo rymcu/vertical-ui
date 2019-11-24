@@ -11,8 +11,16 @@ import User from '../pages/user/User'
 import Login from '../pages/login/Login'
 import Register from '../pages/register/Register'
 import PostArticle from '../pages/article/PostArticle'
+import ForgetPassword from '../pages/forget/ForgetPassword'
 
-Vue.use(Router)
+/**
+ * 重写路由的push方法
+ */
+const routerPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+    return routerPush.call(this, location).catch(error=> error)
+};
+Vue.use(Router);
 
 export default new Router({
     mode: 'history',
@@ -70,6 +78,11 @@ export default new Router({
                     path: '/register',
                     name: 'register',
                     component: Register
+                },
+                {
+                    path: '/forget-password',
+                    name: 'forget-password',
+                    component: ForgetPassword
                 },
                 {
                     path: '*', redirect: '/'

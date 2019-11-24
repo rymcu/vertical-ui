@@ -31,10 +31,10 @@
         <el-dialog
                 title="找回密码"
                 :visible.sync="forget"
-                width="100%"
+                width="475px"
                 :before-close="hideForgetPasswordDialog"
                 center>
-            <el-form :model="forgetForm" ref="forgetForm" status-icon label-width="100px" style="align-items: center;">
+            <el-form :model="forgetForm" ref="forgetForm" status-icon label-width="100px" style="align-items: center;max-width: 375px;">
                 <el-form-item label="邮箱" prop="email"
                               :rules="[
                   { required: true, message: '请输入邮箱地址', trigger: 'blur' },
@@ -116,8 +116,8 @@
                 let data = {
                     email: email
                 };
-                _ts.axios.post('/console/get-forget-email-code', _ts.qs.stringify(data)).then(function (res) {
-                    _ts.loading = true;
+                _ts.axios.post('/console/get-forget-password-email', _ts.qs.stringify(data)).then(function (res) {
+                    _ts.loading = false;
                     _ts.forget = false;
                     if (res) {
                         _ts.$message(res.message)
