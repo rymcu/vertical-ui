@@ -46,7 +46,7 @@
     import { LazyLoadImage } from '../../plugins/utils'
     import Vditor from 'vditor'
     export default {
-        name: "postArticle",
+        name: "PostArticle",
         data() {
             return {
                 tokenURL: {},
@@ -189,6 +189,7 @@
                 let articleContentHtml = await _ts.contentEditor.getHTML();
                 if(!(_ts.articleTitle && articleContent)){
                     _ts.$message("标题/正文不能为空！");
+                    return false;
                 }
                 let article = {
                     idArticle: _ts.idArticle,
@@ -197,7 +198,7 @@
                     articleContentHtml: articleContentHtml,
                     articleTags: _ts.articleTags.join(",")
                 };
-                _ts.axios[id ? 'put' : 'post']('/article/post',_ts.qs.stringify(article)).then(function (res) {
+                _ts.axios[id ? 'put' : 'post']('/article/post', article).then(function (res) {
                     if(res) {
                         if (res.message) {
                             _ts.$message(res.message);
@@ -250,6 +251,8 @@
                     this.$set(this, 'articleTitle', article.articleTitle);
                     this.$set(this, 'articleContent', article.articleContent);
                     this.$set(this, 'articleTags', (article.articleTags).split(','));
+                    localStorage.setItem("article-title", article.articleTitle);
+                    localStorage.setItem("article-tags", (article.articleTags).split(','));
                     this.contentEditor.setValue(article.articleContent);
                 }
             } else {
