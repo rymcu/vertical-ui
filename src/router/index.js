@@ -12,6 +12,10 @@ import Login from '../pages/login/Login'
 import Register from '../pages/register/Register'
 import PostArticle from '../pages/article/PostArticle'
 import ForgetPassword from '../pages/forget/ForgetPassword'
+import Admin from '../pages/admin/Index'
+import AdminDashboard from '../pages/admin/dashboard/Dashboard'
+import AdminUser from '../pages/admin/user/User'
+import AdminTopic from '../pages/admin/topic/Topic'
 
 /**
  * 重写路由的push方法
@@ -83,6 +87,40 @@ export default new Router({
                     path: '/forget-password',
                     name: 'forget-password',
                     component: ForgetPassword
+                },
+                {
+                    path: '/admin',
+                    component: Admin,
+                    children: [
+                        {
+                            path: '/',
+                            name: 'admin-dashboard',
+                            component: AdminDashboard
+                        },
+                        {
+                            path: 'user',
+                            name: 'admin-user',
+                            component: AdminUser
+                        },
+                        {
+                            path: 'topic',
+                            name: 'admin-topic',
+                            component: AdminTopic
+                        },
+                        {
+                            path: 'post-topic',
+                            name: 'admin-post-topic',
+                            component: ()=>import('../pages/admin/topic/PostTopic')
+                        },
+                        {
+                            path: 'topic-tag',
+                            name: 'admin-topic-tag',
+                            component: ()=>import('../pages/admin/topic/TopicTag')
+                        },
+                        {
+                            path: '*', redirect: '/'
+                        }
+                    ]
                 },
                 {
                     path: '*', redirect: '/'

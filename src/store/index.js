@@ -27,6 +27,7 @@ export default new Vuex.Store({
     bodySide: '',
     login: false,
     activeMenu: 'home',
+    activeAdminMenu: 'admin-dashboard',
     activeTopic: '51mcu',
     activeTag: 'news'
   },
@@ -36,6 +37,9 @@ export default new Vuex.Store({
     },
     setActiveMenu(state, data){
       state.activeMenu = data
+    },
+    setActiveAdminMenu(state, data){
+      state.activeAdminMenu = data
     },
     setActiveTopic(state, data){
       state.activeTopic = data

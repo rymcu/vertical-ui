@@ -3,7 +3,7 @@ module.exports = {
         port: 8081,
         proxy: {
             '/api/': {
-                target: 'http://192.168.1.4:8099/vertical/',
+                target: 'http://localhost:8099/vertical/',
                 ws: true,
                 changeOrigin: true,
                 pathRewrite: {
