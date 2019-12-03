@@ -136,9 +136,25 @@ export default {
     float: none;
   }
 
-
   .mr-3, .mx-3 {
     margin-right: 0.75rem !important;
+  }
+
+
+  .navbar-brand-img {
+    height: 2rem;
+    line-height: 2rem;
+    vertical-align: bottom;
+    margin-right: .5rem;
+    width: auto;
+  }
+
+  .topic-brand-img {
+    height: 4rem;
+    line-height: 2rem;
+    vertical-align: bottom;
+    margin-right: .5rem;
+    width: auto;
   }
 
 </style>

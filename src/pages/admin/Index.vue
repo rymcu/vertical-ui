@@ -34,15 +34,15 @@
         name: "Admin",
         computed: {
             getActiveAdminMenu () {
-                return this.$store.state.activeAdminMenu;
+                return this.$store.state.activeMenu;
             }
         },
         methods: {
             handleSelectMenu(item) {
                 let _ts = this;
-                let activeMenu = _ts.$store.state.activeAdminMenu;
+                let activeMenu = _ts.$store.state.activeMenu;
                 if (activeMenu !== item) {
-                    _ts.$store.commit('setActiveAdminMenu', item);
+                    _ts.$store.commit('setActiveMenu', item);
                     _ts.$router.push(
                         {
                             name: item

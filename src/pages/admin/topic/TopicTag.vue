@@ -1,16 +1,31 @@
 <template>
     <el-row>
-        <el-col>
-            <el-col :span="4">
-                <img :src="topic.topicIconPath" :alt="topic.topicTitle" class="navbar-brand-img">
+        <el-col v-if="topic.idTopic">
+            <el-col :span="2" style="text-align: right;align-items: center;display: flex;">
+                <img :src="topic.topicIconPath" :alt="topic.topicTitle" class="topic-brand-img">
             </el-col>
             <el-col :span="20">
                 <el-col>
                     <el-col>
-                        <el-link @click="onRouter('admin-topic-tag',topic)" :underline="false"><h4>{{ topic.topicTitle }}</h4></el-link>
+                        <h2>{{ topic.topicTitle }}</h2>
                     </el-col>
                     <el-col>
                         <p>{{ topic.topicDescription }}</p>
+                    </el-col>
+                </el-col>
+            </el-col>
+        </el-col>
+        <el-col v-else>
+            <el-col :span="2" style="text-align: right;">
+                <img :src="topicIconPath" :alt="topicTitle" class="topic-brand-img">
+            </el-col>
+            <el-col :span="20">
+                <el-col>
+                    <el-col>
+                        <h2>{{ topicTitle }}</h2>
+                    </el-col>
+                    <el-col>
+                        <p>{{ topicDescription }}</p>
                     </el-col>
                 </el-col>
             </el-col>
@@ -21,19 +36,48 @@
 <script>
     export default {
         name: "TopicTag",
-        props: ["idTopic"],
+        props: {
+            idTopic: {
+                type: Number,
+                default: 0
+            },
+            topicTitle: {
+                type: String,
+                default: ''
+            },
+            topicUri: {
+                type: String,
+                default: ''
+            },
+            topicIconPath: {
+                type: String,
+                default: ''
+            },
+            topicDescription: {
+                type: String,
+                default: ''
+            }
+        },
         data() {
             return {
-                topic: {}
+                topic: {
+                    idTopic: 0,
+                    topicTitle: '',
+                    topicUri: '',
+                    topicIconPath: '',
+                    topicDescription: '',
+                    topicTags: {}
+                }
             }
         },
         methods: {
-            getData() {}
+            getData() {
+                let _ts = this;
+                _ts.axios.get("/admin/topic")
+            }
         },
         mounted() {
-            // eslint-disable-next-line no-console
-            console.log(this.$route.params)
-            this.$store.commit("setActiveAdminMenu", "admin-topic-tag");
+            this.$store.commit("setActiveMenu", "admin-topic-tag");
             this.getData();
         }
     }

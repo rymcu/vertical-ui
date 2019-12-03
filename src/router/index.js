@@ -113,9 +113,10 @@ export default new Router({
                             component: ()=>import('../pages/admin/topic/PostTopic')
                         },
                         {
-                            path: 'topic-tag',
+                            path: 'topic-tag/:topicUri',
                             name: 'admin-topic-tag',
-                            component: ()=>import('../pages/admin/topic/TopicTag')
+                            component: ()=>import('../pages/admin/topic/TopicTag'),
+                            props: true
                         },
                         {
                             path: '*', redirect: '/'
