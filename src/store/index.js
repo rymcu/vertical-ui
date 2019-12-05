@@ -119,6 +119,8 @@ export default new Vuex.Store({
           default:
             hasPermissions = state.role < 4;
         }
+      } else {
+        window.app.$store.commit('logout');
       }
       return hasPermissions;
     }
