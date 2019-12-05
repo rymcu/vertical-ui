@@ -2,11 +2,11 @@
     <el-row>
         <el-col>
             <el-form :model="topic" :rules="rules" ref="topic" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="主题名称" prop="name">
+                <el-form-item label="主题名称" prop="topicTitle">
                     <el-input v-model="topic.topicTitle"></el-input>
                 </el-form-item>
-                <el-form-item label="URI" prop="uri">
-                    <el-input v-model="topic.topicURI"></el-input>
+                <el-form-item label="URI" prop="topicUri">
+                    <el-input v-model="topic.topicUri"></el-input>
                 </el-form-item>
                 <el-form-item label="图标">
                     <el-upload
@@ -15,7 +15,7 @@
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess"
                             :before-upload="beforeAvatarUpload">
-                        <img v-if="topic.topicIconPath" :src="topic.topicIconPath">
+                        <img v-if="topic.topicIconPath" class="topic-brand-img" :src="topic.topicIconPath">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </el-form-item>
@@ -44,7 +44,10 @@
                     <el-input v-model="topic.topicTagCount" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="描述">
-                    <el-input v-model="topic.topicDescription" maxlength="100" show-word-limit></el-input>
+                    <el-input v-model="topic.topicDescription" type="textarea" :rows="5" maxlength="200" show-word-limit></el-input>
+                </el-form-item>
+                <el-form-item class="text-right">
+                    <el-button @click="updateTopic" :loading="loading">提交</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -54,6 +57,7 @@
 <script>
     export default {
         name: "PostTopic",
+        props: ["id"],
         data() {
             return {
                 topic: {
@@ -67,13 +71,14 @@
                     topicSort: 10
                 },
                 rules: {
-                    name: [
+                    topicTitle: [
                         {required: true, message: '请输入主题名称', trigger: 'blur'}
                     ],
-                    uri: [
+                    topicUri: [
                         {required: true, message: '请输入主题uri', trigger: 'blur'}
                     ]
-                }
+                },
+                loading: false
             }
         },
         methods: {
@@ -91,7 +96,36 @@
                     this.$message.error('上传头像图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
+            },
+            updateTopic() {
+                let _ts = this;
+                _ts.$set(_ts,'loading', true);
+                let id = _ts.topic.idTopic;
+                let title = id?'更新':'添加';
+                _ts.axios[id?'put':'post']('/admin/topic/post', _ts.topic).then(function (res) {
+                    if (res && res.message) {
+                        _ts.$message.error(res.message);
+                    } else {
+                        _ts.$message({
+                            type: 'success',
+                            message: title + '成功!'
+                        });
+                        _ts.$set(_ts,'loading', false);
+                        _ts.getData();
+                    }
+                })
+            },
+            async getData() {
+                let _ts = this;
+                const responseData = await _ts.axios.get('/admin/topic/detail/' + _ts.id);
+                if (responseData) {
+                    _ts.$set(_ts,'topic',responseData);
+                }
             }
+        },
+        mounted() {
+            this.$store.commit("setActiveMenu", "admin-topic-post");
+            this.getData();
         }
     }
 </script>

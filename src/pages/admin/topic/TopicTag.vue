@@ -15,7 +15,7 @@
                         <el-dropdown trigger="click"  @command="handleCommand">
                             <el-link :underline="false"><i class="el-icon-more"></i></el-link>
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item command="edit">管理</el-dropdown-item>
+                                <el-dropdown-item command="admin-post-topic">管理</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </el-col>
@@ -48,8 +48,7 @@
         name: "TopicTag",
         computed: {
             hasPermissions() {
-                let _ts = this;
-                return _ts.$store.getters.hasPermissions('topic');
+                return this.$store.getters.hasPermissions('topic');
             }
         },
         props: {
@@ -105,7 +104,10 @@
             },
             handleCommand(command) {
                 this.$router.push({
-                    name: command
+                    name: command,
+                    params: {
+                        id: this.topic.idTopic
+                    }
                 })
             }
         },
