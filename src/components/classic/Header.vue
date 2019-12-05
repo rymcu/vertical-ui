@@ -44,8 +44,8 @@
                                     <el-avatar class="mr-3" v-else size="small" style="margin-top: 1rem;" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
                                     <el-link :underline="false" style="margin-left: 10px;margin-bottom: 1rem;">{{ nickname }}</el-link>
                                 </el-dropdown-item>
-                                <!--<el-dropdown-item command="info" divided>积分</el-dropdown-item>-->
-                                <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+                                <el-dropdown-item v-show="hasPermissions" command="admin-dashboard">管理</el-dropdown-item>
+                                <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </el-link>
@@ -76,6 +76,9 @@
             },
             nickname() {
                 return this.$store.state.nickname;
+            },
+            hasPermissions () {
+                return this.$store.getters.hasPermissions('blog_admin');
             }
         },
         data() {

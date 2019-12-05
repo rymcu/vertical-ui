@@ -1,22 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Index from '../pages/Index'
-import Home from '../pages/home/Home'
-import Topic from '../pages/topic/Topic'
-import Tag from '../pages/tag/Tag'
-import Comment from '../pages/comment/Comment'
-import Article from '../pages/article/Article'
-import User from '../pages/user/User'
-import Login from '../pages/login/Login'
-import Register from '../pages/register/Register'
-import PostArticle from '../pages/article/PostArticle'
-import ForgetPassword from '../pages/forget/ForgetPassword'
-import Admin from '../pages/admin/Index'
-import AdminDashboard from '../pages/admin/dashboard/Dashboard'
-import AdminUser from '../pages/admin/user/User'
-import AdminTopic from '../pages/admin/topic/Topic'
-
 /**
  * 重写路由的push方法
  */
@@ -32,75 +16,75 @@ export default new Router({
     routes: [
         {
             path: '/',
-            component: Index,
+            component: ()=>import('../pages/Index'),
             children: [
                 {
                     path: '/',
                     name: 'home',
-                    component: Home
+                    component: ()=>import('../pages/home/Home')
                 },
                 {
                     path: '/topic/:name',
                     name: 'topic',
-                    component: Topic,
+                    component: ()=>import('../pages/topic/Topic'),
                     props: true
                 },
                 {
                     path: '/tag/:tag',
                     name: 'tag',
-                    component: Tag,
+                    component: ()=>import('../pages/tag/Tag'),
                     props: true
                 },
                 {
                     path: '/article/:id',
                     name: 'article',
-                    component: Article,
+                    component: ()=>import('../pages/article/Article'),
                     props: true
                 },
                 {
                     path: '/postArticle',
                     name: 'postArticle',
-                    component: PostArticle
+                    component: ()=>import('../pages/article/PostArticle')
                 },
                 {
                     path: '/comment',
                     name: 'comment',
-                    component: Comment
+                    component: ()=>import('../pages/comment/Comment')
                 },
                 {
                     path: '/user/:id',
                     name: 'user',
-                    component: User,
+                    component: ()=>import('../pages/user/User'),
                     props: true
                 },
                 {
                     path: '/login',
                     name: 'login',
-                    component: Login
+                    component: ()=>import('../pages/login/Login')
                 },
                 {
                     path: '/register',
                     name: 'register',
-                    component: Register
+                    component: ()=>import('../pages/register/Register')
                 },
                 {
                     path: '/forget-password',
                     name: 'forget-password',
-                    component: ForgetPassword
+                    component: ()=>import('../pages/forget/ForgetPassword')
                 },
                 {
                     path: '/admin',
-                    component: Admin,
+                    component: ()=>import('../pages/admin/Index'),
                     children: [
                         {
                             path: '/',
                             name: 'admin-dashboard',
-                            component: AdminDashboard
+                            component: ()=>import('../pages/admin/dashboard/Dashboard')
                         },
                         {
                             path: 'user',
                             name: 'admin-user',
-                            component: AdminUser
+                            component: ()=>import('../pages/admin/user/User')
                         },
                         {
                             path: 'role',
@@ -110,12 +94,13 @@ export default new Router({
                         {
                             path: 'topics',
                             name: 'admin-topic',
-                            component: AdminTopic
+                            component: ()=>import('../pages/admin/topic/Topic')
                         },
                         {
-                            path: 'post-topic',
+                            path: 'post-topic/:id',
                             name: 'admin-post-topic',
-                            component: ()=>import('../pages/admin/topic/PostTopic')
+                            component: ()=>import('../pages/admin/topic/PostTopic'),
+                            props: true
                         },
                         {
                             path: 'topic/:topicUri',

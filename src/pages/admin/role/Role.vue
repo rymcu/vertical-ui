@@ -112,7 +112,7 @@
             updateRole() {
                 let _ts = this;
                 let id = _ts.role.idRole;
-                let title = id?'修改':'添加';
+                let title = id?'更新':'添加';
                 _ts.axios[id?'put':'post']('/admin/role/post', _ts.role).then(function (res) {
                     if (res && res.message) {
                         _ts.$message.error(res.message);

@@ -50,7 +50,7 @@
                 return this.$store.state.activeMenu;
             },
             hasPermissions () {
-                return this.$store.getters.hasPermissions();
+                return this.$store.getters.hasPermissions('blog_admin');
             }
         },
         methods: {
@@ -66,9 +66,6 @@
                     )
                 }
             }
-        },
-        mounted() {
-            this.$store.commit("setActiveMenu", "admin-dashboard");
         }
     }
 </script>

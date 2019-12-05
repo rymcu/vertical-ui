@@ -6,7 +6,10 @@
 
 <script>
     export default {
-        name: "Dashboard"
+        name: "Dashboard",
+        mounted() {
+            this.$store.commit("setActiveMenu", "admin-dashboard");
+        }
     }
 </script>
 
