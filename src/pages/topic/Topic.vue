@@ -50,9 +50,9 @@
                 topicNavs: [],
                 articles: [],
                 pagination: {
-                    "paginationPageCount": 0,
-                    "paginationPageNums": [],
-                    "currentPage": 1
+                    currentPage: 1,
+                    pageSize: 20,
+                    total: 0
                 }
             }
         },
