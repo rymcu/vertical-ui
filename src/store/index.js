@@ -69,11 +69,13 @@ export default new Vuex.Store({
       state.nickname = '';
       state.token = '';
       state.account = '';
+      state.role = '';
       localStorage.removeItem('isLogin');
       localStorage.removeItem('avatarURL');
       localStorage.removeItem('nickname');
       localStorage.removeItem('account');
       localStorage.removeItem('x-auth-token');
+      localStorage.removeItem('role');
     }
   },
   actions: {
@@ -110,6 +112,9 @@ export default new Vuex.Store({
             break;
           case 'admin':
             hasPermissions = state.role < 2;
+            break;
+          case 'blog_admin':
+            hasPermissions = state.role < 3;
             break;
           default:
             hasPermissions = state.role < 4;

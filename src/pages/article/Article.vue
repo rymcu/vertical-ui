@@ -16,7 +16,7 @@
                                     <small class="d-block text-muted">{{ article.timeAgo }}</small>
                                 </div>
                             </el-col>
-                            <el-col v-if="isAuthor" class="text-right">
+                            <el-col v-if="hasPermissions" class="text-right">
                                 <el-dropdown trigger="click"  @command="handleCommand">
                                     <el-link :underline="false"><i class="el-icon-more"></i></el-link>
                                     <el-dropdown-menu slot="dropdown">
@@ -40,14 +40,14 @@
         name: "Article",
         props: ["id"],
         computed: {
-            isAuthor() {
+            hasPermissions() {
                 let account = this.$store.state.nickname;
                 if(account){
                     if (account === this.article.articleAuthor.userNickname){
                         return true;
                     }
                 }
-                return false;
+                return this.$store.getters.hasPermissions('blog_admin');
             }
         },
         data (){

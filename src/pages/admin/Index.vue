@@ -1,9 +1,9 @@
 <template>
     <el-row type="flex" justify="center" :gutter="8">
-        <el-col :span="20">
+        <el-col v-if="hasPermissions" :span="20">
             <el-col :span="4">
                 <el-menu
-                        :default-active="getActiveAdminMenu"
+                        :default-active="getActiveMenu"
                         class="el-menu-vertical-demo"
                         @select="handleSelectMenu">
                     <el-menu-item index="admin-dashboard">
@@ -28,6 +28,15 @@
                 <router-view></router-view>
             </el-col>
         </el-col>
+        <el-col v-else class="text-center">
+            <el-alert
+                title="用户无权限"
+                type="warning"
+                center
+                show-icon
+                :closable="false">
+            </el-alert>
+        </el-col>
     </el-row>
 </template>
 
@@ -37,8 +46,11 @@
     export default {
         name: "Admin",
         computed: {
-            getActiveAdminMenu () {
+            getActiveMenu () {
                 return this.$store.state.activeMenu;
+            },
+            hasPermissions () {
+                return this.$store.getters.hasPermissions();
             }
         },
         methods: {
@@ -54,6 +66,9 @@
                     )
                 }
             }
+        },
+        mounted() {
+            this.$store.commit("setActiveMenu", "admin-dashboard");
         }
     }
 </script>
