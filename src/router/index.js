@@ -103,7 +103,12 @@ export default new Router({
                             component: AdminUser
                         },
                         {
-                            path: 'topic',
+                            path: 'role',
+                            name: 'admin-role',
+                            component: ()=>import('../pages/admin/role/Role')
+                        },
+                        {
+                            path: 'topics',
                             name: 'admin-topic',
                             component: AdminTopic
                         },
@@ -113,7 +118,7 @@ export default new Router({
                             component: ()=>import('../pages/admin/topic/PostTopic')
                         },
                         {
-                            path: 'topic-tag/:topicUri',
+                            path: 'topic/:topicUri',
                             name: 'admin-topic-tag',
                             component: ()=>import('../pages/admin/topic/TopicTag'),
                             props: true

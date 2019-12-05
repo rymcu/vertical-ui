@@ -48,16 +48,20 @@ export default new Vuex.Store({
       state.activeTag = data
     },
     initLogin(state, data){
+      // eslint-disable-next-line no-console
+      console.log(data);
       state.isLogin = true;
       state.avatarURL = data.avatarURL;
       state.nickname = data.nickname;
       state.token = data.token;
       state.account = data.account;
+      state.role = data.weights;
       localStorage.setItem('isLogin', 'true');
       localStorage.setItem('avatarURL', data.avatarURL);
       localStorage.setItem('nickname', data.nickname);
       localStorage.setItem('account', data.account);
       localStorage.setItem('x-auth-token', data.token);
+      localStorage.setItem('role', data.weights);
     },
     logout(state){
       state.isLogin = false;
@@ -84,8 +88,34 @@ export default new Vuex.Store({
         state.avatarURL = localStorage.getItem('avatarURL') !== 'undefined'?localStorage.getItem('avatarURL'):"";
         state.token = localStorage.getItem('x-auth-token');
         state.account = localStorage.getItem('account');
+        state.role = Number(localStorage.getItem('role'));
       }
       return state.isLogin
+    },
+    hasPermissions:(state)=>(scenes)=>{
+      let hasPermissions = false;
+      if (state.role) {
+        switch (scenes) {
+          case 'user':
+            hasPermissions = state.role < 2;
+            break;
+          case 'role':
+            hasPermissions = state.role < 2;
+            break;
+          case 'topic':
+            hasPermissions = state.role < 3;
+            break;
+          case 'tag':
+            hasPermissions = state.role < 3;
+            break;
+          case 'admin':
+            hasPermissions = state.role < 2;
+            break;
+          default:
+            hasPermissions = state.role < 4;
+        }
+      }
+      return hasPermissions;
     }
   }
 })

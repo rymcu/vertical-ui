@@ -157,4 +157,11 @@ export default {
     width: auto;
   }
 
+  .text-left {
+    text-align: left;
+  }
+  .text-right {
+    text-align: right;
+  }
+
 </style>

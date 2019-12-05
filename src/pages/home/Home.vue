@@ -38,9 +38,9 @@
             return {
                 articles: [],
                 pagination: {
-                    "paginationPageCount": 0,
-                    "paginationPageNums": [],
-                    "currentPage": 1
+                    currentPage: 1,
+                    pageSize: 20,
+                    total: 0
                 }
             }
         },
@@ -49,11 +49,12 @@
                 this.getData(val);
             },
             async getData(p){
+                let _ts = this;
                 const responseTopData = await this.axios.get('/console/articles?page='+p);
                 if (responseTopData) {
                     responseTopData.pagination.currentPage = p;
-                    this.$set(this, 'articles', responseTopData.articles);
-                    this.$set(this, 'pagination', responseTopData.pagination);
+                    _ts.$set(_ts, 'articles', responseTopData.articles);
+                    _ts.$set(_ts, 'pagination', responseTopData.pagination);
                 }
             },
             onRouter (name, data) {

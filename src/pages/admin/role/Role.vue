@@ -1,45 +1,34 @@
 <template>
     <el-row>
         <el-col>
+            <el-button type="primary" @click="showAddDialog">添加角色</el-button>
             <el-table
-                    :data="users"
-                    style="width: 100%">
+                    :data="roles"
+                    style="width: 100%;margin-top: 1rem;">
                 <el-table-column
-                    label="#"
-                    width="40"
-                    prop="idUser">
-                </el-table-column>
-                <el-table-column
-                    label="头像"
-                    width="60"
-                    prop="userAvatarURL">
-                    <template slot-scope="scope">
-                        <el-avatar v-if="scope.row.userAvatarURL" size="medium" :src="scope.row.userAvatarURL"></el-avatar>
-                        <el-avatar v-else size="medium" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        label="昵称"
+                        label="#"
                         width="180"
-                        prop="nickname">
-                    <template slot-scope="scope">
-                        <el-link type="primary" @click="onRouter('user', scope.row.nickname)" :underline="false">{{ scope.row.nickname }}</el-link>
-                    </template>
+                        prop="idRole">
                 </el-table-column>
                 <el-table-column
-                    label="账号"
-                    width="180"
-                    prop="account">
+                        label="角色名"
+                        width="180"
+                        prop="name">
                 </el-table-column>
                 <el-table-column
-                    label="注册时间"
-                    width="180"
-                    prop="createdTime">
+                        label="权重"
+                        width="180"
+                        prop="weights">
                 </el-table-column>
                 <el-table-column
-                    label="状态"
-                    width="180"
-                    prop="status">
+                        label="创建时间"
+                        width="180"
+                        prop="createdTime">
+                </el-table-column>
+                <el-table-column
+                        label="状态"
+                        width="180"
+                        prop="status">
                     <template slot-scope="scope">
                         <el-tag type="primary" disable-transitions>
                             {{scope.row.status === '0' ? '正常' : '禁用'}}
@@ -48,7 +37,7 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="handleRole(scope.$index, scope.row)">授权</el-button>
+                        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                         <el-button v-if="scope.row.status == 1" size="mini" type="primary" @click="toggleStatus(scope.$index, scope.row)">启用</el-button>
                         <el-button v-else size="mini" type="danger" @click="toggleStatus(scope.$index, scope.row)">禁用</el-button>
                     </template>
@@ -67,12 +56,16 @@
             </el-pagination>
         </el-col>
         <el-col>
-            <el-dialog :visible.sync="dialogVisible">
-                <el-form>
-                    <el-form-item>
-                        <el-radio-group v-model="idRole">
-                            <el-radio v-for="role in roles" :key="role.idRole" border :label="role.idRole">{{ role.name }}</el-radio>
-                        </el-radio-group>
+            <el-dialog :title="title" :visible.sync="dialogVisible">
+                <el-form v-model="role" label-width="80px">
+                    <el-form-item label="角色名">
+                        <el-input v-model="role.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="拼音码">
+                        <el-input v-model="role.inputCode"></el-input>
+                    </el-form-item>
+                    <el-form-item label="权重">
+                        <el-input-number :min="1" v-model="role.weights"></el-input-number>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -88,10 +81,9 @@
     /* eslint-disable no-console */
 
     export default {
-        name: "AdminUser",
+        name: "AdminRole",
         data() {
             return {
-                users: [],
                 roles: [],
                 pagination:{
                     currentPage: 1,
@@ -99,46 +91,58 @@
                     total: 0
                 },
                 order: 'desc',
-                idRole: 0,
-                idUser: 0,
+                role: {},
+                title: '',
                 dialogVisible: false
             }
         },
         methods: {
-            onRouter(name, data) {
-                this.$router.push({
-                    name: name,
-                    params: {
-                        id: data
+            showAddDialog() {
+                let _ts = this;
+                _ts.$set(_ts,'dialogVisible', true);
+                _ts.$set(_ts,'title', '添加角色信息');
+                _ts.$set(_ts,'role', { weights: 10 });
+            },
+            handleEdit(index, role) {
+                let _ts = this;
+                _ts.$set(_ts,'dialogVisible', true);
+                _ts.$set(_ts,'title', '编辑角色信息');
+                _ts.$set(_ts,'role', role);
+            },
+            updateRole() {
+                let _ts = this;
+                let id = _ts.role.idRole;
+                let title = id?'修改':'添加';
+                _ts.axios[id?'put':'post']('/admin/role/post', _ts.role).then(function (res) {
+                    if (res && res.message) {
+                        _ts.$message.error(res.message);
+                    } else {
+                        _ts.$message({
+                            type: 'success',
+                            message: title + '成功!'
+                        });
+                        _ts.$set(_ts,'dialogVisible', false);
+                        _ts.getData(_ts.pagination.currentPage, _ts.pagination.pageSize);
                     }
                 })
             },
-            handleRole(index, user) {
-                let _ts = this;
-                _ts.$set(_ts,'idUser', user.idUser);
-                _ts.axios.get('admin/user/' + user.idUser + '/role')
-                .then(function (res) {
-                    _ts.$set(_ts,'dialogVisible', true);
-                    _ts.$set(_ts,'idRole', res[0].idRole);
-                });
-            },
-            toggleStatus(index, user) {
+            toggleStatus(index, role) {
                 let _ts = this;
                 let title,status;
-                if (user.status == 0) {
+                if (role.status == 0) {
                     title = '禁用';
                     status = 1;
                 } else {
                     title = '启用';
                     status = 0;
                 }
-                _ts.$confirm('确定'+ title +'用户'+ user.nickname +'('+user.account+')?', '提示', {
+                _ts.$confirm('确定'+ title +'角色 '+ role.name +'?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    _ts.axios.patch('/admin/user/update-status',{
-                        idUser: user.idUser,
+                    _ts.axios.patch('/admin/role/update-status',{
+                        idRole: role.idRole,
                         status: status
                     }).then(function (res) {
                         if (res && res.message) {
@@ -164,22 +168,13 @@
                     page: page,
                     rows: pageSize
                 };
-                _ts.axios.get("/admin/users", {
+                _ts.axios.get("/admin/roles", {
                     params: data
                 }).then(function (res) {
-                    let users = res.users;
-                    let pagination = res.pagination;
-                    if (users) {
-                        _ts.$set(_ts,'users', users);
-                        _ts.$set(_ts,'pagination', res.pagination);
-                    }
-                    _ts.pagination = pagination;
-                });
-
-                _ts.axios.get("/admin/roles").then(function (res) {
                     let roles = res.roles;
-                    if (roles) {
+                    if(roles){
                         _ts.$set(_ts,'roles', roles);
+                        _ts.$set(_ts,'pagination', res.pagination);
                     }
                 })
             },
@@ -190,30 +185,10 @@
             handleCurrentChange(val) {
                 let _ts = this;
                 _ts.getData(val, _ts.pagination.pageSize);
-            },
-            updateRole() {
-                let _ts = this;
-                let data = {
-                    idUser: _ts.idUser,
-                    idRole: _ts.idRole
-                };
-                _ts.axios.patch('/admin/user/update-role', data).then(function (res) {
-                    if (res && res.message) {
-                        _ts.$message.error(res.message);
-                    } else {
-                        _ts.$message({
-                            message:'授权成功',
-                            type: 'success'
-                        });
-                        _ts.$set(_ts,'dialogVisible', false);
-                        _ts.$set(_ts,'idUser', 0);
-                        _ts.$set(_ts,'idRole', 0);
-                    }
-                })
             }
         },
         mounted() {
-            this.$store.commit("setActiveMenu", "admin-user");
+            this.$store.commit("setActiveMenu", "admin-role");
             this.getData(this.pagination.currentPage, this.pagination.pageSize);
         }
     }
