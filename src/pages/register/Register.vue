@@ -3,7 +3,7 @@
         <el-col :xs="24" :sm="12" :xl="12" class="verify-wrap flex-inline">
             <el-form :model="user" ref="user" status-icon label-width="100px" style="width: 375px;">
                 <el-form-item>
-                    <img src="../../assets/rymcu.png" alt="RY MCU" class="icon-rymcu">
+                    <img src="../../assets/rymcu.png" alt="RYMCU" class="icon-rymcu">
                 </el-form-item>
                 <el-form-item label="邮箱" prop="email"
                   :rules="[
@@ -30,8 +30,8 @@
         </el-col>
         <el-col :xs="24" :sm="12" :xl="12" class="intro vditor-reset verify__sign">
             <div>
-                <h2>欢迎来到 RY MCU</h2>
-                <p><a href="/">RY MCU</a> 是一个嵌入式知识共享平台，专注于单片机学习。</p>
+                <h2>欢迎来到 RYMCU</h2>
+                <p><a href="/">RYMCU</a> 是一个嵌入式知识共享平台，专注于单片机学习。</p>
                 <p>我们正在构建一个小众社区。大家在这里相互<strong>信任</strong>，以<em>平等 • 自由 • 奔放</em>的价值观进行分享交流。最终，希望大家能够找到与自己志同道合的伙伴，共同成长。</p>
                 <p>最后请大家共同爱护这个<i>自由</i>的交流环境，相信这里一定是你注册过的所有社区中用户体验最好的 😍</p>
             </div>

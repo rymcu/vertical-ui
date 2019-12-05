@@ -3,8 +3,8 @@
         <el-col>
             <el-col :xs="16" :sm="4" :xl="2" style="padding-top: 1rem;">
                 <a class="navbar-brand" href="/">
-                    <img src="../../assets/rymcu.png" alt="RY MCU" class="navbar-brand-img">
-                    <span>RY MCU</span>
+                    <img src="../../assets/rymcu.png" alt="RYMCU" class="navbar-brand-img">
+                    <span>RYMCU</span>
                 </a>
             </el-col>
             <el-col :xs="0" :sm="12" :xl="16" style="text-align: center;">

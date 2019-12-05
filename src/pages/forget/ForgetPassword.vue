@@ -3,7 +3,7 @@
         <el-col :xs="24" :sm="12" :xl="12" class="verify-wrap flex-inline">
             <el-form :model="form" ref="form" status-icon label-width="100px" style="width: 375px;">
                 <el-form-item>
-                    <img src="../../assets/rymcu.png" alt="RY MCU" class="icon-rymcu">
+                    <img src="../../assets/rymcu.png" alt="RYMCU" class="icon-rymcu">
                 </el-form-item>
                 <el-form-item style="text-align: center;">
                     <span style="font-size: 32px;">找回密码</span>
