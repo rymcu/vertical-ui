@@ -48,8 +48,6 @@ export default new Vuex.Store({
       state.activeTag = data
     },
     initLogin(state, data){
-      // eslint-disable-next-line no-console
-      console.log(data);
       state.isLogin = true;
       state.avatarURL = data.avatarURL;
       state.nickname = data.nickname;
