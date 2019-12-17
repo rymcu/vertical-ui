@@ -25,11 +25,6 @@
 <script>
     export default {
         name: "AdminTopic",
-        computed: {
-            isAdmin() {
-                return true
-            }
-        },
         data() {
             return {
                 topics: []

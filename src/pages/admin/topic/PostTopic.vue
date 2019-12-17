@@ -11,11 +11,14 @@
                 <el-form-item label="图标">
                     <el-upload
                             class="avatar-uploader"
-                            action="https://jsonplaceholder.typicode.com/posts/"
+                            :action="tokenURL.URL"
+                            :multiple="true"
+                            :with-credentials="true"
+                            :headers="uploadHeaders"
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess"
                             :before-upload="beforeAvatarUpload">
-                        <img v-if="topic.topicIconPath" class="topic-brand-img" :src="topic.topicIconPath">
+                        <img v-if="topicIconPath" class="topic-brand-img" :src="topicIconPath">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </el-form-item>
@@ -57,6 +60,12 @@
 <script>
     export default {
         name: "PostTopic",
+        computed: {
+            uploadHeaders() {
+                let token = this.$store.getters.uploadHeaders;
+                return { 'X-Upload-Token': token }
+            }
+        },
         props: ["id"],
         data() {
             return {
@@ -78,24 +87,38 @@
                         {required: true, message: '请输入主题uri', trigger: 'blur'}
                     ]
                 },
-                loading: false
+                loading: false,
+                tokenURL: {
+                    URL: '',
+                    token: ''
+                },
+                topicIconPath: ''
             }
         },
         methods: {
-            handleAvatarSuccess(res, file) {
-                this.topic.topicIconPath = URL.createObjectURL(file.raw);
+            handleAvatarSuccess(res) {
+                let _ts = this;
+                if (res && res.data && res.data.url) {
+                    let topic = _ts.topic;
+                    topic.topicIconPath = res.data.url;
+                    _ts.$set(_ts, 'topic', topic);
+                    _ts.$set(_ts, 'topicIconPath', res.data.url);
+                } else {
+                    _ts.$message.error('上传失败!');
+                }
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';
+                const isPNG = file.type === 'image/png';
                 const isLt2M = file.size / 1024 / 1024 < 2;
 
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                if (!(isJPG || isPNG)) {
+                    this.$message.error('上传图标只能是 JPG 或者 PNG 格式!');
                 }
                 if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                    this.$message.error('上传图标大小不能超过 2MB!');
                 }
-                return isJPG && isLt2M;
+                return (isJPG || isPNG) && isLt2M;
             },
             updateTopic() {
                 let _ts = this;
@@ -120,12 +143,23 @@
                 const responseData = await _ts.axios.get('/admin/topic/detail/' + _ts.id);
                 if (responseData) {
                     _ts.$set(_ts,'topic',responseData);
+                    _ts.$set(_ts,'topicIconPath',responseData.topicIconPath);
                 }
             }
         },
         mounted() {
-            this.$store.commit("setActiveMenu", "admin-topic-post");
-            this.getData();
+            let _ts = this;
+            _ts.$store.commit("setActiveMenu", "admin-topic-post");
+            this.axios.get('/upload/simple/token').then(function (res) {
+                if (res) {
+                    _ts.$store.commit('setUploadHeaders', res.uploadToken);
+                    _ts.$set(_ts, 'tokenURL', {
+                        token: res.uploadToken || '',
+                        URL: res.uploadURL || '',
+                    })
+                }
+            });
+            _ts.getData();
         }
     }
 </script>
