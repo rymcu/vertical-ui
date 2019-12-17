@@ -34,18 +34,16 @@
                 </el-row>
             </div>
         </el-col>
-        <!--<el-col>
+        <el-col>
             <div class="vertical-container text-center">
                 <el-pagination v-show="pagination" v-model="pagination"
-                               :page-size="20"
-                               :pager-count="8"
                                layout="prev, pager, next"
                                :current-page="pagination.currentPage"
-                               :page-count="pagination.paginationPageCount"
+                               :total="pagination.total"
                                @current-change="currentChange">
                 </el-pagination>
             </div>
-        </el-col>-->
+        </el-col>
     </el-row>
 </template>
 
@@ -63,7 +61,7 @@
                 articles: [],
                 pagination: {
                     currentPage: 1,
-                    pageSize: 20,
+                    pageSize: 10,
                     total: 0
                 }
             }
