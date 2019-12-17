@@ -7,6 +7,14 @@
                         <el-link @click="onRouter('article',article.idArticle)" :underline="false" style="margin-bottom: .5rem;">
                             <h4 v-html="article.articleTitle"></h4>
                         </el-link>
+                        <el-tag
+                                style="margin-left: 0.5rem;"
+                                v-for="tag in article.tags"
+                                :key="tag.idTag"
+                                size="mini"
+                                effect="plain">
+                            {{ tag.tagTitle }}
+                        </el-tag>
                         <div class="text-muted article-summary-md">{{ article.articlePreviewContent }}</div>
                         <el-row class="pt-5">
                             <el-col :xs="3" :sm="1" :xl="1" class="mr-3">
@@ -27,6 +35,16 @@
                     </div>
                 </el-card>
             </el-col>
+            <el-col>
+                <div class="vertical-container text-center">
+                    <el-pagination v-show="pagination" v-model="pagination"
+                                   layout="prev, pager, next"
+                                   :current-page="pagination.currentPage"
+                                   :total="pagination.total"
+                                   @current-change="currentChange">
+                    </el-pagination>
+                </div>
+            </el-col>
         </el-col>
     </el-row>
 </template>
@@ -39,7 +57,7 @@
                 articles: [],
                 pagination: {
                     currentPage: 1,
-                    pageSize: 20,
+                    pageSize: 10,
                     total: 0
                 }
             }
@@ -55,6 +73,7 @@
                     responseTopData.pagination.currentPage = p;
                     _ts.$set(_ts, 'articles', responseTopData.articles);
                     _ts.$set(_ts, 'pagination', responseTopData.pagination);
+                    window.scrollTo(0, 0)
                 }
             },
             onRouter (name, data) {

@@ -29,7 +29,8 @@ export default new Vuex.Store({
     activeMenu: 'home',
     activeAdminMenu: 'admin-dashboard',
     activeTopic: '51mcu',
-    activeTag: 'news'
+    activeTag: 'news',
+    uploadHeaders: ''
   },
   mutations: {
     setLogin(state, data){
@@ -74,6 +75,9 @@ export default new Vuex.Store({
       localStorage.removeItem('account');
       localStorage.removeItem('x-auth-token');
       localStorage.removeItem('role');
+    },
+    setUploadHeaders(state, data){
+      state.uploadHeaders = data
     }
   },
   actions: {
@@ -81,6 +85,9 @@ export default new Vuex.Store({
   modules: {
   },
   getters: {
+    uploadHeaders(state){
+      return state.uploadHeaders;
+    },
     isLogin(state){
       if (!state.isLogin) {
         state.isLogin = localStorage.getItem('isLogin');   //从sessionStorage中读取状态

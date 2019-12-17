@@ -1,0 +1,93 @@
+<template>
+    <el-row>
+        <el-col style="margin: .5rem;">
+            <el-button size="small" @click="cleanUnusedTag">清除未使用标签</el-button>
+        </el-col>
+        <el-col v-for="tag in tags" :key="tag.idTag">
+            <el-card style="margin: .5rem;">
+                <el-col :span="1">
+                    <el-avatar shape="square" :src="tag.tagIconPath" fit="scale-down"></el-avatar>
+                </el-col>
+                <el-col :span="20">
+                    <el-col>
+                            <span class="tag-title">{{ tag.tagTitle }}</span>
+                    </el-col>
+                    <el-col>
+                        <span class="text-muted" v-if="tag.tagArticleCount">{{ tag.tagArticleCount }} 引用</span>
+                        <span class="text-muted" v-else> <span style="color: #F56C6C;">0</span> 引用</span>
+                    </el-col>
+                </el-col>
+                <el-col :span="3" class="text-right">
+                    <el-button size="small" @click="updateTag(tag.idTag)">管理</el-button>
+                </el-col>
+                <el-col style="margin-bottom: .8rem">{{ tag.tagDescription }}</el-col>
+            </el-card>
+        </el-col>
+    </el-row>
+</template>
+
+<script>
+    export default {
+        name: "AdminTag",
+        data() {
+            return {
+                tags: []
+            }
+        },
+        methods: {
+            cleanUnusedTag() {
+                let _ts = this;
+                _ts.$confirm('确定清除未使用标签吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    _ts.axios.delete('/admin/tag/clean-unused').then(function (res) {
+                        if (res && res.message){
+                            _ts.$message.error(res.message)
+                        } else {
+                            _ts.getData()
+                        }
+                    })
+                }).catch(() => {
+                    _ts.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+                });
+            },
+            getData() {
+                let _ts = this;
+                _ts.axios.get("/admin/tags").then(function (res) {
+                    _ts.$set(_ts,"tags",res.tags);
+                })
+            },
+            onRouter(item,data) {
+                this.$router.push({
+                    name: item,
+                    params: data
+                })
+            },
+            updateTag(id) {
+                this.$router.push({
+                    name: 'admin-post-tag',
+                    params: {
+                        id: id
+                    }
+                })
+            }
+        },
+        mounted() {
+            this.$store.commit("setActiveMenu", "admin-tag");
+            this.getData();
+        }
+    }
+</script>
+
+<style scoped>
+    .tag-title {
+        font-weight: bold;
+        font-size: 1em;
+        margin-right: 1.5rem;
+    }
+</style>

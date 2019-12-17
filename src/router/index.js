@@ -109,6 +109,17 @@ export default new Router({
                             props: true
                         },
                         {
+                            path: 'tag',
+                            name: 'admin-tag',
+                            component: ()=>import('../pages/admin/tag/Tag')
+                        },
+                        {
+                            path: 'post-tag/:id',
+                            name: 'admin-post-tag',
+                            component: ()=>import('../pages/admin/tag/PostTag'),
+                            props: true
+                        },
+                        {
                             path: '*', redirect: '/'
                         }
                     ]
