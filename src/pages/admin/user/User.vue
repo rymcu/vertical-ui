@@ -1,5 +1,11 @@
 <template>
     <el-row>
+        <el-col style="margin-bottom: 1rem;">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/admin' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+            </el-breadcrumb>
+        </el-col>
         <el-col>
             <el-table
                     :data="users"

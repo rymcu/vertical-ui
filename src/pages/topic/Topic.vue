@@ -58,18 +58,22 @@
         },
         methods: {
             currentChange(val){
-                this.getData(val);
+                const topic = this.$store.state.activeTopic;
+                this.getData(topic,val);
             },
             async getData(topic,p){
+                let _ts = this;
                 const topicNavData = await this.axios.get('/topic/topic-nav');
                 if (topicNavData) {
-                    this.$set(this, 'topicNavs', topicNavData);
+                    _ts.$set(_ts, 'topicNavs', topicNavData);
                 }
-                const responseTopData = await this.axios.get('/topic/' + topic + '&page='+p);
+                const responseTopData = await this.axios.get('/topic/' + topic + '?page='+p);
                 if (responseTopData) {
                     responseTopData.pagination.currentPage = p;
-                    this.$set(this, 'articles', responseTopData.articles);
-                    this.$set(this, 'pagination', responseTopData.pagination);
+                    _ts.$set(_ts, 'articles', responseTopData.articles);
+                    _ts.$set(_ts, 'pagination', responseTopData.pagination);
+                } else {
+                    _ts.$set(_ts, 'articles', []);
                 }
             },
             onRouter (name, data) {
@@ -83,14 +87,10 @@
                 )
             },
             handleSelectTopic(item) {
-                this.$router.push(
-                    {
-                        name: 'topic',
-                        params: {
-                            name: item
-                        }
-                    }
-                )
+                this.$store.commit('setActiveTopic', item);
+                const topic = this.$store.state.activeTopic;
+                const p = this.pagination.currentPage;
+                this.getData(topic,p);
             }
         },
         mounted () {

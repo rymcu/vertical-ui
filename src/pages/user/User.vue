@@ -36,7 +36,7 @@
         </el-col>
         <el-col>
             <div class="vertical-container text-center">
-                <el-pagination v-show="pagination" v-model="pagination"
+                <el-pagination v-show="pagination.total > 12" v-model="pagination"
                                layout="prev, pager, next"
                                :current-page="pagination.currentPage"
                                :total="pagination.total"

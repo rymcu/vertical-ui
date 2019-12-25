@@ -1,5 +1,11 @@
 <template>
     <el-row>
+        <el-col style="margin-bottom: 1rem;">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/admin' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>角色管理</el-breadcrumb-item>
+            </el-breadcrumb>
+        </el-col>
         <el-col>
             <el-button type="primary" @click="showAddDialog">添加角色</el-button>
             <el-table

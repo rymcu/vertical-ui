@@ -27,8 +27,9 @@
                                     <small class="d-block text-muted">{{ article.timeAgo }}</small>
                                 </div>
                                 <div class="ml-auto text-muted">
-                                    <a href="javascript:void(0)" class="icon d-none d-md-inline-block ml-3"><i
-                                            class="fe fe-heart mr-1"></i></a>
+                                    <a href="javascript:void(0)" class="icon d-none d-md-inline-block ml-3">
+                                        <i class="fe fe-heart mr-1"></i>
+                                    </a>
                                 </div>
                             </el-col>
                         </el-row>
@@ -37,7 +38,7 @@
             </el-col>
             <el-col>
                 <div class="vertical-container text-center">
-                    <el-pagination v-show="pagination" v-model="pagination"
+                    <el-pagination v-show="pagination.total > 10" v-model="pagination"
                                    layout="prev, pager, next"
                                    :current-page="pagination.currentPage"
                                    :total="pagination.total"
