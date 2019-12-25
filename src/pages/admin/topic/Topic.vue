@@ -1,5 +1,11 @@
 <template>
     <el-row :gutter="8">
+        <el-col style="margin-bottom: 1rem;">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/admin' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>专题管理</el-breadcrumb-item>
+            </el-breadcrumb>
+        </el-col>
         <el-col :span="8" style="margin-bottom: .5rem;" v-for="topic in topics" :key="topic.idTopic">
             <el-card>
                 <div class="card-body d-flex flex-column">

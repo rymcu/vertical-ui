@@ -103,13 +103,19 @@ export default new Router({
                             props: true
                         },
                         {
+                            path: 'bind-topic-tag/:id',
+                            name: 'admin-bind-topic-tag',
+                            component: ()=>import('../pages/admin/topic/BindTopicTag'),
+                            props: true
+                        },
+                        {
                             path: 'topic/:topicUri',
                             name: 'admin-topic-tag',
                             component: ()=>import('../pages/admin/topic/TopicTag'),
                             props: true
                         },
                         {
-                            path: 'tag',
+                            path: 'tags',
                             name: 'admin-tag',
                             component: ()=>import('../pages/admin/tag/Tag')
                         },

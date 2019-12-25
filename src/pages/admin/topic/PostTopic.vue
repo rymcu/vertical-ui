@@ -1,5 +1,13 @@
 <template>
     <el-row>
+        <el-col style="margin-bottom: 1rem;">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/admin' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/admin/topics' }">专题管理</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/admin/topic/' + topic.topicUri }">{{ topic.topicTitle }}</el-breadcrumb-item>
+                <el-breadcrumb-item>编辑</el-breadcrumb-item>
+            </el-breadcrumb>
+        </el-col>
         <el-col>
             <el-form :model="topic" :rules="rules" ref="topic" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="主题名称" prop="topicTitle">
