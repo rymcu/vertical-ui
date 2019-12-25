@@ -1,5 +1,12 @@
 <template>
     <el-row>
+        <el-col style="margin-bottom: 1rem;">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/admin' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/admin/tags' }">标签管理</el-breadcrumb-item>
+                <el-breadcrumb-item>编辑</el-breadcrumb-item>
+            </el-breadcrumb>
+        </el-col>
         <el-col>
             <el-form ref="form" :model="tag" label-width="80px">
                 <el-form-item label="标签名">

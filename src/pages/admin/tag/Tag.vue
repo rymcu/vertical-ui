@@ -1,5 +1,11 @@
 <template>
     <el-row>
+        <el-col style="margin-bottom: 1rem;">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/admin' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>标签管理</el-breadcrumb-item>
+            </el-breadcrumb>
+        </el-col>
         <el-col style="margin: .5rem;">
             <el-button size="small" @click="cleanUnusedTag">清除未使用标签</el-button>
         </el-col>
