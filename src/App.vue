@@ -6,7 +6,59 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  computed: {
+    hasPermissions() {
+      return this.$store.getters.hasPermissions('user');
+    }
+  },
+  data() {
+    return {
+      path: "ws://192.168.1.168:8099/vertical/api/v1/websocket/1",
+      socket: ""
+    }
+  },
+  methods: {
+    init: function () {
+      let _ts = this;
+      if (typeof(WebSocket) === "undefined") {
+        alert("您的浏览器不支持socket")
+      }else{
+        if (_ts.hasPermissions) {
+          // 实例化socket
+          _ts.socket = new WebSocket(_ts.path);
+          // 监听socket连接
+          _ts.socket.onopen = _ts.open;
+          // 监听socket错误信息
+          _ts.socket.onerror = _ts.error;
+          // 监听socket消息
+          _ts.socket.onmessage = _ts.getMessage;
+        }
+      }
+    },
+    open: function () {
+      console.log("socket连接成功");
+    },
+    error: function () {
+      console.log("连接错误");
+    },
+    getMessage: function (msg) {
+      console.log(msg.data);
+    },
+    send: function (params) {
+      this.socket.send(params);
+    },
+    close: function () {
+      console.log("socket已经关闭");
+    }
+  },
+  mounted() {
+    this.init();
+  },
+  destroyed () {
+    // 销毁监听
+    this.socket.onclose = this.close;
+  }
 }
 </script>
 
