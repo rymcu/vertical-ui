@@ -11,7 +11,7 @@ module.exports = {
         }
     },*/
     devServer: {
-        port: 8081,
+        port: 8082,
         proxy: {
             '/api/': {
                 target: 'http://localhost:8099/vertical/',
@@ -19,6 +19,14 @@ module.exports = {
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': '/api/v1'
+                }
+            },
+            '/ws/': {
+                target: 'http://localhost:8099/vertical/',
+                ws: true,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/ws': '/ws'
                 }
             }
         },

@@ -11,6 +11,7 @@ export default new Vuex.Store({
     isLogin: false,
     token: '',
     nickname: '',
+    idUser: '',
     blogTitle: '',
     avatarURL: '',
     blogURL: '/',
@@ -55,10 +56,12 @@ export default new Vuex.Store({
       state.token = data.token;
       state.account = data.account;
       state.role = data.weights;
+      state.idUser = data.idUser;
       localStorage.setItem('isLogin', 'true');
       localStorage.setItem('avatarURL', data.avatarURL);
       localStorage.setItem('nickname', data.nickname);
       localStorage.setItem('account', data.account);
+      localStorage.setItem('idUser', data.idUser);
       localStorage.setItem('x-auth-token', data.token);
       localStorage.setItem('role', data.weights);
     },
@@ -69,10 +72,12 @@ export default new Vuex.Store({
       state.token = '';
       state.account = '';
       state.role = '';
+      state.idUser = '';
       localStorage.removeItem('isLogin');
       localStorage.removeItem('avatarURL');
       localStorage.removeItem('nickname');
       localStorage.removeItem('account');
+      localStorage.removeItem('idUser');
       localStorage.removeItem('x-auth-token');
       localStorage.removeItem('role');
     },
@@ -95,6 +100,7 @@ export default new Vuex.Store({
         state.avatarURL = localStorage.getItem('avatarURL') !== 'undefined'?localStorage.getItem('avatarURL'):"";
         state.token = localStorage.getItem('x-auth-token');
         state.account = localStorage.getItem('account');
+        state.idUser = localStorage.getItem('idUser');
         state.role = Number(localStorage.getItem('role'));
       }
       return state.isLogin

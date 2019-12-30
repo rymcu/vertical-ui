@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import SockJS from  'sockjs-client';
+import  Stomp from 'stompjs';
 export default {
   name: 'app',
   computed: {
@@ -14,50 +16,83 @@ export default {
   },
   data() {
     return {
-      path: "ws://192.168.1.168:8099/vertical/api/v1/websocket/1",
-      socket: ""
+      path: "/ws",
+      stompClient: '',
+      timer:'',
     }
   },
-  methods: {
-    init: function () {
+  methods:{
+    initWebSocket() {
+      this.connection();
+    },
+    connection() {
       let _ts = this;
-      if (typeof(WebSocket) === "undefined") {
-        alert("您的浏览器不支持socket")
-      }else{
-        if (_ts.hasPermissions) {
-          // 实例化socket
-          _ts.socket = new WebSocket(_ts.path);
-          // 监听socket连接
-          _ts.socket.onopen = _ts.open;
-          // 监听socket错误信息
-          _ts.socket.onerror = _ts.error;
-          // 监听socket消息
-          _ts.socket.onmessage = _ts.getMessage;
-        }
+      let token = localStorage.getItem("x-auth-token");
+      let idUser = localStorage.getItem("idUser");
+      // 建立连接对象
+      let socket = new SockJS(this.path);
+      // 获取STOMP子协议的客户端对象
+      _ts.stompClient = Stomp.over(socket);
+      // 定义客户端的认证信息,按需求配置
+      let headers = {
+        Authorization: token
+      };
+      // 向服务器发起websocket连接
+      _ts.stompClient.connect(headers,() => {
+        _ts.stompClient.subscribe('/public/greetings', (msg) => { // 订阅服务端提供的某个topic
+         _ts.sendMessage(msg);
+        },headers);
+        _ts.stompClient.subscribe('/user/' + idUser + '/message', (msg) => { // 订阅服务端提供的某个topic
+         _ts.sendMessage(msg);
+        },headers);
+      }, (err) => {
+        // 连接发生错误时的处理函数
+        console.log('失败');
+        console.log(err);
+      });
+      socket.onerror = function (err) {
+        console.log(err);
       }
     },
-    open: function () {
-      console.log("socket连接成功");
+    disconnect() {
+      if (this.stompClient) {
+        this.stompClient.disconnect();
+      }
     },
-    error: function () {
-      console.log("连接错误");
+    sendMessage (msg) {
+      let _ts = this;
+      console.log(msg);
+      // 如果用户同意接收通知，我们就尝试发送通知
+      if (window.Notification && Notification.permission === "granted") {
+        new Notification('Hi!', {tag: 'soManyNotification'});
+      } else {
+        _ts.$notify({
+          title: '自定义位置',
+          message: '右上角弹出的消息'
+        });
+      }
     },
-    getMessage: function (msg) {
-      console.log(msg.data);
-    },
-    send: function (params) {
-      this.socket.send(params);
-    },
-    close: function () {
-      console.log("socket已经关闭");
+    initNotificationPermission() {
+      // 首先，让我们检查我们是否有权限发出通知
+      // 如果没有，我们就请求获得权限
+      console.log('Notification:' + Notification.permission);
+      if (window.Notification && Notification.permission !== "granted") {
+        Notification.requestPermission(function (status) {
+          if (Notification.permission !== status) {
+            Notification.permission = status;
+          }
+        });
+      }
     }
   },
-  mounted() {
-    this.init();
+  mounted(){
+    this.initWebSocket();
+    this.initNotificationPermission();
   },
-  destroyed () {
-    // 销毁监听
-    this.socket.onclose = this.close;
+  beforeDestroy: function () {
+    // 页面离开时断开连接,清除定时器
+    this.disconnect();
+    clearInterval(this.timer);
   }
 }
 </script>
