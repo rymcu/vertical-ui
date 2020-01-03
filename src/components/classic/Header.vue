@@ -34,6 +34,15 @@
                 <!--<el-col v-if="isLogin" :xs="0" :sm="8" :xl="6">-->
                 <el-col v-if="isLogin">
                     <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;" href="/postArticle">发帖</el-link>
+                    <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;">
+                        <el-dropdown trigger="click"  @command="handleCommand">
+                            <el-link :underline="false" style="font-size: 1.4rem;" class="el-icon-bell"></el-link>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item v-for="notification in notifications" :key="notification.idNotification" command="messages">{{ notification.dataSummary }}</el-dropdown-item>
+                                <el-dropdown-item command="messages">查看所有消息</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </el-link>
                     <el-link :underline="false" style="margin-left: 10px;">
                         <el-dropdown trigger="click"  @command="handleCommand">
                             <el-avatar v-if="avatarURL" size="small" :src="avatarURL"></el-avatar>
@@ -86,7 +95,8 @@
                 restaurants: [],
                 state: '',
                 timeout:  null,
-                show: false
+                show: false,
+                notifications: []
             };
         },
         methods: {
@@ -160,10 +170,19 @@
                 this.$router.push({
                     name: item
                 })
+            },
+            getUnreadNotifications() {
+                let _ts = this;
+                _ts.axios.get('/notification/unread').then(function (res) {
+                    if (res) {
+                        _ts.$set(_ts, 'notifications', res.notifications)
+                    }
+                })
             }
         },
         mounted() {
             this.restaurants = this.loadAll();
+            this.getUnreadNotifications()
         }
 
     }
