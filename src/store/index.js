@@ -49,16 +49,22 @@ export default new Vuex.Store({
     setActiveTag(state, data){
       state.activeTag = data
     },
+    setUserInfo(state, data) {
+      state.avatarURL = data.avatarUrl;
+      state.nickname = data.nickname;
+      localStorage.setItem('avatarURL', data.avatarUrl);
+      localStorage.setItem('nickname', data.nickname);
+    },
     initLogin(state, data){
       state.isLogin = true;
-      state.avatarURL = data.avatarURL;
+      state.avatarURL = data.avatarUrl;
       state.nickname = data.nickname;
       state.token = data.token;
       state.account = data.account;
       state.role = data.weights;
       state.idUser = data.idUser;
       localStorage.setItem('isLogin', 'true');
-      localStorage.setItem('avatarURL', data.avatarURL);
+      localStorage.setItem('avatarURL', data.avatarUrl);
       localStorage.setItem('nickname', data.nickname);
       localStorage.setItem('account', data.account);
       localStorage.setItem('idUser', data.idUser);

@@ -86,7 +86,7 @@ export default {
     }
   },
   mounted(){
-    this.initWebSocket();
+    // this.initWebSocket();
     this.initNotificationPermission();
   },
   beforeDestroy: function () {
