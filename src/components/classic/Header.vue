@@ -33,8 +33,8 @@
                 </el-col>
                 <!--<el-col v-if="isLogin" :xs="0" :sm="8" :xl="6">-->
                 <el-col v-if="isLogin">
-                    <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;" href="/postArticle">发帖</el-link>
-                    <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;">
+                    <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;" href="/post-article">发帖</el-link>
+                    <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;display: none;">
                         <el-dropdown trigger="click"  @command="handleCommand">
                             <el-link :underline="false" style="font-size: 1.4rem;" class="el-icon-bell"></el-link>
                             <el-dropdown-menu slot="dropdown">
@@ -46,14 +46,15 @@
                     <el-link :underline="false" style="margin-left: 10px;">
                         <el-dropdown trigger="click"  @command="handleCommand">
                             <el-avatar v-if="avatarURL" size="small" :src="avatarURL"></el-avatar>
-                            <el-avatar v-else size="small" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
+                            <el-avatar v-else size="small" src="https://rymcu.com/vertical/article/1578475481946.png"></el-avatar>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item command="user" style="align-items: center;">
                                     <el-avatar class="mr-3" v-if="avatarURL" size="small" style="margin-top: 1rem;" :src="avatarURL"></el-avatar>
-                                    <el-avatar class="mr-3" v-else size="small" style="margin-top: 1rem;" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
+                                    <el-avatar class="mr-3" v-else size="small" style="margin-top: 1rem;" src="https://rymcu.com/vertical/article/1578475481946.png"></el-avatar>
                                     <el-link :underline="false" style="margin-left: 10px;margin-bottom: 1rem;">{{ nickname }}</el-link>
                                 </el-dropdown-item>
-                                <el-dropdown-item v-show="hasPermissions" command="admin-dashboard">管理</el-dropdown-item>
+                                <el-dropdown-item v-show="hasPermissions" command="admin-dashboard">系统管理</el-dropdown-item>
+                                <el-dropdown-item command="user-info">资料与账号</el-dropdown-item>
                                 <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
@@ -150,16 +151,21 @@
             handleSelect(item) {
                 console.log(item)
             },
-            toggleLogin() {
-                this.$store.commit('setLogin', true)
-            },
             handleCommand(item) {
                 let _ts = this;
                 if(item == 'user'){
-                    this.$router.push({
+                    _ts.$router.push({
                         name: item,
                         params: {
                             id: _ts.$store.state.nickname
+                        }
+                    })
+                }
+                if( item === 'user-info'){
+                    _ts.$router.push({
+                        name: 'account',
+                        params: {
+                            id: _ts.$store.state.idUser
                         }
                     })
                 }
@@ -167,7 +173,7 @@
                     _ts.$store.commit('logout');
                     item = 'login';
                 }
-                this.$router.push({
+                _ts.$router.push({
                     name: item
                 })
             },

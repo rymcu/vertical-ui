@@ -7,7 +7,7 @@
             <el-col :xs="24" :xl="12">
                 <el-col class="row align-items-center">
                     <el-col class="col-auto">
-                        Copyright © 2019 <a href="/">{{ systemName }}</a>.  <span style="margin-left: 1.5rem;">{{ beiAn }}</span>
+                        Copyright © 2020 <el-link :underline="false" href="/"><span>{{ systemName }}</span></el-link>.  <el-link :underline="false" href="http://www.beian.miit.gov.cn/"><span style="margin-left: 1.5rem;">{{ beiAn }}</span></el-link>
                     </el-col>
                 </el-col>
             </el-col>

@@ -21,7 +21,7 @@
                     prop="userAvatarURL">
                     <template slot-scope="scope">
                         <el-avatar v-if="scope.row.userAvatarURL" size="medium" :src="scope.row.userAvatarURL"></el-avatar>
-                        <el-avatar v-else size="medium" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
+                        <el-avatar v-else size="medium" src="https://rymcu.com/vertical/article/1578475481946.png"></el-avatar>
                     </template>
                 </el-table-column>
                 <el-table-column

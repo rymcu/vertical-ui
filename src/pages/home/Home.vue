@@ -19,7 +19,7 @@
                         <el-row class="pt-5">
                             <el-col :xs="3" :sm="1" :xl="1" class="mr-3">
                                 <el-avatar v-if="article.articleAuthorAvatarUrl" size="medium" :src="article.articleAuthorAvatarUrl"></el-avatar>
-                                <el-avatar v-else size="medium" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png"></el-avatar>
+                                <el-avatar v-else size="medium" src="https://rymcu.com/vertical/article/1578475481946.png"></el-avatar>
                             </el-col>
                             <el-col :xs="9" :sm="11" :xl="11">
                                 <div>

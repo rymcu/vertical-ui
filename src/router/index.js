@@ -42,8 +42,8 @@ export default new Router({
                     props: true
                 },
                 {
-                    path: '/postArticle',
-                    name: 'postArticle',
+                    path: '/post-article',
+                    name: 'post-article',
                     component: ()=>import('../pages/article/PostArticle')
                 },
                 {
@@ -56,6 +56,21 @@ export default new Router({
                     name: 'user',
                     component: ()=>import('../pages/user/User'),
                     props: true
+                },
+                {
+                    path: '/user-info',
+                    component: ()=>import('../pages/user/Index'),
+                    children: [
+                        {
+                            path: '/',
+                            name: 'user-info',
+                            component: ()=>import('../pages/user/UserInfo'),
+                            props: true
+                        },
+                        {
+                            path: '*', redirect: '/'
+                        }
+                    ]
                 },
                 {
                     path: '/login',

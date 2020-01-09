@@ -220,7 +220,7 @@
         },
         async mounted () {
             let _ts = this;
-            this.$store.commit('setActiveMenu', 'postArticle');
+            this.$store.commit('setActiveMenu', 'post-article');
             const responseData = await this.axios.get('/upload/token');
             if (responseData) {
                 this.$set(this, 'tokenURL', {

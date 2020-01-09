@@ -6,7 +6,7 @@
                 <div v-else class="card-header" :style="{backgroundImage:'url(https://rymcu.com/vertical/article/1574441651963.jpg)', backgroundSize:'cover', backgroundPosition:'50%'}" ></div>
                 <div class="card-body text-center">
                     <img v-if="user.userAvatarURL" class="card-profile-img" :src="user.userAvatarURL">
-                    <img v-else class="card-profile-img" src="https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png">
+                    <img v-else class="card-profile-img" src="https://rymcu.com/vertical/article/1578475481946.png">
                     <h3 class="mb-3">{{user.nickname}}</h3>
                     <p class="mb-4" v-html="user.userIntro"></p>
                     <!--<el-button type="primary" plain round><span class="fe fe-plus"></span> 关注</el-button>-->
@@ -55,7 +55,7 @@
             return {
                 user: {
                     userName: '',
-                    userAvatarURL: 'https://b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png',
+                    userAvatarURL: 'https://rymcu.com/vertical/article/1578475481946.png',
                     userIntro: ''
                 },
                 articles: [],
