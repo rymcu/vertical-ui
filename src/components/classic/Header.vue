@@ -38,8 +38,8 @@
                         <el-dropdown trigger="click"  @command="handleCommand">
                             <el-link :underline="false" style="font-size: 1.4rem;" class="el-icon-bell"></el-link>
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item v-for="notification in notifications" :key="notification.idNotification" command="messages">{{ notification.dataSummary }}</el-dropdown-item>
-                                <el-dropdown-item command="messages">查看所有消息</el-dropdown-item>
+                                <el-dropdown-item v-for="notification in notifications" :key="notification.idNotification" command="notification">{{ notification.dataSummary }}</el-dropdown-item>
+                                <el-dropdown-item command="notification">查看所有消息</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </el-link>
@@ -70,8 +70,6 @@
 </template>
 
 <script>
-    /* eslint-disable no-console */
-
     export default {
         name: "Header",
         computed: {
@@ -99,6 +97,11 @@
                 show: false,
                 notifications: []
             };
+        },
+        watch: {
+            isLogin: function () {
+                this.getUnreadNotifications();
+            }
         },
         methods: {
             loadAll() {
@@ -188,7 +191,10 @@
         },
         mounted() {
             this.restaurants = this.loadAll();
-            this.getUnreadNotifications()
+            let isLogin = this.isLogin();
+            if (isLogin) {
+                this.getUnreadNotifications();
+            }
         }
 
     }
