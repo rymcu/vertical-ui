@@ -13,6 +13,7 @@
     "element-ui": "^2.13.0",
     "exif-js": "^2.3.0",
     "jquery": "^3.4.1",
+    "prerender-spa-plugin": "^3.4.0",
     "qs": "^6.9.1",
     "save-svg-as-png": "^1.4.14",
     "stompjs": "^2.3.3",
@@ -20,6 +21,7 @@
     "vue": "^2.6.10",
     "vue-axios": "^2.1.5",
     "vue-cropper": "^0.4.9",
+    "vue-meta-info": "^0.1.7",
     "vue-router": "^3.1.3",
     "vuejs-avataaars": "^3.0.9",
     "vuex": "^3.0.1"
