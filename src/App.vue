@@ -6,7 +6,7 @@
 
 <script>
 import SockJS from  'sockjs-client';
-import  Stomp from 'stompjs';
+import Stomp from 'stompjs';
 export default {
   name: 'app',
   computed: {
@@ -21,18 +21,28 @@ export default {
       timer:'',
     }
   },
+  watch: {
+    hasPermissions: function () {
+      let idUser = this.$store.state.idUser;
+      if (idUser) {
+        this.initWebSocket();
+      }
+    }
+  },
   methods:{
     initWebSocket() {
       this.connection();
     },
     connection() {
       let _ts = this;
-      let token = localStorage.getItem("x-auth-token");
-      let idUser = localStorage.getItem("idUser");
+      let token = this.$store.state.token;
+      let idUser = this.$store.state.idUser;
       // 建立连接对象
       let socket = new SockJS(this.path);
       // 获取STOMP子协议的客户端对象
       _ts.stompClient = Stomp.over(socket);
+      // 停用 stompJs debug 日志
+      _ts.stompClient.debug = null;
       // 定义客户端的认证信息,按需求配置
       let headers = {
         Authorization: token
@@ -47,7 +57,7 @@ export default {
         },headers);
       }, (err) => {
         // 连接发生错误时的处理函数
-        console.log('失败');
+        console.log('socket 连接失败');
         console.log(err);
       });
       socket.onerror = function (err) {
@@ -61,10 +71,9 @@ export default {
     },
     sendMessage (msg) {
       let _ts = this;
-      console.log(msg);
       // 如果用户同意接收通知，我们就尝试发送通知
       if (window.Notification && Notification.permission === "granted") {
-        new Notification('Hi!', {tag: 'soManyNotification'});
+        new Notification(msg, {tag: 'soManyNotification'});
       } else {
         _ts.$notify({
           title: '自定义位置',
@@ -75,7 +84,6 @@ export default {
     initNotificationPermission() {
       // 首先，让我们检查我们是否有权限发出通知
       // 如果没有，我们就请求获得权限
-      console.log('Notification:' + Notification.permission);
       if (window.Notification && Notification.permission !== "granted") {
         Notification.requestPermission(function (status) {
           if (Notification.permission !== status) {
@@ -86,7 +94,10 @@ export default {
     }
   },
   mounted(){
-    // this.initWebSocket();
+    let idUser = this.$store.state.idUser;
+    if (idUser) {
+      this.initWebSocket();
+    }
     this.initNotificationPermission();
   },
   beforeDestroy: function () {

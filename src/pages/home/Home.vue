@@ -51,8 +51,51 @@
 </template>
 
 <script>
+    import Vue from 'vue';
+    import MetaInfo from 'vue-meta-info';
+
+    Vue.use(MetaInfo);
     export default {
         name: "Home",
+        metaInfo: {
+            // set a title
+            title: 'RYMCU - 嵌入式知识共享平台',
+            // set meta
+            meta: [
+                {
+                    name: 'keywords',
+                    content: 'RYMCU'
+                },
+                {
+                    name: 'description',
+                    content: '嵌入式知识共享平台'
+                },
+                {
+                    name: 'site_name',
+                    content: 'RYMCU'
+                },
+                {
+                    name: 'url',
+                    content: 'https://rymcu.com'
+                },
+                {
+                    name: 'og:title',
+                    content: 'RYMCU - 嵌入式知识共享平台'
+                },
+                {
+                    name: 'og:description',
+                    content: '嵌入式知识共享平台'
+                },
+                {
+                    name: 'og:site_name',
+                    content: 'RYMCU'
+                },
+                {
+                    name: 'og:url',
+                    content: 'https://rymcu.com'
+                }
+            ]
+        },
         data() {
             return {
                 articles: [],

@@ -88,6 +88,11 @@ export default new Router({
                     component: ()=>import('../pages/forget/ForgetPassword')
                 },
                 {
+                    path: '/notification',
+                    name: 'notification',
+                    component: ()=>import('../pages/notification/Notification')
+                },
+                {
                     path: '/admin',
                     component: ()=>import('../pages/admin/Index'),
                     children: [

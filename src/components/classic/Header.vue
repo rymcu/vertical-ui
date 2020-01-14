@@ -140,7 +140,7 @@
                             }
                         )
                     }
-                    if(item == 'github') {
+                    if(item === 'github') {
                         window.open("https://github.com/Hugh-rymcu");
                         return false;
                     }
@@ -156,7 +156,7 @@
             },
             handleCommand(item) {
                 let _ts = this;
-                if(item == 'user'){
+                if(item === 'user'){
                     _ts.$router.push({
                         name: item,
                         params: {
@@ -191,7 +191,7 @@
         },
         mounted() {
             this.restaurants = this.loadAll();
-            let isLogin = this.isLogin();
+            let isLogin = this.isLogin;
             if (isLogin) {
                 this.getUnreadNotifications();
             }

@@ -49,6 +49,9 @@
 <script>
     import Vue from 'vue';
     import $ from 'jquery';
+    import MetaInfo from 'vue-meta-info';
+
+    Vue.use(MetaInfo);
     export default {
         name: "Article",
         props: ["id"],
@@ -61,6 +64,47 @@
                     }
                 }
                 return this.$store.getters.hasPermissions('blog_admin');
+            }
+        },
+        metaInfo() {
+            return {
+                // set a title
+                title: this.article.articleTitle + ' - RYMCU',
+                // set meta
+                meta: [
+                    {
+                        name: 'keywords',
+                        content: 'RYMCU,' + this.article.articleTags
+                    },
+                    {
+                        name: 'description',
+                        content: this.article.articlePreviewContent
+                    },
+                    {
+                        name: 'site_name',
+                        content: 'RYMCU'
+                    },
+                    {
+                        name: 'url',
+                        content: this.article.articlePermalink
+                    },
+                    {
+                        name: 'og:title',
+                        content: this.article.articleTitle + ' - RYMCU'
+                    },
+                    {
+                        name: 'og:description',
+                        content: this.article.articlePreviewContent
+                    },
+                    {
+                        name: 'og:site_name',
+                        content: 'RYMCU'
+                    },
+                    {
+                        name: 'og:url',
+                        content: this.article.articlePermalink
+                    }
+                ]
             }
         },
         data (){
@@ -104,10 +148,13 @@
             }
         },
         async mounted () {
-            this.$store.commit('setActiveMenu', 'article');
-            const responseTopData = await this.axios.get('/console/article/'+this.id);
+            let _ts = this;
+            _ts.$store.commit('setActiveMenu', 'article');
+            const responseTopData = await _ts.axios.get('/console/article/' + _ts.id);
             if (responseTopData) {
-                this.$set(this, 'article', responseTopData.article);
+                let article = responseTopData.article;
+                _ts.$set(_ts, 'article', article);
+
                 Vue.nextTick(() => {
                     $('*[data-src]').each(function () {
                         const testImage = this.getAttribute('data-src');
