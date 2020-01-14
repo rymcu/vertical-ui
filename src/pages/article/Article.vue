@@ -24,6 +24,9 @@
                                     </el-dropdown-menu>
                                 </el-dropdown>
                             </el-col>
+                            <el-col class="text-right">
+                                <el-link :underline="false" title="总浏览数"><i class="el-icon-s-data"></i><span style="color: red;">{{ article.articleViewCount }}</span></el-link>
+                            </el-col>
                             <el-col style="margin: 1rem 0;">
                                 <el-tag
                                         style="margin-right: 0.5rem;"
