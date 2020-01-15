@@ -13,7 +13,6 @@
     "element-ui": "^2.13.0",
     "exif-js": "^2.3.0",
     "jquery": "^3.4.1",
-    "prerender-spa-plugin": "^3.4.0",
     "qs": "^6.9.1",
     "save-svg-as-png": "^1.4.14",
     "stompjs": "^2.3.3",
