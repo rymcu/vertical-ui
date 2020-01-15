@@ -244,7 +244,7 @@
 
             if (id) {
                 _ts.idEdit = false;
-                const responseData = await this.axios.get(`/console/update/${id}`);
+                const responseData = await this.axios.get(`/article/detail/${id}`);
                 if (responseData) {
                     let article = responseData.article;
                     this.$set(this, 'idArticle', article.idArticle);
