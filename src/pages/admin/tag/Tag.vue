@@ -29,6 +29,16 @@
                 <el-col style="margin-bottom: .8rem">{{ tag.tagDescription }}</el-col>
             </el-card>
         </el-col>
+        <el-col>
+            <div class="vertical-container text-center">
+                <el-pagination v-show="pagination.total > 10" v-model="pagination"
+                               layout="prev, pager, next"
+                               :current-page="pagination.currentPage"
+                               :total="pagination.total"
+                               @current-change="currentChange">
+                </el-pagination>
+            </div>
+        </el-col>
     </el-row>
 </template>
 
@@ -37,7 +47,12 @@
         name: "AdminTag",
         data() {
             return {
-                tags: []
+                tags: [],
+                pagination: {
+                    currentPage: 1,
+                    pageSize: 20,
+                    total: 0
+                }
             }
         },
         methods: {
@@ -52,7 +67,8 @@
                         if (res && res.message){
                             _ts.$message.error(res.message)
                         } else {
-                            _ts.getData()
+                            const p = _ts.pagination.currentPage;
+                            _ts.getData(p)
                         }
                     })
                 }).catch(() => {
@@ -62,10 +78,14 @@
                     });
                 });
             },
-            getData() {
+            currentChange(val){
+                this.getData(val);
+            },
+            getData(p) {
                 let _ts = this;
-                _ts.axios.get("/admin/tags").then(function (res) {
-                    _ts.$set(_ts,"tags",res.tags);
+                _ts.axios.get('/admin/tags' + '?page=' + p).then(function (res) {
+                    _ts.$set(_ts, 'tags', res.tags);
+                    _ts.$set(_ts, 'pagination', res.pagination);
                 })
             },
             onRouter(item,data) {
@@ -85,7 +105,8 @@
         },
         mounted() {
             this.$store.commit("setActiveMenu", "admin-tag");
-            this.getData();
+            const p = this.pagination.currentPage;
+            this.getData(p);
         }
     }
 </script>
