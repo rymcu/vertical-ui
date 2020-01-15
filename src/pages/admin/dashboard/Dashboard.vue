@@ -21,7 +21,7 @@
         <el-col :span="4">
             <el-card>
                 <el-col class="mt-2rem dashboard-number">{{ dashboard.newArticleNum }}</el-col>
-                <el-col class="mt-2rem">新增文章</el-col>
+                <el-col class="mt-2rem">今日文章数</el-col>
             </el-card>
         </el-col>
         <el-col :span="4">
@@ -32,7 +32,7 @@
         </el-col>
         <el-col :span="4">
             <el-card>
-                <el-col class="mt-2rem dashboard-number">{{ dashboard.toadyViewNum }}</el-col>
+                <el-col class="mt-2rem dashboard-number">{{ dashboard.todayViewNum }}</el-col>
                 <el-col class="mt-2rem">今日浏览量</el-col>
             </el-card>
         </el-col>
