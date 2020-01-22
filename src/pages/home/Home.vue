@@ -4,7 +4,7 @@
             <el-col v-for="article in articles" :key="article.idArticle" style="padding-bottom: 1rem;">
                 <el-card>
                     <div class="card-body d-flex flex-column">
-                        <el-link @click="onRouter('article',article.idArticle)" :underline="false" style="margin-bottom: .5rem;">
+                        <el-link @click="onRouter('article',article.articleLink)" :underline="false" style="margin-bottom: .5rem;">
                             <h4 v-html="article.articleTitle"></h4>
                         </el-link>
                         <el-tag
@@ -31,6 +31,9 @@
                                         <i class="fe fe-heart mr-1"></i>
                                     </a>
                                 </div>
+                            </el-col>
+                            <el-col class="text-right">
+                                <el-link :underline="false" title="总浏览数"><i class="el-icon-s-data"></i><span style="color: red;">{{ article.articleViewCount }}</span></el-link>
                             </el-col>
                         </el-row>
                     </div>
@@ -64,7 +67,7 @@
             meta: [
                 {
                     name: 'keywords',
-                    content: 'RYMCU'
+                    content: 'RYMCU,嵌入式,51,单片机,STM,STM8,STM32'
                 },
                 {
                     name: 'description',
@@ -77,6 +80,10 @@
                 {
                     name: 'url',
                     content: 'https://rymcu.com'
+                },
+                {
+                    name: 'og:keywords',
+                    content: 'RYMCU,嵌入式,51,单片机,STM,STM8,STM32'
                 },
                 {
                     name: 'og:title',
@@ -121,14 +128,17 @@
                 }
             },
             onRouter (name, data) {
-                this.$router.push(
-                    {
-                        name: name,
-                        params: {
-                            id: data
+                if (name === 'article') {
+                    this.$router.push({
+                        path: data
+                    })
+                } else {
+                    this.$router.push(
+                        {
+                            path: '/user/' + data
                         }
-                    }
-                )
+                    )
+                }
             }
         },
         mounted () {
