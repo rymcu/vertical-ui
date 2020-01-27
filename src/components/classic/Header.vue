@@ -34,9 +34,11 @@
                 <!--<el-col v-if="isLogin" :xs="0" :sm="8" :xl="6">-->
                 <el-col v-if="isLogin">
                     <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;" href="/post-article">发帖</el-link>
-                    <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;display: none;">
+                    <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;">
                         <el-dropdown trigger="click"  @command="handleCommand">
-                            <el-link :underline="false" style="font-size: 1.4rem;" class="el-icon-bell"></el-link>
+                            <el-badge :value="notificationNumbers" class="item">
+                                <el-link :underline="false" style="font-size: 1.4rem;" class="el-icon-bell"></el-link>
+                            </el-badge>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item v-for="notification in notifications" :key="notification.idNotification" command="notification">{{ notification.dataSummary }}</el-dropdown-item>
                                 <el-dropdown-item command="notification">查看所有消息</el-dropdown-item>
@@ -95,7 +97,8 @@
                 state: '',
                 timeout:  null,
                 show: false,
-                notifications: []
+                notifications: [],
+                notificationNumbers: ""
             };
         },
         watch: {
@@ -184,7 +187,8 @@
                 let _ts = this;
                 _ts.axios.get('/notification/unread').then(function (res) {
                     if (res) {
-                        _ts.$set(_ts, 'notifications', res.notifications)
+                        _ts.$set(_ts, 'notifications', res.notifications);
+                        _ts.$set(_ts, 'notificationNumbers', res.notifications.length == 0 ? "" : res.notifications.length);
                     }
                 })
             }
