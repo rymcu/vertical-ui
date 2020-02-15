@@ -4,8 +4,9 @@
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="{ path: '/admin' }">首页</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{ path: '/admin/topics' }">专题管理</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: '/admin/topic/' + topic.topicUri }">{{ topic.topicTitle }}</el-breadcrumb-item>
-                <el-breadcrumb-item>编辑</el-breadcrumb-item>
+                <el-breadcrumb-item v-if="id" :to="{ path: '/admin/topic/' + topic.topicUri }">{{ topic.topicTitle }}</el-breadcrumb-item>
+                <el-breadcrumb-item v-if="id">编辑</el-breadcrumb-item>
+                <el-breadcrumb-item v-else>创建</el-breadcrumb-item>
             </el-breadcrumb>
         </el-col>
         <el-col>
@@ -78,7 +79,6 @@
         data() {
             return {
                 topic: {
-                    idTopic: 1,
                     topicTitle: '',
                     topicIconPath: '',
                     topicDescription: '',
@@ -167,7 +167,9 @@
                     })
                 }
             });
-            _ts.getData();
+            if (_ts.id) {
+                _ts.getData();
+            }
         }
     }
 </script>

@@ -6,6 +6,9 @@
                 <el-breadcrumb-item>专题管理</el-breadcrumb-item>
             </el-breadcrumb>
         </el-col>
+        <el-col style="margin: .5rem;">
+            <el-button size="small" @click="createTopic">创建专题</el-button>
+        </el-col>
         <el-col :span="8" style="margin-bottom: .5rem;" v-for="topic in topics" :key="topic.idTopic">
             <el-card>
                 <div class="card-body d-flex flex-column">
@@ -47,6 +50,12 @@
                 this.$router.push({
                     name: item,
                     params: data
+                })
+            },
+            createTopic() {
+                let _ts = this;
+                _ts.$router.push({
+                    name: 'admin-post-topic'
                 })
             }
         },
