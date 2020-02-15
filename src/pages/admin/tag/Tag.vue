@@ -7,6 +7,7 @@
             </el-breadcrumb>
         </el-col>
         <el-col style="margin: .5rem;">
+            <el-button size="small" @click="createTag">创建标签</el-button>
             <el-button size="small" @click="cleanUnusedTag">清除未使用标签</el-button>
         </el-col>
         <el-col v-for="tag in tags" :key="tag.idTag">
@@ -65,10 +66,14 @@
                 }).then(() => {
                     _ts.axios.delete('/admin/tag/clean-unused').then(function (res) {
                         if (res && res.message){
-                            _ts.$message.error(res.message)
+                            _ts.$message.error(res.message);
                         } else {
                             const p = _ts.pagination.currentPage;
-                            _ts.getData(p)
+                            _ts.getData(p);
+                            _ts.$message({
+                                type: 'success',
+                                message: '已清理完成!'
+                            });
                         }
                     })
                 }).catch(() => {
@@ -92,6 +97,11 @@
                 this.$router.push({
                     name: item,
                     params: data
+                })
+            },
+            createTag() {
+                this.$router.push({
+                    name: 'admin-post-tag'
                 })
             },
             updateTag(id) {

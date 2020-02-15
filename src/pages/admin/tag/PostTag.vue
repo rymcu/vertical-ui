@@ -38,6 +38,15 @@
                         inactive-value="1">
                     </el-switch>
                 </el-form-item>
+                <el-form-item label="系统保留">
+                    <el-switch
+                        v-model="tag.tagReservation"
+                        active-text="是"
+                        inactive-text="否"
+                        active-value="1"
+                        inactive-value="0">
+                    </el-switch>
+                </el-form-item>
                 <el-form-item label="描述">
                     <el-input v-model="tag.tagDescription" type="textarea" :rows="5" maxlength="200" show-word-limit></el-input>
                 </el-form-item>
@@ -62,7 +71,8 @@
         data() {
             return {
                 tag: {
-                    tagIconPath: ''
+                    tagIconPath: '',
+                    tagStatus: '0'
                 },
                 tokenURL: {
                     URL: '',
@@ -105,6 +115,7 @@
                 _ts.axios[id?'put':'post']('/admin/tag/post', _ts.tag).then(function (res) {
                     if (res && res.message) {
                         _ts.$message.error(res.message);
+                        _ts.$set(_ts,'loading', false);
                     } else {
                         _ts.$message({
                             type: 'success',
@@ -138,8 +149,9 @@
                     })
                 }
             });
-
-            _ts.getData()
+            if (_ts.id) {
+                _ts.getData();
+            }
         }
     }
 </script>
