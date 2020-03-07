@@ -43,6 +43,36 @@
                 </div>
             </el-card>
         </el-col>
+        <el-col v-if="isLogin" style="margin-top: 1rem;">
+            <el-col :span="1">
+                <el-avatar :src="avatar"></el-avatar>
+            </el-col>
+            <el-col :span="23" style="padding-left: 1rem;">
+                <el-input @click.native="showComment" placeholder="请输入回帖内容"></el-input>
+            </el-col>
+            <el-col>
+                <el-drawer
+                        :visible.sync="drawer"
+                        :direction="direction"
+                        size="40%">
+                    <el-col slot="title">
+                        <el-col>
+                            <el-avatar v-if="commentAuthorAvatar" :src="commentAuthorAvatar"></el-avatar>
+                            <span class="text-default" style="padding-left: 1rem;">{{ title }}</span>
+                        </el-col>
+                    </el-col>
+                    <el-col>
+                        <div id="contentEditor"></div>
+                    </el-col>
+                    <el-col style="margin-top: 1rem;padding-right:3rem;text-align: right;">
+                        <el-button type="primary" :loading="loading" @click="postComment">发布</el-button>
+                    </el-col>
+                </el-drawer>
+            </el-col>
+        </el-col>
+        <el-col>
+            <Comment :comments="article.articleComments" :reply="reply"></Comment>
+        </el-col>
     </div>
 </template>
 
@@ -50,11 +80,17 @@
     import Vue from 'vue';
     import $ from 'jquery';
     import MetaInfo from 'vue-meta-info';
+    import Vditor from 'vditor'
+    import {LazyLoadImage} from "../../plugins/utils";
+    import Comment from '@/pages/comment/Comment';
 
     Vue.use(MetaInfo);
     export default {
         name: "Article",
         props: ["id"],
+        components: {
+            Comment
+        },
         computed: {
             hasPermissions() {
                 let account = this.$store.state.nickname;
@@ -64,6 +100,12 @@
                     }
                 }
                 return this.$store.getters.hasPermissions('blog_admin');
+            },
+            isLogin () {
+                return this.$store.getters.isLogin;
+            },
+            avatar() {
+                return this.$store.state.avatarURL;
             }
         },
         metaInfo() {
@@ -109,6 +151,14 @@
         },
         data (){
             return {
+                tokenURL: {},
+                drawer: false,
+                direction: 'btt',
+                initEditor: false,
+                loading: false,
+                title: '',
+                commentAuthorAvatar: '',
+                commentOriginalCommentId: 0,
                 article: {
                     articleTitle: '',
                     articleContent: '',
@@ -127,6 +177,54 @@
             }
         },
         methods: {
+            _initEditor (data) {
+                return new Vditor(data.id, {
+                    tab: '\t',
+                    cache: this.$route.query.id ? false : true,
+                    preview: {
+                        delay: 500,
+                        mode: data.mode,
+                        /*url: `${process.env.Server}/api/console/markdown`,*/
+                        parse: (element) => {
+                            if (element.style.display === 'none') {
+                                return
+                            }
+                            LazyLoadImage();
+                            Vditor.highlightRender({style:'github'}, element, document);
+                        }
+                    },
+                    upload: {
+                        max: 10 * 1024 * 1024,
+                        url: this.tokenURL.URL,
+                        linkToImgUrl: this.tokenURL.URL,
+                        token: this.tokenURL.token,
+                        filename: name => name.replace(/\?|\\|\/|:|\||<|>|\*|\[|\]|\s+/g, '-')
+                    },
+                    height: data.height,
+                    counter: 102400,
+                    resize: {
+                        enable: data.resize,
+                    },
+                    lang: this.$store.state.locale,
+                    placeholder: data.placeholder,
+                })
+            },
+            _loadEditor() {
+                let _ts = this;
+                if (!_ts.initEditor) {
+                    _ts.$set(_ts, 'initEditor', true);
+                    setTimeout(function () {
+                        _ts.contentEditor = _ts._initEditor({
+                            id: 'contentEditor',
+                            mode: 'both',
+                            height: 200,
+                            placeholder: '', //this.$t('inputContent', this.$store.state.locale)
+                            resize: false,
+                        });
+                        _ts.contentEditor.setValue('');
+                    }, 500);
+                }
+            },
             onRouter (name, data) {
                 this.$router.push(
                     {
@@ -144,6 +242,61 @@
                     query: {
                         id: _ts.article.idArticle
                     }
+                })
+            },
+            showComment() {
+                let _ts = this;
+                _ts.$set(_ts, 'drawer', true);
+                _ts.$set(_ts, 'title', _ts.article.articleTitle);
+                _ts.$set(_ts, 'commentAuthorAvatar', '');
+                _ts.$set(_ts, 'commentOriginalCommentId', 0);
+                _ts._loadEditor();
+            },
+            reply(comment) {
+                let _ts = this;
+                _ts.$set(_ts, 'drawer', true);
+                _ts.$set(_ts, 'title', comment.commenter.userNickname);
+                _ts.$set(_ts, 'commentAuthorAvatar', comment.commenter.userAvatarURL);
+                _ts.$set(_ts, 'commentOriginalCommentId', comment.idComment);
+                _ts._loadEditor();
+            },
+            async postComment() {
+                let _ts = this;
+                _ts.$set(_ts, 'loading', true);
+                let commentContent = await _ts.contentEditor.getHTML();
+                if(!(commentContent)){
+                    _ts.$message("回帖内容不能为空！");
+                    return false;
+                }
+                let comment = {
+                    commentArticleId: _ts.article.idArticle,
+                    commentContent: commentContent,
+                    commentOriginalCommentId: _ts.commentOriginalCommentId,
+                    commentAuthorId: _ts.$store.state.idUser
+                };
+                _ts.axios.post('/comment/post', comment).then(function (res) {
+                    if(res) {
+                        if (res.message) {
+                            _ts.$message(res.message);
+                            return false;
+                        }
+                        _ts.contentEditor.setValue('');
+                        _ts.$set(_ts, 'drawer', false);
+                        _ts.getComments();
+                    }
+                    _ts.$set(_ts, 'loading', false);
+                })
+            },
+            getComments() {
+                let _ts = this;
+                _ts.axios.get('/article/' + _ts.article.idArticle + '/comments').then(function (res) {
+                    if (res.message) {
+                        _ts.$message(res.message);
+                        return false;
+                    }
+                    let article = _ts.article;
+                    article.articleComments = res.comments;
+                    _ts.$set(_ts, 'article', article);
                 })
             }
         },
@@ -163,6 +316,17 @@
                     })
                 });
             }
+
+            if (_ts.isLogin) {
+                const responseData = await this.axios.get('/upload/token');
+                if (responseData) {
+                    _ts.$set(_ts, 'tokenURL', {
+                        token: responseData.uploadToken || '',
+                        URL: responseData.uploadURL || '',
+                    })
+                }
+            }
+
         }
     }
 </script>
