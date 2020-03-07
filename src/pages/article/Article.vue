@@ -70,6 +70,9 @@
                 </el-drawer>
             </el-col>
         </el-col>
+        <el-col v-else class="text-center" style="margin-top: 1rem;">
+            <el-button type="primary" size="medium" @click="gotoLogin">登录</el-button> 后发布评论
+        </el-col>
         <el-col>
             <Comment :comments="article.articleComments" :reply="reply"></Comment>
         </el-col>
@@ -297,6 +300,11 @@
                     let article = _ts.article;
                     article.articleComments = res.comments;
                     _ts.$set(_ts, 'article', article);
+                })
+            },
+            gotoLogin() {
+                this.$router.push({
+                    name: 'login'
                 })
             }
         },
