@@ -101,7 +101,7 @@ export default new Vuex.Store({
     },
     isLogin(state){
       if (!state.isLogin) {
-        state.isLogin = localStorage.getItem('isLogin');   //从sessionStorage中读取状态
+        state.isLogin = localStorage.getItem('isLogin');   //从localStorage中读取状态
         state.nickname = localStorage.getItem('nickname');
         state.avatarURL = localStorage.getItem('avatarURL') !== 'undefined'?localStorage.getItem('avatarURL'):"";
         state.token = localStorage.getItem('x-auth-token');

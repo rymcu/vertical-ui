@@ -21,7 +21,7 @@
                                 <el-avatar v-if="article.articleAuthorAvatarUrl" size="medium" :src="article.articleAuthorAvatarUrl"></el-avatar>
                                 <el-avatar v-else size="medium" src="https://rymcu.com/vertical/article/1578475481946.png"></el-avatar>
                             </el-col>
-                            <el-col :xs="9" :sm="11" :xl="11">
+                            <el-col :xs="21" :sm="23" :xl="23">
                                 <div>
                                     <el-link @click="onRouter('user', article.articleAuthorName)" :underline="false" class="text-default">{{ article.articleAuthorName }}</el-link>
                                     <small class="d-block text-muted">{{ article.timeAgo }}</small>

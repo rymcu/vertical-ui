@@ -1,13 +1,13 @@
 <template>
     <el-row justify="space-between">
         <el-col>
-            <el-col :xs="16" :sm="4" :xl="2" style="padding-top: 1rem;">
+            <el-col :xs="14" :sm="4" :xl="2" style="padding-top: 1rem;">
                 <a class="navbar-brand" href="/">
                     <img src="../../assets/rymcu.png" alt="RYMCU" class="navbar-brand-img">
                     <span>RYMCU</span>
                 </a>
             </el-col>
-            <el-col :xs="0" :sm="12" :xl="16" style="text-align: center;">
+            <el-col :xs="0" :sm="10" :xl="16" style="text-align: center;">
                 <el-row type="flex" justify="center">
                     <el-col :sm="18" :xl="8">
                         <el-menu :default-active="getActiveMenu" style="margin-top: -2px;border: 0;" mode="horizontal" @select="handleSelectMenu">
@@ -19,7 +19,7 @@
                     </el-col>
                 </el-row>
             </el-col>
-            <el-col :xs="8" :sm="8" :xl="6" style="padding-top: 1rem;">
+            <el-col :xs="10" :sm="10" :xl="6" style="padding-top: 1rem;">
                 <!--<el-col :xs="24" :sm="16" :xl="12">-->
                 <el-col :xs="0" :sm="0" :xl="0">
                     <el-autocomplete
@@ -161,10 +161,7 @@
                 let _ts = this;
                 if(item === 'user'){
                     _ts.$router.push({
-                        name: item,
-                        params: {
-                            id: _ts.$store.state.nickname
-                        }
+                        path: '/user/' + _ts.$store.state.nickname
                     })
                 }
                 if( item === 'user-info'){
