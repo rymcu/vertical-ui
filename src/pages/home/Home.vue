@@ -21,15 +21,10 @@
                                 <el-avatar v-if="article.articleAuthorAvatarUrl" size="medium" :src="article.articleAuthorAvatarUrl"></el-avatar>
                                 <el-avatar v-else size="medium" src="https://rymcu.com/vertical/article/1578475481946.png"></el-avatar>
                             </el-col>
-                            <el-col :xs="21" :sm="23" :xl="23">
+                            <el-col :xs="20" :sm="20" :xl="20">
                                 <div>
                                     <el-link @click="onRouter('user', article.articleAuthorName)" :underline="false" class="text-default">{{ article.articleAuthorName }}</el-link>
                                     <small class="d-block text-muted">{{ article.timeAgo }}</small>
-                                </div>
-                                <div class="ml-auto text-muted">
-                                    <a href="javascript:void(0)" class="icon d-none d-md-inline-block ml-3">
-                                        <i class="fe fe-heart mr-1"></i>
-                                    </a>
                                 </div>
                             </el-col>
                             <el-col class="text-right">
