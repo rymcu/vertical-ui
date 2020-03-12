@@ -15,7 +15,7 @@ export default new Vuex.Store({
     blogTitle: '',
     avatarURL: '',
     blogURL: '/',
-    role: 0, // 0-no login, 1-admin, 2-blog admin, 3-blog user, 4-visitor
+    role: 0, // 0-no login, 1-admin, 2-blog admin, 3-blog author, 4-blog user, 5-visitor
     blogs: [{
       title: '',
       id: ''
@@ -116,7 +116,7 @@ export default new Vuex.Store({
       if (state.role) {
         switch (scenes) {
           case 'user':
-            hasPermissions = state.role < 2;
+            hasPermissions = state.role < 5;
             break;
           case 'role':
             hasPermissions = state.role < 2;
