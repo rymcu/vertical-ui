@@ -38,8 +38,9 @@
         </el-col>
         <el-col v-else style="margin-top: 1rem;padding-right:3rem;text-align: right;">
             <el-button type="danger" :loading="doLoading" @click="deleteArticle">删除</el-button>
+            <el-button v-if="articleStatus === '1'" :loading="doLoading" @click="saveArticle">保存草稿</el-button>
             <el-button v-if="articleStatus === '0'" :loading="doLoading" type="primary" @click="postArticle">更新</el-button>
-            <el-button v-else :loading="doLoading" @click="saveArticle">保存草稿</el-button>
+            <el-button v-else type="primary" :loading="doLoading" @click="postArticle">发布</el-button>
         </el-col>
     </el-row>
 </template>
@@ -168,8 +169,7 @@
                 }).then(() => {
                     let id = _ts.$route.query.id;
                     _ts.axios.delete('/article/delete/'+ id).then(function (res) {
-                        console.log(res);
-                        if(res){
+                        if(res && res.message){
                             _ts.$message(res.message);
                             return false;
                         }
@@ -291,6 +291,7 @@
                     this.$set(this, 'idArticle', article.idArticle);
                     this.$set(this, 'articleTitle', article.articleTitle);
                     this.$set(this, 'articleContent', article.articleContent);
+                    this.$set(this, 'articleStatus', article.articleStatus);
                     this.$set(this, 'articleTags', (article.articleTags).split(','));
                     localStorage.setItem("article-title", article.articleTitle);
                     localStorage.setItem("article-tags", (article.articleTags).split(','));

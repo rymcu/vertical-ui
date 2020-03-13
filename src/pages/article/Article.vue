@@ -16,11 +16,12 @@
                                     <small class="d-block text-muted">{{ article.timeAgo }}</small>
                                 </div>
                             </el-col>
-                            <el-col :xs="12" :sm="12" :xl="12" v-if="hasPermissions" class="text-right">
+                            <el-col :xs="12" :sm="12" :xl="12" v-if="isLogin" class="text-right">
                                 <el-dropdown trigger="click"  @command="handleCommand">
                                     <el-link :underline="false"><i class="el-icon-more"></i></el-link>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item command="edit">编辑</el-dropdown-item>
+                                        <el-dropdown-item command="edit" v-if="hasPermissions">编辑</el-dropdown-item>
+                                        <el-dropdown-item command="share">分享</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
                             </el-col>
@@ -36,6 +37,11 @@
                                         effect="plain">
                                     {{ tag.tagTitle }}
                                 </el-tag>
+                            </el-col>
+                            <el-col v-show="isShare" style="margin-bottom: 1rem;">
+                                <el-input v-model="shareData.shareUrl">
+                                    <el-button slot="append" title="分享至微信"><el-image src="https://rymcu.com/vertical/article/1584023661179.png" style="width: 20px;"></el-image></el-button>
+                                </el-input>
                             </el-col>
                         </el-row>
                         <div class="pt-7 pipe-content__reset" v-html="article.articleContent" style="overflow: hidden;"></div>
@@ -174,9 +180,11 @@
                     }
                 },
                 pagination: {
-                    "paginationPageCount": 0,
-                    "paginationPageNums": []
-                }
+                    "paginationPageCount": Number,
+                    "paginationPageNums": Array
+                },
+                shareData: Object,
+                isShare: false
             }
         },
         methods: {
@@ -238,14 +246,23 @@
                     }
                 )
             },
-            handleCommand() {
+            handleCommand(item) {
                 let _ts = this;
-                this.$router.push({
-                    name: 'post-article',
-                    query: {
-                        id: _ts.article.idArticle
-                    }
-                })
+                if (item === 'edit') {
+                    _ts.$router.push({
+                        name: 'post-article',
+                        query: {
+                            id: _ts.article.idArticle
+                        }
+                    })
+                } else {
+                    _ts.axios.get('/article/' + _ts.article.idArticle + '/share').then(function (res) {
+                        if (res) {
+                            _ts.$set(_ts, 'shareData', res);
+                            _ts.$set(_ts, 'isShare', true);
+                        }
+                    });
+                }
             },
             showComment() {
                 let _ts = this;

@@ -5,7 +5,7 @@
         </el-col>
         <el-col v-for="article in articles" :key="article.idArticle">
             <el-col>
-                <el-link :href="article.articlePermalink" :underline="false">
+                <el-link  @click="onRouter(article.articleLink)" :underline="false">
                     <h4 v-html="article.articleTitle"></h4>
                 </el-link>
             </el-col>
@@ -55,6 +55,11 @@
             },
             currentChange(val){
                 this.getData(val);
+            },
+            onRouter (data) {
+                this.$router.push({
+                    path: data
+                })
             }
         },
         mounted() {
