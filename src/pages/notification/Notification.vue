@@ -27,13 +27,13 @@
                 </el-col>
             </el-col>
             <el-col v-else>
-                <el-col :xs="9" :sm="11" :xl="11">
+                <el-col :xs="21" :sm="23" :xl="23">
                     <el-link :underline="false" style="font-size: 1.1em;" v-html="notification.dataSummary"></el-link>
                     <el-col>{{ notification.createdTime }}</el-col>
                 </el-col>
-                <el-col :xs="3" :sm="1" :xl="1" class="mr-3">
+                <el-col :xs="3" :sm="1" :xl="1" class="text-right" style="padding-right: 1rem;">
                     <el-link v-if="notification.hasRead === '0'" :underline="false" @click="read(notification.idNotification)">
-                        <i class="el-icon-check"></i>
+                        <i class="el-icon-check" style="font-weight: bold;"></i>
                     </el-link>
                 </el-col>
             </el-col>
@@ -68,13 +68,15 @@
             }
         },
         methods: {
-            getData() {
+            async getData(p) {
                 let _ts = this;
-                _ts.axios.get('/notification/all').then(function (res) {
-                    if (res) {
-                        _ts.$set(_ts, 'notifications', res.notifications)
+                let responseTopData = await _ts.axios.get('/notification/all?page=' + p)
+                    if (responseTopData) {
+                        responseTopData.pagination.currentPage = p;
+                        _ts.$set(_ts, 'notifications', responseTopData.notifications);
+                        _ts.$set(_ts, 'pagination', responseTopData.pagination);
+                        window.scrollTo(0, 0)
                     }
-                })
             },
             onRouter(notification) {
                 if ('0' === notification.dataType) {
@@ -89,10 +91,14 @@
                 this.axios.put('/notification/read/' + id).then(function () {
                     _ts.getData();
                 });
+            },
+            currentChange(val){
+                this.getData(val);
             }
         },
         mounted() {
-            this.getData();
+            const p = this.pagination.currentPage;
+            this.getData(p);
         }
     }
 </script>
