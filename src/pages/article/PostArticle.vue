@@ -32,12 +32,14 @@
                 </el-option>
             </el-select>
         </el-col>
-        <el-col v-if="idEdit" style="margin-top: 1rem;padding-right:3rem;text-align: right;">
+        <el-col v-if="!isEdit" style="margin-top: 1rem;padding-right:3rem;text-align: right;">
+            <el-button :loading="doLoading" @click="saveArticle">保存草稿</el-button>
             <el-button type="primary" :loading="doLoading" @click="postArticle">发布</el-button>
         </el-col>
         <el-col v-else style="margin-top: 1rem;padding-right:3rem;text-align: right;">
-            <el-button type="danger" @click="deleteArticle">删除</el-button>
-            <el-button type="primary" @click="postArticle">更新</el-button>
+            <el-button type="danger" :loading="doLoading" @click="deleteArticle">删除</el-button>
+            <el-button v-if="articleStatus === '0'" :loading="doLoading" type="primary" @click="postArticle">更新</el-button>
+            <el-button v-else :loading="doLoading" @click="saveArticle">保存草稿</el-button>
         </el-col>
     </el-row>
 </template>
@@ -55,11 +57,12 @@
                 articleContent: '',
                 articleType: 0,
                 articleTags: [],
+                articleStatus: '0',
                 options: [],
                 list: [],
                 loading: false,
                 doLoading: false,
-                idEdit: false,
+                isEdit: false,
                 states: ["Alabama", "Alaska", "Arizona",
                     "Arkansas", "California", "Colorado",
                     "Connecticut", "Delaware", "Florida",
@@ -165,6 +168,7 @@
                 }).then(() => {
                     let id = _ts.$route.query.id;
                     _ts.axios.delete('/article/delete/'+ id).then(function (res) {
+                        console.log(res);
                         if(res){
                             _ts.$message(res.message);
                             return false;
@@ -196,7 +200,8 @@
                     articleTitle: _ts.articleTitle,
                     articleContent: articleContent,
                     articleContentHtml: articleContentHtml,
-                    articleTags: _ts.articleTags.join(",")
+                    articleTags: _ts.articleTags.join(","),
+                    articleStatus: 0
                 };
                 _ts.axios[id ? 'put' : 'post']('/article/post', article).then(function (res) {
                     if(res) {
@@ -216,6 +221,42 @@
                     }
                 })
 
+            },
+            async saveArticle() {
+                let _ts = this;
+                _ts.doLoading = true;
+                let id = _ts.$route.query.id;
+                let articleContent = _ts.contentEditor.getValue();
+                let articleContentHtml = await _ts.contentEditor.getHTML();
+                if(!(_ts.articleTitle && articleContent)){
+                    _ts.$message("标题/正文不能为空！");
+                    return false;
+                }
+                let article = {
+                    idArticle: _ts.idArticle,
+                    articleTitle: _ts.articleTitle,
+                    articleContent: articleContent,
+                    articleContentHtml: articleContentHtml,
+                    articleTags: _ts.articleTags.join(","),
+                    articleStatus: 1
+                };
+                _ts.axios[id ? 'put' : 'post']('/article/post', article).then(function (res) {
+                    if(res) {
+                        if (res.message) {
+                            _ts.$message(res.message);
+                            return false;
+                        }
+                        localStorage.removeItem('article-title');
+                        localStorage.removeItem('article-tags');
+                        _ts.contentEditor.setValue('');
+                        _ts.$router.push({
+                            name: 'article',
+                            params: {
+                                id: res.id
+                            }
+                        })
+                    }
+                })
             }
         },
         async mounted () {
@@ -243,7 +284,7 @@
             let id = _ts.$route.query.id;
 
             if (id) {
-                _ts.idEdit = false;
+                _ts.$set(_ts, 'isEdit', true);
                 const responseData = await this.axios.get(`/article/detail/${id}`);
                 if (responseData) {
                     let article = responseData.article;
@@ -256,7 +297,7 @@
                     this.contentEditor.setValue(article.articleContent);
                 }
             } else {
-                _ts.idEdit = true;
+                _ts.$set(_ts, 'isEdit', false);
                 // set storage
                 this._setDefaultLocalStorage();
                 setTimeout(() => {

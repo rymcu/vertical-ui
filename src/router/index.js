@@ -47,6 +47,11 @@ export default new Router({
                     component: ()=>import('../pages/article/PostArticle')
                 },
                 {
+                    path: '/draft-box',
+                    name: 'draft-box',
+                    component: ()=>import('../pages/article/DraftBox')
+                },
+                {
                     path: '/comment',
                     name: 'comment',
                     component: ()=>import('../pages/comment/Comment')
