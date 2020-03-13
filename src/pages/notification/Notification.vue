@@ -75,7 +75,7 @@
                         responseTopData.pagination.currentPage = p;
                         _ts.$set(_ts, 'notifications', responseTopData.notifications);
                         _ts.$set(_ts, 'pagination', responseTopData.pagination);
-                        window.scrollTo(0, 0)
+                        window.scrollTo(0, 0);
                     }
             },
             onRouter(notification) {
