@@ -1,55 +1,55 @@
 <template>
     <el-row class="article__wrapper">
-        <el-col v-if="article.idArticle" :xs="24" :sm="24" :xl="24">
-            <el-card>
-                <div class="card-body d-flex flex-column article">
-                    <div class="article__item">
-                        <h1 class="list__title" v-html="article.articleTitle"></h1>
-                        <el-row class="pt-5">
-                            <el-col :xs="3" :sm="1" :xl="1">
-                                <el-avatar v-if="article.articleAuthorAvatarUrl" :src="article.articleAuthorAvatarUrl"></el-avatar>
-                                <el-avatar v-else src="https://rymcu.com/vertical/article/1578475481946.png"></el-avatar>
-                            </el-col>
-                            <el-col :xs="9" :sm="11" :xl="11">
-                                <div style="margin-left: 1rem;">
-                                    <el-link @click="onRouter('user', article.articleAuthorName)" :underline="false" class="text-default" >{{ article.articleAuthorName }}</el-link>
-                                    <small class="d-block text-muted">{{ article.timeAgo }}</small>
-                                </div>
-                            </el-col>
-                            <el-col :xs="12" :sm="12" :xl="12" v-if="isLogin" class="text-right">
-                                <el-dropdown trigger="click"  @command="handleCommand">
-                                    <el-link :underline="false"><i class="el-icon-more"></i></el-link>
-                                    <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item command="edit" v-if="hasPermissions">编辑</el-dropdown-item>
-                                        <el-dropdown-item command="share">分享</el-dropdown-item>
-                                    </el-dropdown-menu>
-                                </el-dropdown>
-                            </el-col>
-                            <el-col class="text-right">
-                                <el-link :underline="false" title="总浏览数"><i class="el-icon-s-data"></i><span style="color: red;">{{ article.articleViewCount }}</span></el-link>
-                            </el-col>
-                            <el-col style="margin: 1rem 0;">
-                                <el-tag
-                                        style="margin-right: 0.5rem;"
-                                        v-for="tag in article.tags"
-                                        :key="tag.idTag"
-                                        size="small"
-                                        effect="plain">
-                                    {{ tag.tagTitle }}
-                                </el-tag>
-                            </el-col>
-                            <el-col v-show="isShare" style="margin-bottom: 1rem;">
-                                <el-input v-model="shareData.shareUrl">
-                                    <el-button slot="append" title="分享至微信"><el-image src="https://rymcu.com/vertical/article/1584023661179.png" style="width: 20px;"></el-image></el-button>
-                                </el-input>
-                            </el-col>
-                        </el-row>
-                        <div class="pt-7 pipe-content__reset" v-html="article.articleContent" style="overflow: hidden;"></div>
+        <el-col v-if="isShow">
+            <el-col>
+                <el-card>
+                    <div class="card-body d-flex flex-column article">
+                        <div class="article__item">
+                            <h1 class="list__title" v-html="article.articleTitle"></h1>
+                            <el-row class="pt-5">
+                                <el-col :xs="3" :sm="1" :xl="1">
+                                    <el-avatar v-if="article.articleAuthorAvatarUrl" :src="article.articleAuthorAvatarUrl"></el-avatar>
+                                    <el-avatar v-else src="https://rymcu.com/vertical/article/1578475481946.png"></el-avatar>
+                                </el-col>
+                                <el-col :xs="9" :sm="11" :xl="11">
+                                    <div style="margin-left: 1rem;">
+                                        <el-link @click="onRouter('user', article.articleAuthorName)" :underline="false" class="text-default" >{{ article.articleAuthorName }}</el-link>
+                                        <small class="d-block text-muted">{{ article.timeAgo }}</small>
+                                    </div>
+                                </el-col>
+                                <el-col :xs="12" :sm="12" :xl="12" v-if="isLogin" class="text-right">
+                                    <el-dropdown trigger="click"  @command="handleCommand">
+                                        <el-link :underline="false"><i class="el-icon-more"></i></el-link>
+                                        <el-dropdown-menu slot="dropdown">
+                                            <el-dropdown-item command="edit" v-if="hasPermissions">编辑</el-dropdown-item>
+                                            <el-dropdown-item command="share">分享</el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </el-dropdown>
+                                </el-col>
+                                <el-col class="text-right">
+                                    <el-link :underline="false" title="总浏览数"><i class="el-icon-s-data"></i><span style="color: red;">{{ article.articleViewCount }}</span></el-link>
+                                </el-col>
+                                <el-col style="margin: 1rem 0;">
+                                    <el-tag
+                                            style="margin-right: 0.5rem;"
+                                            v-for="tag in article.tags"
+                                            :key="tag.idTag"
+                                            size="small"
+                                            effect="plain">
+                                        {{ tag.tagTitle }}
+                                    </el-tag>
+                                </el-col>
+                                <el-col v-show="isShare" style="margin-bottom: 1rem;">
+                                    <el-input v-model="shareData.shareUrl">
+                                        <el-button slot="append" title="分享至微信"><el-image src="https://rymcu.com/vertical/article/1584023661179.png" style="width: 20px;"></el-image></el-button>
+                                    </el-input>
+                                </el-col>
+                            </el-row>
+                            <div class="pt-7 pipe-content__reset" v-html="article.articleContent" style="overflow: hidden;"></div>
+                        </div>
                     </div>
-                </div>
-            </el-card>
-        </el-col>
-        <el-col v-if="article.idArticle">
+                </el-card>
+            </el-col>
             <el-col v-if="isLogin" style="margin-top: 1rem;">
                 <el-col :xs="2" :xl="1">
                     <el-avatar :src="avatar"></el-avatar>
@@ -84,9 +84,8 @@
                 <Comment :comments="article.articleComments" :reply="reply"></Comment>
             </el-col>
         </el-col>
-        <el-col v-else class="text-center">
-            <el-col><span class="text-center text-default" style="font-size: 5rem;">404</span></el-col>
-            <el-col style="margin-top: 1rem;"><span class="text-center text-default" style="font-size: 2rem;">未找到文章!</span></el-col>
+        <el-col v-else>
+            <Component404></Component404>
         </el-col>
     </el-row>
 </template>
@@ -98,13 +97,15 @@
     import Vditor from 'vditor'
     import {LazyLoadImage} from "../../plugins/utils";
     import Comment from '@/pages/comment/Comment';
+    import Component404 from '@/components/classic/404';
 
     Vue.use(MetaInfo);
     export default {
         name: "Article",
         props: ["id"],
         components: {
-            Comment
+            Comment,
+            Component404
         },
         computed: {
             hasPermissions() {
@@ -170,6 +171,7 @@
                 drawer: false,
                 direction: 'btt',
                 initEditor: false,
+                isShow: true,
                 loading: false,
                 title: '',
                 commentAuthorAvatar: '',
@@ -338,6 +340,7 @@
             if (responseTopData && responseTopData.article) {
                 let article = responseTopData.article;
                 _ts.$set(_ts, 'article', article);
+                _ts.$set(_ts, 'isShow', true);
 
                 Vue.nextTick(() => {
                     $('*[data-src]').each(function () {
@@ -347,6 +350,7 @@
                     })
                 });
             } else {
+                _ts.$set(_ts, 'isShow', false);
                 return ;
             }
 
