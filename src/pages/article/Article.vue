@@ -84,7 +84,7 @@
                 <Comment :comments="article.articleComments" :reply="reply"></Comment>
             </el-col>
         </el-col>
-        <el-col class="text-center">
+        <el-col v-else class="text-center">
             <el-col><span class="text-center text-default" style="font-size: 5rem;">404</span></el-col>
             <el-col style="margin-top: 1rem;"><span class="text-center text-default" style="font-size: 2rem;">未找到文章!</span></el-col>
         </el-col>
