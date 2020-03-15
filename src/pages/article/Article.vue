@@ -22,7 +22,7 @@
                                         <el-link :underline="false"><i class="el-icon-more"></i></el-link>
                                         <el-dropdown-menu slot="dropdown">
                                             <el-dropdown-item command="edit" v-if="hasPermissions">编辑</el-dropdown-item>
-                                            <el-dropdown-item command="share">分享</el-dropdown-item>
+<!--                                            <el-dropdown-item command="share">分享</el-dropdown-item>-->
                                         </el-dropdown-menu>
                                     </el-dropdown>
                                 </el-col>
