@@ -250,7 +250,7 @@
                         localStorage.removeItem('article-tags');
                         _ts.contentEditor.setValue('');
                         _ts.$router.push({
-                            name: 'article',
+                            name: 'draft',
                             params: {
                                 id: res.id
                             }

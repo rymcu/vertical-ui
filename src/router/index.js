@@ -42,13 +42,19 @@ export default new Router({
                     props: true
                 },
                 {
+                    path: '/draft/:id',
+                    name: 'draft',
+                    component: ()=>import('../pages/article/Draft'),
+                    props: true
+                },
+                {
                     path: '/post-article',
                     name: 'post-article',
                     component: ()=>import('../pages/article/PostArticle')
                 },
                 {
-                    path: '/draft-box',
-                    name: 'draft-box',
+                    path: '/drafts',
+                    name: 'drafts',
                     component: ()=>import('../pages/article/DraftBox')
                 },
                 {

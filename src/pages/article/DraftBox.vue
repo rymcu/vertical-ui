@@ -6,8 +6,11 @@
         <el-col v-for="article in articles" :key="article.idArticle">
             <el-col>
                 <el-link  @click="onRouter(article.articleLink)" :underline="false">
-                    <h4 v-html="article.articleTitle"></h4>
+                    <h2 v-html="article.articleTitle"></h2>
                 </el-link>
+            </el-col>
+            <el-col>
+                <small class="d-block text-muted">{{ article.timeAgo }}</small>
             </el-col>
             <el-col>
                 <el-divider></el-divider>

@@ -1,6 +1,6 @@
 <template>
-    <div class="article__wrapper">
-        <el-col :xs="24" :sm="24" :xl="24">
+    <el-row class="article__wrapper">
+        <el-col v-if="article.idArticle" :xs="24" :sm="24" :xl="24">
             <el-card>
                 <div class="card-body d-flex flex-column article">
                     <div class="article__item">
@@ -49,40 +49,46 @@
                 </div>
             </el-card>
         </el-col>
-        <el-col v-if="isLogin" style="margin-top: 1rem;">
-            <el-col :xs="2" :xl="1">
-                <el-avatar :src="avatar"></el-avatar>
+        <el-col v-if="article.idArticle">
+            <el-col v-if="isLogin" style="margin-top: 1rem;">
+                <el-col :xs="2" :xl="1">
+                    <el-avatar :src="avatar"></el-avatar>
+                </el-col>
+                <el-col :xs="22" :xl="23" style="padding-left: 1rem;">
+                    <el-input @click.native="showComment" placeholder="请输入回帖内容"></el-input>
+                </el-col>
+                <el-col>
+                    <el-drawer
+                            :visible.sync="drawer"
+                            :direction="direction"
+                            size="40%">
+                        <el-col slot="title">
+                            <el-col>
+                                <el-avatar v-if="commentAuthorAvatar" :src="commentAuthorAvatar"></el-avatar>
+                                <span class="text-default" style="padding-left: 1rem;">{{ title }}</span>
+                            </el-col>
+                        </el-col>
+                        <el-col>
+                            <div id="contentEditor"></div>
+                        </el-col>
+                        <el-col style="margin-top: 1rem;padding-right:3rem;text-align: right;">
+                            <el-button type="primary" :loading="loading" @click="postComment">发布</el-button>
+                        </el-col>
+                    </el-drawer>
+                </el-col>
             </el-col>
-            <el-col :xs="22" :xl="23" style="padding-left: 1rem;">
-                <el-input @click.native="showComment" placeholder="请输入回帖内容"></el-input>
+            <el-col v-else class="text-center" style="margin-top: 1rem;">
+                <el-button type="primary" size="medium" @click="gotoLogin">登录</el-button> 后发布评论
             </el-col>
             <el-col>
-                <el-drawer
-                        :visible.sync="drawer"
-                        :direction="direction"
-                        size="40%">
-                    <el-col slot="title">
-                        <el-col>
-                            <el-avatar v-if="commentAuthorAvatar" :src="commentAuthorAvatar"></el-avatar>
-                            <span class="text-default" style="padding-left: 1rem;">{{ title }}</span>
-                        </el-col>
-                    </el-col>
-                    <el-col>
-                        <div id="contentEditor"></div>
-                    </el-col>
-                    <el-col style="margin-top: 1rem;padding-right:3rem;text-align: right;">
-                        <el-button type="primary" :loading="loading" @click="postComment">发布</el-button>
-                    </el-col>
-                </el-drawer>
+                <Comment :comments="article.articleComments" :reply="reply"></Comment>
             </el-col>
         </el-col>
-        <el-col v-else class="text-center" style="margin-top: 1rem;">
-            <el-button type="primary" size="medium" @click="gotoLogin">登录</el-button> 后发布评论
+        <el-col class="text-center">
+            <el-col><span class="text-center text-default" style="font-size: 5rem;">404</span></el-col>
+            <el-col style="margin-top: 1rem;"><span class="text-center text-default" style="font-size: 2rem;">未找到文章!</span></el-col>
         </el-col>
-        <el-col>
-            <Comment :comments="article.articleComments" :reply="reply"></Comment>
-        </el-col>
-    </div>
+    </el-row>
 </template>
 
 <script>
@@ -329,7 +335,7 @@
             let _ts = this;
             _ts.$store.commit('setActiveMenu', 'article');
             const responseTopData = await _ts.axios.get('/console/article/' + _ts.id);
-            if (responseTopData) {
+            if (responseTopData && responseTopData.article) {
                 let article = responseTopData.article;
                 _ts.$set(_ts, 'article', article);
 
@@ -340,6 +346,8 @@
                         this.removeAttribute('data-src');
                     })
                 });
+            } else {
+                return ;
             }
 
             if (_ts.isLogin) {

@@ -57,7 +57,7 @@
                                 </el-dropdown-item>
                                 <el-dropdown-item v-show="hasPermissions" command="admin-dashboard">系统管理</el-dropdown-item>
                                 <el-dropdown-item command="user-info">资料与账号</el-dropdown-item>
-                                <el-dropdown-item command="draft-box">我的草稿</el-dropdown-item>
+                                <el-dropdown-item command="drafts">我的草稿</el-dropdown-item>
                                 <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
