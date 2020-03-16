@@ -6,35 +6,36 @@
         <el-main>
             <router-view/>
         </el-main>
-        <el-footer>
+        <el-footer style="height: auto;">
             <Footer></Footer>
         </el-footer>
-        <el-dialog
-                title="登录"
-                :visible.sync="showLoginDialog"
-                width="30%"
-                :before-close="hideLoginDialog"
-                center>
-                <el-form :model="user" status-icon :rules="rules" ref="ruleForm" label-width="100px" style="align-items: center;">
-                    <el-form-item label="账号" prop="pass">
-                        <el-input v-model="user.account" autocomplete="off" style="width: 275px;"></el-input>
-                    </el-form-item>
-                    <el-form-item label="密码" prop="pass">
-                        <el-input type="password" v-model="user.password" autocomplete="off" style="width: 275px;" show-password></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="login" style="width: 135px;">登录</el-button>
-                        <el-button @click="register" style="width: 130px;">注册</el-button>
-                    </el-form-item>
-                </el-form>
-        </el-dialog>
-        <el-backtop target=".el-container"></el-backtop>
+        <div style="position: fixed;bottom: 10vh;right: 3vw;">
+            <el-col :xs="0" :xl="24">
+                <el-popover
+                        placement="right"
+                        width="20"
+                        trigger="hover">
+                    <el-col>
+                        <el-image :src="rymcu"></el-image>
+                    </el-col>
+                    <el-col class="text-center">
+                        <span>扫码关注公众号</span>
+                    </el-col>
+                    <el-button slot="reference" circle><img style="width: 14px;height: 14px;" :src="weiXin" fit="cover"/></el-button>
+                </el-popover>
+            </el-col>
+            <el-col style="margin-top: 1rem;"  :xs="0" :xl="24">
+                <el-button circle @click="backTop" icon="el-icon-caret-top"></el-button>
+            </el-col>
+        </div>
     </el-container>
 </template>
 
 <script>
     import Header from "@/components/classic/Header";
     import Footer from "@/components/classic/Footer";
+    import WeiXin from "@/assets/weixin.png";
+    import Rymcu from "@/assets/rymcugzh.jpg";
     export default {
         name: "index",
         components: {
@@ -68,6 +69,8 @@
                 }
             };
             return {
+                rymcu: Rymcu,
+                weiXin: WeiXin,
                 user: {
                     account: '',
                     password: ''
@@ -91,12 +94,15 @@
                     if (valid) {
                         alert('submit!');
                     } else {
-                        this.$message('error!')
+                        this.$message('error!');
                         return false;
                     }
                 });
             },
-            register() {}
+            register() {},
+            backTop() {
+                window.scrollTo(0, 0);
+            }
         }
     }
 </script>

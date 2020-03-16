@@ -22,7 +22,7 @@
                                         <el-link :underline="false"><i class="el-icon-more"></i></el-link>
                                         <el-dropdown-menu slot="dropdown">
                                             <el-dropdown-item command="edit" v-if="hasPermissions">编辑</el-dropdown-item>
-<!--                                            <el-dropdown-item command="share">分享</el-dropdown-item>-->
+                                            <el-dropdown-item command="share">分享</el-dropdown-item>
                                         </el-dropdown-menu>
                                     </el-dropdown>
                                 </el-col>
@@ -39,9 +39,20 @@
                                         {{ tag.tagTitle }}
                                     </el-tag>
                                 </el-col>
-                                <el-col v-show="isShare" style="margin-bottom: 1rem;">
+                                <el-col v-if="isShare" style="margin-bottom: 1rem;">
                                     <el-input v-model="shareData.shareUrl">
-                                        <el-button slot="append" title="分享至微信"><el-image src="https://rymcu.com/vertical/article/1584023661179.png" style="width: 20px;"></el-image></el-button>
+                                        <el-popover slot="append"
+                                                placement="bottom"
+                                                width="20"
+                                                trigger="hover">
+                                            <el-col>
+                                                <qrcode :value="shareData.shareUrl" :options="{ width: 20 }"></qrcode>
+                                            </el-col>
+                                            <el-col class="text-center">
+                                                <span>扫码分享至微信</span>
+                                            </el-col>
+                                            <el-button slot="reference"><el-image style="width: 14px;height: 14px;" :src="weiXin" fit="cover"></el-image></el-button>
+                                        </el-popover>
                                     </el-input>
                                 </el-col>
                             </el-row>
@@ -94,10 +105,13 @@
     import Vue from 'vue';
     import $ from 'jquery';
     import MetaInfo from 'vue-meta-info';
-    import Vditor from 'vditor'
+    import Vditor from 'vditor';
     import {LazyLoadImage} from "../../plugins/utils";
     import Comment from '@/pages/comment/Comment';
     import Component404 from '@/components/classic/404';
+    import WeiXin from "@/assets/weixin.png";
+    import VueQrcode from '@chenfengyuan/vue-qrcode';
+    Vue.component(VueQrcode.name, VueQrcode);
 
     Vue.use(MetaInfo);
     export default {
@@ -168,6 +182,7 @@
         data (){
             return {
                 tokenURL: {},
+                weiXin: WeiXin,
                 drawer: false,
                 direction: 'btt',
                 initEditor: false,
