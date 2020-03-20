@@ -11,7 +11,7 @@
             </el-col>
             <el-col>
                 <el-input placeholder="请输入标签名" v-model="tagTitle">
-                    <el-button @click="getTags" slot="append" icon="el-icon-search"></el-button>
+                    <el-button @click="getTags(pagination.currentPage)" slot="append" icon="el-icon-search"></el-button>
                 </el-input>
             </el-col>
             <el-col v-for="tag in tags" :key="tag.idTag">
