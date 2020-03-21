@@ -9,8 +9,8 @@
         <el-footer style="height: auto;">
             <Footer></Footer>
         </el-footer>
-        <div style="position: fixed;bottom: 10vh;right: 3vw;">
-            <el-col :xs="0" :xl="24">
+        <div v-if="isPostArticle" style="position: fixed;bottom: 10vh;right: 3vw;">
+            <el-col v-if="isPostArticle" :xs="0" :xl="24">
                 <el-popover
                         placement="right"
                         width="20"
@@ -45,6 +45,12 @@
         computed: {
             showLoginDialog () {
                 return this.$store.state.login
+            },
+            isPostArticle() {
+                if (this.$route.name == 'post-article') {
+                    return false;
+                }
+                return true;
             }
         },
         data() {
