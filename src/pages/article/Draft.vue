@@ -115,7 +115,11 @@
         async mounted () {
             let _ts = this;
             _ts.$store.commit('setActiveMenu', 'article');
-            const responseTopData = await _ts.axios.get('/article/detail/' + _ts.id);
+            const responseTopData = await _ts.axios.get('/article/detail/' + _ts.id, {
+                params: {
+                    type: 1
+                }
+            });
             if (responseTopData) {
                 let article = responseTopData.article;
                 _ts.$set(_ts, 'article', article);
