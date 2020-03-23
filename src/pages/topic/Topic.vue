@@ -12,6 +12,14 @@
                         <el-link @click="onRouter('article',article.idArticle)" :underline="false" style="margin-bottom: .5rem;">
                             <h4 v-html="article.articleTitle"></h4>
                         </el-link>
+                        <el-tag
+                                style="margin-left: 0.5rem;"
+                                v-for="tag in article.tags"
+                                :key="tag.idTag"
+                                size="mini"
+                                effect="plain">
+                            {{ tag.tagTitle }}
+                        </el-tag>
                         <div class="text-muted article-summary-md">{{ article.articlePreviewContent }}</div>
                         <el-row class="pt-5">
                             <el-col :xs="3" :sm="1" :xl="1" class="mr-3">
@@ -130,6 +138,9 @@
                 )
             },
             handleSelectTopic(item) {
+                this.$router.push({
+                    path: '/topic/' + item
+                });
                 this.$store.commit('setActiveTopic', item);
                 const topic = this.$store.state.activeTopic;
                 const p = this.pagination.currentPage;
