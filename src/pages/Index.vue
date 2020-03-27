@@ -9,7 +9,7 @@
         <el-footer style="height: auto;">
             <Footer></Footer>
         </el-footer>
-        <div v-if="isPostArticle" style="position: fixed;bottom: 10vh;right: 3vw;">
+        <div v-if="isPostArticle && isShow" style="position: fixed;bottom: 10vh;right: 3vw;">
             <el-col v-if="isPostArticle" :xs="0" :xl="24">
                 <el-popover
                         placement="right"
@@ -24,7 +24,7 @@
                     <el-button slot="reference" circle><img style="width: 14px;height: 14px;" :src="weiXin" fit="cover"/></el-button>
                 </el-popover>
             </el-col>
-            <el-col style="margin-top: 1rem;"  :xs="0" :xl="24">
+            <el-col style="padding-top: 1rem;" :xs="0" :xl="24">
                 <el-button circle @click="backTop" icon="el-icon-caret-top"></el-button>
             </el-col>
         </div>
@@ -88,7 +88,8 @@
                     password: [
                         { validator: validatePassWord, trigger: 'blur' }
                     ]
-                }
+                },
+                isShow: false
             }
         },
         methods: {
@@ -108,7 +109,19 @@
             register() {},
             backTop() {
                 window.scrollTo(0, 0);
+            },
+            handleScroll(){
+                let _ts = this;
+                let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                if (scrollTop > 100) {
+                    _ts.$set(_ts, 'isShow', true);
+                } else {
+                    _ts.$set(_ts, 'isShow', false);
+                }
             }
+        },
+        mounted() {
+            window.addEventListener('scroll',this.handleScroll,true);
         }
     }
 </script>
