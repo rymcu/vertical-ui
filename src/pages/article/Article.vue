@@ -46,7 +46,7 @@
                                                 width="20"
                                                 trigger="hover">
                                             <el-col>
-                                                <qrcode :value="shareData.shareUrl" :options="{ width: 20 }"></qrcode>
+                                                <qrcode :value="shareWeiXin(shareData.shareUrl)" :options="{ width: 20 }"></qrcode>
                                             </el-col>
                                             <el-col class="text-center">
                                                 <span>扫码分享至微信</span>
@@ -62,10 +62,10 @@
                 </el-card>
             </el-col>
             <el-col v-if="isLogin" style="margin-top: 1rem;">
-                <el-col :xs="2" :xl="1">
+                <el-col :xs="2" :sm="1" :xl="1">
                     <el-avatar :src="avatar"></el-avatar>
                 </el-col>
-                <el-col :xs="22" :xl="23" style="padding-left: 1rem;">
+                <el-col :xs="22" :sm="23" :xl="23" style="padding-left: 1rem;">
                     <el-input @click.native="showComment" placeholder="请输入回帖内容"></el-input>
                 </el-col>
                 <el-col>
@@ -346,6 +346,10 @@
                 this.$router.push({
                     name: 'login'
                 })
+            },
+            shareWeiXin(url) {
+                let path = url + '?s=' + this.$store.state.userNickname
+                return path;
             }
         },
         async mounted () {
