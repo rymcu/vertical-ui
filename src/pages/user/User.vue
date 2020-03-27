@@ -8,7 +8,7 @@
                     <img v-if="user.avatarUrl" class="card-profile-img" :src="user.avatarUrl">
                     <img v-else class="card-profile-img" src="https://rymcu.com/vertical/article/1578475481946.png">
                     <h3 class="mb-3">{{user.nickname}}</h3>
-                    <p class="mb-4" v-html="user.userIntro"></p>
+                    <p class="mb-4" v-html="user.signature"></p>
                     <!--<el-button type="primary" plain round><span class="fe fe-plus"></span> 关注</el-button>-->
                 </div>
             </div>
@@ -31,6 +31,9 @@
                             </div>
                         </div>
                     </el-col>
+                    <el-col v-if="!articles" class="text-center">
+                        这里什么都没有!
+                    </el-col>
                 </el-row>
             </div>
         </el-col>
@@ -48,15 +51,60 @@
 </template>
 
 <script>
+    import Vue from 'vue';
+    import MetaInfo from 'vue-meta-info';
+
+    Vue.use(MetaInfo);
     export default {
         name: "User",
         props: ["id"],
+        metaInfo() {
+            return {
+                // set a title
+                title: this.user.nickname + ' 的主页 - RYMCU',
+                // set meta
+                meta: [
+                    {
+                        name: 'keywords',
+                        content: 'RYMCU,' + this.user.nickname
+                    },
+                    {
+                        name: 'description',
+                        content: this.user.signature
+                    },
+                    {
+                        name: 'site_name',
+                        content: 'RYMCU'
+                    },
+                    {
+                        name: 'url',
+                        content: 'https://rymcu.com/user/' + this.id
+                    },
+                    {
+                        name: 'og:title',
+                        content: this.user.nickname + ' 的主页 - RYMCU',
+                    },
+                    {
+                        name: 'og:description',
+                        content: this.user.nickname + ' 的主页 - ' + this.user.signature
+                    },
+                    {
+                        name: 'og:site_name',
+                        content: 'RYMCU'
+                    },
+                    {
+                        name: 'og:url',
+                        content: 'https://rymcu.com/user/' + this.id
+                    }
+                ]
+            }
+        },
         data() {
             return {
                 user: {
-                    userName: '',
+                    nickname: '',
                     avatarUrl: 'https://rymcu.com/vertical/article/1578475481946.png',
-                    userIntro: ''
+                    signature: ''
                 },
                 articles: [],
                 pagination: {
