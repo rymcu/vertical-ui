@@ -76,7 +76,7 @@
                             password: _ts.user.password
                         }
 
-                        _ts.axios.post('/console/login', _ts.qs.stringify(data)).then(function (res) {
+                        _ts.axios.post('/console/login', data).then(function (res) {
                             if (res) {
                                 if (res.message) {
                                     _ts.$message(res.message);
@@ -116,7 +116,9 @@
                 let data = {
                     email: email
                 };
-                _ts.axios.post('/console/get-forget-password-email', _ts.qs.stringify(data)).then(function (res) {
+                _ts.axios.get('/console/get-forget-password-email', {
+                    params: data
+                }).then(function (res) {
                     _ts.loading = false;
                     _ts.forget = false;
                     if (res) {

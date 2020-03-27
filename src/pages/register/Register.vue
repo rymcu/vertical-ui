@@ -62,7 +62,9 @@
                 let data = {
                     email: email
                 }
-                _ts.axios.post('/console/get-email-code', _ts.qs.stringify(data)).then(function (res) {
+                _ts.axios.get('/console/get-email-code', {
+                    params: data
+                }).then(function (res) {
                     if (res) {
                         _ts.$message(res.message)
                     }
@@ -76,8 +78,8 @@
                             email: _ts.user.email,
                             password: _ts.user.password,
                             code: _ts.user.code
-                        }
-                        _ts.axios.post('/console/register', _ts.qs.stringify(data)).then(function (res) {
+                        };
+                        _ts.axios.post('/console/register', data).then(function (res) {
                             if (res) {
                                 _ts.$message(res.message);
                                 if(res.flag && res.flag === 1){
