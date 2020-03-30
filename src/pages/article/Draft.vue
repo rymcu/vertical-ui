@@ -117,7 +117,7 @@
             _ts.$store.commit('setActiveMenu', 'article');
             const responseTopData = await _ts.axios.get('/article/detail/' + _ts.id, {
                 params: {
-                    type: 1
+                    type: 0
                 }
             });
             if (responseTopData) {
