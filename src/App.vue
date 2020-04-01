@@ -18,7 +18,7 @@ export default {
     return {
       path: "/ws",
       stompClient: '',
-      timer:'',
+      timer:''
     }
   },
   watch: {
@@ -91,6 +91,49 @@ export default {
           }
         });
       }
+    },
+    loadAprilFoolsDay() {
+      let _ts = this;
+      let date = new Date();
+      if (date.getMonth() == 3 && date.getDate() == 1 ) {
+          let isAprilFoolsDay = localStorage.getItem('isAprilFoolsDay');
+          if (!isAprilFoolsDay) {
+            let new_element = document.createElement("style");
+            new_element.id = "aprilFoolsDay";
+            new_element.innerHTML =("\n" +
+                    "\n" +
+                    "  html {\n" +
+                    "    filter: flipV();\n" +
+                    "  }\n" +
+                    "  body{\n" +
+                    "    -webkit-transform: rotateX(180deg);\n" +
+                    "    transform: rotateX(180deg);\n" +
+                    "    -moz-transform: skew(180deg, 0deg) scale(-1, 1);\n" +
+                    "    -o-transform: skew(180deg, 0deg) scale(-1, 1);\n" +
+                    "  }");
+            document.body.appendChild(new_element);
+            setTimeout(function () {
+              _ts.$notify({
+                title: '提示',
+                message: '愚人节快乐!',
+                duration: 0,
+                position: 'bottom-right',
+                onClose: function () {
+                  localStorage.setItem('isAprilFoolsDay', 'true');
+                  let aprilFoolsDay = document.getElementById('aprilFoolsDay');
+                  if (aprilFoolsDay) {
+                    document.body.removeChild(aprilFoolsDay);
+                  }
+                }
+              });
+            }, 2000);
+          }
+      } else {
+        let aprilFoolsDay = document.getElementById('aprilFoolsDay');
+        if (aprilFoolsDay) {
+          document.body.removeChild(aprilFoolsDay);
+        }
+      }
     }
   },
   mounted(){
@@ -99,6 +142,7 @@ export default {
       this.initWebSocket();
     }
     this.initNotificationPermission();
+    this.loadAprilFoolsDay();
   },
   beforeDestroy: function () {
     // 页面离开时断开连接,清除定时器
