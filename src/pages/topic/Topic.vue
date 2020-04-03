@@ -1,45 +1,12 @@
 <template>
     <el-row class="wrapper">
-        <el-col>
+        <el-col style="margin-bottom: 1rem;">
             <el-menu type="border-card" :default-active="getActiveTopic" style="margin-top: -2px;border: 0;" mode="horizontal" @select="handleSelectTopic">
                 <el-menu-item v-for="topic in topicNavs" :key="topic.idTopic" :index="topic.topicUri">{{topic.topicTitle}}</el-menu-item>
             </el-menu>
         </el-col>
         <el-col style="margin: 0 auto;">
-            <el-col v-for="article in articles" :key="article.idArticle" style="padding-bottom: 1rem;">
-                <el-card>
-                    <div class="card-body d-flex flex-column">
-                        <el-link @click="onRouter('article',article.idArticle)" :underline="false" style="margin-bottom: .5rem;">
-                            <h4 v-html="article.articleTitle"></h4>
-                        </el-link>
-                        <el-tag
-                                style="margin-left: 0.5rem;"
-                                v-for="tag in article.tags"
-                                :key="tag.idTag"
-                                size="mini"
-                                effect="plain">
-                            {{ tag.tagTitle }}
-                        </el-tag>
-                        <div class="text-muted article-summary-md">{{ article.articlePreviewContent }}</div>
-                        <el-row class="pt-5">
-                            <el-col :xs="3" :sm="1" :xl="1" class="mr-3">
-                                <el-avatar v-if="article.articleAuthorAvatarUrl" size="medium" :src="article.articleAuthorAvatarUrl"></el-avatar>
-                                <el-avatar v-else size="medium" src="https://rymcu.com/vertical/article/1578475481946.png"></el-avatar>
-                            </el-col>
-                            <el-col :xs="9" :sm="11" :xl="11">
-                                <div>
-                                    <el-link @click="onRouter('user', article.articleAuthorName)" :underline="false" class="text-default">{{ article.articleAuthorName }}</el-link>
-                                    <small class="d-block text-muted">{{ article.timeAgo }}</small>
-                                </div>
-                                <div class="ml-auto text-muted">
-                                    <a href="javascript:void(0)" class="icon d-none d-md-inline-block ml-3"><i
-                                            class="fe fe-heart mr-1"></i></a>
-                                </div>
-                            </el-col>
-                        </el-row>
-                    </div>
-                </el-card>
-            </el-col>
+            <Article :articles="articles"></Article>
         </el-col>
         <el-col>
             <div class="vertical-container text-center">
@@ -57,10 +24,14 @@
 <script>
     import Vue from 'vue';
     import MetaInfo from 'vue-meta-info';
+    import Article from '@/components/classic/Article';
 
     Vue.use(MetaInfo);
     export default {
         name: "topic",
+        components: {
+            Article
+        },
         props: ['name'],
         computed: {
             getActiveTopic () {
@@ -136,6 +107,7 @@
                 } else {
                     _ts.$set(_ts, 'articles', []);
                 }
+                window.scrollTo(0, 0);
             },
             onRouter (name, data) {
                 this.$router.push(

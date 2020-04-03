@@ -26,6 +26,10 @@
                         <i class="el-icon-postcard"></i>
                         <span slot="title">标签管理</span>
                     </el-menu-item>
+                    <el-menu-item index="admin-special-day">
+                        <i class="el-icon-postcard"></i>
+                        <span slot="title">特殊日管理</span>
+                    </el-menu-item>
                 </el-menu>
             </el-col>
             <el-col :span="20">

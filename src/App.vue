@@ -134,6 +134,26 @@ export default {
           document.body.removeChild(aprilFoolsDay);
         }
       }
+    },
+    loadMourn() {
+      let date = new Date();
+      if (date.getMonth() == 3 && date.getDate() == 4 ) {
+        let new_element = document.createElement("style");
+        new_element.id = "mourn";
+        new_element.innerHTML =("\n" +
+                "  html {\n" +
+                "    -webkit-filter: grayscale(100%);\n" +
+                "    -moz-filter: grayscale(100%);\n" +
+                "    -o-filter: grayscale(100%);\n" +
+                "    filter: grayscale(100%);\n" +
+                "  }");
+        document.body.appendChild(new_element);
+      } else {
+        let mourn = document.getElementById('mourn');
+        if (mourn) {
+          document.body.removeChild(mourn);
+        }
+      }
     }
   },
   mounted(){
@@ -143,6 +163,7 @@ export default {
     }
     this.initNotificationPermission();
     this.loadAprilFoolsDay();
+    this.loadMourn();
   },
   beforeDestroy: function () {
     // 页面离开时断开连接,清除定时器
