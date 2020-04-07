@@ -13,6 +13,16 @@
                 </div>
             </div>
         </el-col>
+        <el-col class="text-center" style="margin-bottom: 1rem;">
+            <el-row type="flex" justify="center">
+                <el-col :xl="24">
+                    <el-menu :default-active="activeTab" class="text-center" mode="horizontal" @select="handleToggleTab" style="padding: 0 46%;">
+                        <el-menu-item index="0">文章</el-menu-item>
+                        <el-menu-item index="1">作品集</el-menu-item>
+                    </el-menu>
+                </el-col>
+            </el-row>
+        </el-col>
         <el-col>
             <div class="wrapper">
                 <el-row class="row-cards row-deck" :gutter="10">
@@ -111,7 +121,8 @@
                     currentPage: 1,
                     pageSize: 10,
                     total: 0
-                }
+                },
+                activeTab: '0'
             }
         },
         methods: {
@@ -135,6 +146,9 @@
                         }
                     }
                 )
+            },
+            handleToggleTab(key, keyPath) {
+                console.log(key, keyPath);
             }
         },
         async mounted () {
