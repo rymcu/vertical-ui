@@ -107,7 +107,7 @@
     import MetaInfo from 'vue-meta-info';
     import Vditor from 'vditor';
     import {LazyLoadImage} from "../../plugins/utils";
-    import Comment from '@/pages/comment/Comment';
+    import Comment from '@/components/classic/comment/Comment';
     import Component404 from '@/components/classic/404';
     import WeiXin from "@/assets/weixin.png";
     import VueQrcode from '@chenfengyuan/vue-qrcode';

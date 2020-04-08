@@ -60,7 +60,7 @@ export default new Router({
                 {
                     path: '/comment',
                     name: 'comment',
-                    component: ()=>import('../pages/comment/Comment')
+                    component: ()=>import('../components/classic/comment/Comment')
                 },
                 {
                     path: '/user/:id',
@@ -102,6 +102,17 @@ export default new Router({
                     path: '/notification',
                     name: 'notification',
                     component: ()=>import('../pages/notification/Notification')
+                },
+                {
+                    path: '/portfolio/:id',
+                    name: 'portfolio',
+                    component: ()=>import('../pages/portfolio/Portfolio'),
+                    props: true
+                },
+                {
+                    path: '/post-portfolio',
+                    name: 'post-portfolio',
+                    component: ()=>import('../pages/portfolio/PostPortfolio')
                 },
                 {
                     path: '/admin',
@@ -155,6 +166,16 @@ export default new Router({
                             name: 'admin-post-tag',
                             component: ()=>import('../pages/admin/tag/PostTag'),
                             props: true
+                        },
+                        {
+                            path: '/special-day',
+                            name: 'admin-special-day',
+                            component: ()=>import('../pages/special/SpecialDay')
+                        },
+                        {
+                            path: '/post-special-day',
+                            name: 'admin-post-special-day',
+                            component: ()=>import('../pages/special/PostSpecialDay')
                         },
                         {
                             path: '*', redirect: '/'

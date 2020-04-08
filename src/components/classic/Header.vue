@@ -33,6 +33,7 @@
                 </el-col>
                 <!--<el-col v-if="isLogin" :xs="0" :sm="8" :xl="6">-->
                 <el-col v-if="isLogin">
+                    <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;" href="/post-portfolio">创建作品集</el-link>
                     <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;" href="/post-article">发帖</el-link>
                     <el-link :underline="false" style="padding-left: 10px;padding-right: 10px;">
                         <el-dropdown trigger="click"  @command="handleCommand">

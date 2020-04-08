@@ -15,47 +15,85 @@
         </el-col>
         <el-col class="text-center" style="margin-bottom: 1rem;">
             <el-row type="flex" justify="center">
-                <el-col :xl="24">
-                    <el-menu :default-active="activeTab" class="text-center" mode="horizontal" @select="handleToggleTab" style="padding: 0 46%;">
+                <el-col>
+                    <el-menu :default-active="activeTab" mode="horizontal" @select="handleToggleTab" style="padding-left:45%;">
                         <el-menu-item index="0">文章</el-menu-item>
                         <el-menu-item index="1">作品集</el-menu-item>
                     </el-menu>
                 </el-col>
             </el-row>
         </el-col>
-        <el-col>
-            <div class="wrapper">
-                <el-row class="row-cards row-deck" :gutter="10">
-                    <el-col :sm="24" :xl="6" v-for="article in articles" :key="article.idArticle">
-                        <div class="card">
-                            <a v-if="article.articleThumbnailUrl" ><img class="card-img-top" style="height: 10rem;" :src="article.articleThumbnailUrl"></a>
-                            <a v-else><img class="card-img-top" style="height: 10rem;" src="https://rymcu.com/vertical/article/1574441170152.jpg"></a>
-                            <div class="card-body d-flex flex-column">
-                                <h4 class="article-header-md"><el-link @click="onRouter('article',article.idArticle)" :underline="false" v-html="article.articleTitle"></el-link></h4>
-                                <div class="text-muted article-summary-md">{{ article.articlePreviewContent }}</div>
-                                <div class="d-flex align-items-center pt-5 mt-auto">
-                                    <div class="ml-auto text-muted">
-                                        <span>{{ article.timeAgo }}</span>
+        <el-col  v-if="activeTab === '0'">
+            <el-col>
+                <div class="wrapper">
+                    <el-row class="row-cards row-deck" :gutter="10">
+                        <el-col :sm="24" :xl="6" v-for="article in articles" :key="article.idArticle">
+                            <div class="card">
+                                <a v-if="article.articleThumbnailUrl" ><img class="card-img-top" style="height: 10rem;" :src="article.articleThumbnailUrl"></a>
+                                <a v-else><img class="card-img-top" style="height: 10rem;" src="https://rymcu.com/vertical/article/1574441170152.jpg"></a>
+                                <div class="card-body d-flex flex-column">
+                                    <h4 class="article-header-md"><el-link @click="onRouter('article',article.idArticle)" :underline="false" v-html="article.articleTitle"></el-link></h4>
+                                    <div class="text-muted article-summary-md">{{ article.articlePreviewContent }}</div>
+                                    <div class="d-flex align-items-center pt-5 mt-auto">
+                                        <div class="ml-auto text-muted">
+                                            <span>{{ article.timeAgo }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </el-col>
-                    <el-col v-if="!articles" class="text-center">
-                        这里什么都没有!
-                    </el-col>
-                </el-row>
-            </div>
+                        </el-col>
+                        <el-col v-if="!articles" class="text-center">
+                            这里什么都没有!
+                        </el-col>
+                    </el-row>
+                </div>
+            </el-col>
+            <el-col>
+                <div class="vertical-container text-center">
+                    <el-pagination v-show="pagination.total > 12" v-model="pagination"
+                                   layout="prev, pager, next"
+                                   :current-page="pagination.currentPage"
+                                   :total="pagination.total"
+                                   @current-change="getArticles">
+                    </el-pagination>
+                </div>
+            </el-col>
         </el-col>
-        <el-col>
-            <div class="vertical-container text-center">
-                <el-pagination v-show="pagination.total > 12" v-model="pagination"
-                               layout="prev, pager, next"
-                               :current-page="pagination.currentPage"
-                               :total="pagination.total"
-                               @current-change="currentChange">
-                </el-pagination>
-            </div>
+        <el-col v-else>
+            <el-col>
+                <div class="wrapper">
+                    <el-row class="row-cards row-deck" :gutter="10">
+                        <el-col :sm="24" :xl="6" v-for="portfolio in portfolios" :key="portfolio.idPortfolio">
+                            <div class="card">
+                                <a v-if="portfolio.headImgUrl" ><img class="card-img-top" style="height: 10rem;" :src="portfolio.headImgUrl"></a>
+                                <a v-else><img class="card-img-top" style="height: 10rem;" src="https://rymcu.com/vertical/article/1574441170152.jpg"></a>
+                                <div class="card-body d-flex flex-column">
+                                    <h4 class="article-header-md"><el-link @click="onRouter('portfolio',portfolio.idPortfolio)" :underline="false" v-html="portfolio.name"></el-link></h4>
+                                    <div class="text-muted article-summary-md">{{ portfolio.description }}</div>
+                                    <div class="d-flex align-items-center pt-5 mt-auto">
+                                        <div class="ml-auto text-muted">
+                                            <span>{{ portfolio.timeAgo }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col v-if="!portfolios" class="text-center">
+                            这里什么都没有!
+                        </el-col>
+                    </el-row>
+                </div>
+            </el-col>
+            <el-col>
+                <div class="vertical-container text-center">
+                    <el-pagination v-show="portfolioPagination.total > 12" v-model="portfolioPagination"
+                                   layout="prev, pager, next"
+                                   :current-page="portfolioPagination.currentPage"
+                                   :total="portfolioPagination.total"
+                                   @current-change="getPortfolios">
+                    </el-pagination>
+                </div>
+            </el-col>
         </el-col>
     </el-row>
 </template>
@@ -122,6 +160,12 @@
                     pageSize: 10,
                     total: 0
                 },
+                portfolios: [],
+                portfolioPagination: {
+                    currentPage: 1,
+                    pageSize: 10,
+                    total: 0
+                },
                 activeTab: '0'
             }
         },
@@ -129,12 +173,24 @@
             currentChange(val){
                 this.getData(val);
             },
-            async getData(p){
+            getData(p){
+                this.getArticles(p);
+                this.getPortfolios(p);
+            },
+            async getArticles(p) {
                 const responseTopData = await this.axios.get('/user/'+this.id+'/articles?page='+p);
                 if (responseTopData) {
                     responseTopData.pagination.currentPage = p;
-                    this.$set(this, 'articles', responseTopData.articles)
-                    this.$set(this, 'pagination', responseTopData.pagination)
+                    this.$set(this, 'articles', responseTopData.articles);
+                    this.$set(this, 'pagination', responseTopData.pagination);
+                }
+            },
+            async getPortfolios(p) {
+                const responseTopData = await this.axios.get('/user/'+this.id+'/portfolios?page='+p);
+                if (responseTopData) {
+                    responseTopData.pagination.currentPage = p;
+                    this.$set(this, 'portfolios', responseTopData.portfolios);
+                    this.$set(this, 'portfolioPagination', responseTopData.pagination);
                 }
             },
             onRouter (name, data) {
@@ -148,6 +204,7 @@
                 )
             },
             handleToggleTab(key, keyPath) {
+                this.$set(this, 'activeTab', key);
                 console.log(key, keyPath);
             }
         },
