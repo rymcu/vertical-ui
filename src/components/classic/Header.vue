@@ -1,15 +1,15 @@
 <template>
-    <el-row justify="space-between">
+    <el-row justify="space-between" type="flex">
         <el-col>
-            <el-col :xs="14" :sm="4" :xl="2" style="padding-top: 1rem;">
+            <el-col :xs="8" :sm="4" :md="4" :xl="3" style="padding-top: 1rem;">
                 <a class="navbar-brand" href="/">
                     <img src="../../assets/rymcu.png" alt="RYMCU" class="navbar-brand-img">
                     <span>RYMCU</span>
                 </a>
             </el-col>
-            <el-col :xs="0" :sm="10" :xl="16" style="text-align: center;">
+            <el-col :xs="0" :sm="12" :md="14" :xl="18" style="text-align: center;">
                 <el-row type="flex" justify="center">
-                    <el-col :sm="18" :xl="8">
+                    <el-col>
                         <el-menu :default-active="getActiveMenu" style="margin-top: -2px;border: 0;" mode="horizontal" @select="handleSelectMenu">
                             <el-menu-item index="home">首页</el-menu-item>
                             <el-menu-item index="topic">专题</el-menu-item>
@@ -19,7 +19,7 @@
                     </el-col>
                 </el-row>
             </el-col>
-            <el-col :xs="10" :sm="10" :xl="6" style="padding-top: 1rem;">
+            <el-col :xs="16" :sm="8" :md="6" :xl="3" style="padding-top: 1rem;">
                 <!--<el-col :xs="24" :sm="16" :xl="12">-->
                 <el-col :xs="0" :sm="0" :xl="0">
                     <el-autocomplete

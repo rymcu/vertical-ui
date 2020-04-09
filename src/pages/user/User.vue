@@ -16,7 +16,7 @@
         <el-col class="text-center" style="margin-bottom: 1rem;">
             <el-row type="flex" justify="center">
                 <el-col>
-                    <el-menu :default-active="activeTab" mode="horizontal" @select="handleToggleTab" style="padding-left:45%;">
+                    <el-menu :default-active="activeTab" mode="horizontal" @select="handleToggleTab" style="padding-left: calc(50vw - 4.8rem);">
                         <el-menu-item index="0">文章</el-menu-item>
                         <el-menu-item index="1">作品集</el-menu-item>
                     </el-menu>
@@ -27,7 +27,7 @@
             <el-col>
                 <div class="wrapper">
                     <el-row class="row-cards row-deck" :gutter="10">
-                        <el-col :sm="24" :xl="6" v-for="article in articles" :key="article.idArticle">
+                        <el-col :sm="24" :md="8" :xl="6" v-for="article in articles" :key="article.idArticle">
                             <div class="card">
                                 <a v-if="article.articleThumbnailUrl" ><img class="card-img-top" style="height: 10rem;" :src="article.articleThumbnailUrl"></a>
                                 <a v-else><img class="card-img-top" style="height: 10rem;" src="https://rymcu.com/vertical/article/1574441170152.jpg"></a>
@@ -63,20 +63,24 @@
             <el-col>
                 <div class="wrapper">
                     <el-row class="row-cards row-deck" :gutter="10">
-                        <el-col :sm="24" :xl="6" v-for="portfolio in portfolios" :key="portfolio.idPortfolio">
-                            <div class="card">
-                                <a v-if="portfolio.headImgUrl" ><img class="card-img-top" style="height: 10rem;" :src="portfolio.headImgUrl"></a>
-                                <a v-else><img class="card-img-top" style="height: 10rem;" src="https://rymcu.com/vertical/article/1574441170152.jpg"></a>
-                                <div class="card-body d-flex flex-column">
-                                    <h4 class="article-header-md"><el-link @click="onRouter('portfolio',portfolio.idPortfolio)" :underline="false" v-html="portfolio.name"></el-link></h4>
-                                    <div class="text-muted article-summary-md">{{ portfolio.description }}</div>
-                                    <div class="d-flex align-items-center pt-5 mt-auto">
-                                        <div class="ml-auto text-muted">
-                                            <span>{{ portfolio.timeAgo }}</span>
+                        <el-col v-for="portfolio in portfolios" :key="portfolio.idPortfolio">
+                            <el-col class="card">
+                                <el-col class="card-body d-flex flex-column">
+                                    <el-col :span="4" class="mr-3">
+                                        <a v-if="portfolio.headImgUrl" ><el-image class="card-img-top" style="height: 10rem;" :src="portfolio.headImgUrl"></el-image></a>
+                                        <a v-else><el-image class="card-img-top" style="height: 10rem;" src="https://rymcu.com/vertical/article/1574441170152.jpg"></el-image></a>
+                                    </el-col>
+                                    <el-col :span="18">
+                                        <h4 class="article-header-md"><el-link @click="onRouter('portfolio',portfolio.idPortfolio)" :underline="false" v-html="portfolio.name"></el-link></h4>
+                                        <div class="text-muted article-summary-md">{{ portfolio.description }}</div>
+                                        <div class="d-flex align-items-center pt-5 mt-auto">
+                                            <div class="ml-auto text-muted">
+                                                <span>{{ portfolio.timeAgo }}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    </el-col>
+                                </el-col>
+                            </el-col>
                         </el-col>
                         <el-col v-if="!portfolios" class="text-center">
                             这里什么都没有!
@@ -309,6 +313,12 @@
         height: 1.4em;
         overflow: hidden;
     }
+
+    .article-header-md a {
+        font-weight: bold;
+        font-size: 1em;
+    }
+
     .article-summary-md {
         position: relative;
         line-height: 1.4em;
