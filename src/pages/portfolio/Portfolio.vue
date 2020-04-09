@@ -6,7 +6,7 @@
             </el-col>
             <el-col :xs="20" :sm="20" :xl="20">
                 <el-col>
-                    <h1>{{ portfolio.name }}</h1>
+                    <h1>{{ portfolio.portfolioTitle }}</h1>
                 </el-col>
                 <el-col style="margin-bottom: .5rem;">
                     <span class="text-default" style="padding-right: 1rem;">作者</span>
@@ -18,16 +18,17 @@
                     <span class="text-default" style="padding-right: 1rem;">文章</span> {{portfolio.articleNumber}}篇
                 </el-col>
                 <el-col style="margin-bottom: .5rem;">
-                    {{ portfolio.description }}
+                    {{ portfolio.portfolioDescription }}
                 </el-col>
             </el-col>
         </el-col>
         <el-col>
-            <el-col>
-                <el-tabs>
-                    <el-tab-pane label="文章列表" name="first"></el-tab-pane>
-                </el-tabs>
+            <el-col style="text-align: right;">
+                <el-col>
+                    <el-link @click="bindArticle(portfolio.idPortfolio)" :underline="false" class="text-default">添加文章</el-link>
+                </el-col>
             </el-col>
+            <el-divider><i class="el-icon-loading"></i></el-divider>
             <Article :articles="articles"></Article>
             <el-col>
                 <div class="vertical-container text-center">
@@ -57,16 +58,16 @@
         metaInfo() {
             return {
                 // set a title
-                title: this.portfolio.name + ' - RYMCU',
+                title: this.portfolio.portfolioTitle + ' - RYMCU',
                 // set meta
                 meta: [
                     {
                         name: 'keywords',
-                        content: 'RYMCU,' + this.portfolio.name
+                        content: 'RYMCU,' + this.portfolio.portfolioTitle
                     },
                     {
                         name: 'description',
-                        content: this.portfolio.description
+                        content: this.portfolio.portfolioDescription
                     },
                     {
                         name: 'site_name',
@@ -78,11 +79,11 @@
                     },
                     {
                         name: 'og:title',
-                        content: this.portfolio.name + ' - RYMCU'
+                        content: this.portfolio.portfolioTitle + ' - RYMCU'
                     },
                     {
                         name: 'og:description',
-                        content: this.portfolio.description
+                        content: this.portfolio.portfolioDescription
                     },
                     {
                         name: 'og:site_name',
@@ -140,6 +141,9 @@
                         }
                     )
                 }
+            },
+            bindArticle(idPortfolio) {
+                console.log(idPortfolio);
             }
         },
         mounted() {

@@ -71,8 +71,8 @@
                                         <a v-else><el-image class="card-img-top" style="height: 10rem;" src="https://rymcu.com/vertical/article/1574441170152.jpg"></el-image></a>
                                     </el-col>
                                     <el-col :span="18">
-                                        <h4 class="article-header-md"><el-link @click="onRouter('portfolio',portfolio.idPortfolio)" :underline="false" v-html="portfolio.name"></el-link></h4>
-                                        <div class="text-muted article-summary-md">{{ portfolio.description }}</div>
+                                        <h4 class="article-header-md"><el-link @click="onRouter('portfolio',portfolio.idPortfolio)" :underline="false" v-html="portfolio.portfolioTitle"></el-link></h4>
+                                        <div class="text-muted article-summary-md">{{ portfolio.portfolioDescription }}</div>
                                         <div class="d-flex align-items-center pt-5 mt-auto">
                                             <div class="ml-auto text-muted">
                                                 <span>{{ portfolio.timeAgo }}</span>
