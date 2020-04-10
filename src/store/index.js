@@ -139,6 +139,9 @@ export default new Vuex.Store({
         }
       }
       return hasPermissions;
+    },
+    isAuthor: (state)=>(scenes)=> {
+      return state.nickname === scenes ? true : false;
     }
   }
 })

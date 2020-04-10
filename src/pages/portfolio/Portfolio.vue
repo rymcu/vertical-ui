@@ -23,9 +23,9 @@
             </el-col>
         </el-col>
         <el-col>
-            <el-col style="text-align: right;">
+            <el-col v-if="isAuthor" style="text-align: right;">
                 <el-col>
-                    <el-link @click="bindArticle(portfolio.idPortfolio)" :underline="false" class="text-default">添加文章</el-link>
+                    <el-link @click="showBindArticleDialog(portfolio.idPortfolio)" :underline="false" class="text-default">添加文章</el-link>
                 </el-col>
             </el-col>
             <el-divider><i class="el-icon-loading"></i></el-divider>
@@ -54,6 +54,12 @@
         props: ["id"],
         components: {
             Article
+        },
+        computed: {
+            isAuthor() {
+                let name = this.portfolio.portfolioAuthorName;
+                return this.$store.getters.isAuthor(name);
+            }
         },
         metaInfo() {
             return {
@@ -142,9 +148,14 @@
                     )
                 }
             },
-            bindArticle(idPortfolio) {
-                console.log(idPortfolio);
-            }
+            showBindArticleDialog(idPortfolio) {
+                this.$router.push({
+                    name: 'bind-article',
+                    params: {
+                        id: idPortfolio
+                    }
+                });
+            },
         },
         mounted() {
             this.getData();

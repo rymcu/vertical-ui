@@ -39,6 +39,21 @@
                                         {{ tag.tagTitle }}
                                     </el-tag>
                                 </el-col>
+                                <el-col v-if="article.portfolios">
+                                    <el-col>
+                                        <h4>所属作品集</h4>
+                                    </el-col>
+                                    <el-col style="padding: 1rem">
+                                        <el-col v-for="portfolio in article.portfolios" :key="portfolio.idPortfolio" :span="8">
+                                            <el-col :xs="3" :sm="3" :xl="3">
+                                                <el-avatar :size="24" :src="portfolio.headImgUrl"></el-avatar>
+                                            </el-col>
+                                            <el-col :xs="20" :sm="20" :xl="20">
+                                                <el-link @click="onRouter('portfolio', portfolio.idPortfolio)" :underline="false" class="text-default">{{ portfolio.portfolioTitle }}</el-link>
+                                            </el-col>
+                                        </el-col>
+                                    </el-col>
+                                </el-col>
                                 <el-col v-if="isShare" style="margin-bottom: 1rem;">
                                     <el-input v-model="shareData.shareUrl">
                                         <el-popover slot="append"
