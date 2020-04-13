@@ -2,9 +2,12 @@
     <el-row class="wrapper">
         <el-col>
             <el-menu type="border-card" :default-active="getActiveTag" style="margin-top: -2px;border: 0;" mode="horizontal" @select="handleSelectTag">
-                <el-menu-item index="product">产品</el-menu-item>
+                <el-menu-item index="51mcu">51 单片机</el-menu-item>
+                <el-menu-item index="stm8">STM8</el-menu-item>
+                <el-menu-item index="stm32-f1">STM32 F1</el-menu-item>
+                <el-menu-item index="stm32-f4">STM32 F4</el-menu-item>
+                <el-menu-item index="rt-thread">RT-thread 实时系统</el-menu-item>
                 <el-menu-item index="tutorial">教程</el-menu-item>
-                <el-menu-item index="news">最新</el-menu-item>
             </el-menu>
         </el-col>
         <el-col style="margin: 0 auto;">
@@ -41,6 +44,7 @@
 <script>
     export default {
         name: "tag",
+        props: ['tag'],
         computed: {
             getActiveTag () {
                 return this.$store.state.activeTag;
@@ -50,9 +54,9 @@
             return {
                 articles: [],
                 pagination: {
-                    "paginationPageCount": 0,
-                    "paginationPageNums": [],
-                    "currentPage": 1
+                    currentPage: 1,
+                    pageSize: 20,
+                    total: 0
                 }
             }
         },
@@ -79,15 +83,20 @@
                 )
             },
             handleSelectTag(item) {
-                // eslint-disable-next-line no-console
-                this.$store.commit('setActiveMenu', 'tag');
-                this.$store.commit('setActiveTag', item);
-                const p = this.pagination.currentPage;
-                this.getData(item,p);
+                this.$router.push(
+                    {
+                        name: 'tag',
+                        params: {
+                            tag: item
+                        }
+                    }
+                )
             }
         },
         mounted () {
-            const tag = this.$store.state.activeTag
+            this.$store.commit('setActiveMenu', 'tag');
+            this.$store.commit('setActiveTag', this.tag);
+            const tag = this.$store.state.activeTag;
             const p = this.pagination.currentPage;
             this.getData(tag,p);
         }
