@@ -40,7 +40,7 @@
         },
         metaInfo: {
             // set a title
-            title: 'RYMCU - 嵌入式知识共享平台',
+            title: 'RYMCU - 嵌入式知识学习交流平台',
             // set meta
             meta: [
                 {
@@ -49,7 +49,7 @@
                 },
                 {
                     name: 'description',
-                    content: '嵌入式知识共享平台'
+                    content: '嵌入式知识学习交流平台'
                 },
                 {
                     name: 'site_name',
@@ -61,11 +61,11 @@
                 },
                 {
                     name: 'og:title',
-                    content: 'RYMCU - 嵌入式知识共享平台'
+                    content: 'RYMCU - 嵌入式知识学习交流平台'
                 },
                 {
                     name: 'og:description',
-                    content: '嵌入式知识共享平台'
+                    content: '嵌入式知识学习交流平台'
                 },
                 {
                     name: 'og:site_name',
