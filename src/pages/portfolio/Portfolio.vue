@@ -17,15 +17,14 @@
                 <el-col style="margin-bottom: .5rem;">
                     <span class="text-default" style="padding-right: 1rem;">文章</span> {{portfolio.articleNumber}}篇
                 </el-col>
-                <el-col style="margin-bottom: .5rem;">
-                    {{ portfolio.portfolioDescription }}
+                <el-col style="margin-bottom: .5rem;" v-html="portfolio.portfolioDescription">
                 </el-col>
             </el-col>
         </el-col>
         <el-col>
             <el-col v-if="isAuthor" style="text-align: right;">
                 <el-col>
-                    <el-link @click="showBindArticleDialog(portfolio.idPortfolio)" :underline="false" class="text-default">添加文章</el-link>
+                    <el-link @click="managerPortfolio(portfolio.idPortfolio)" :underline="false" class="text-default">管理</el-link>
                 </el-col>
             </el-col>
             <el-divider><i class="el-icon-loading"></i></el-divider>
@@ -148,9 +147,9 @@
                     )
                 }
             },
-            showBindArticleDialog(idPortfolio) {
+            managerPortfolio(idPortfolio) {
                 this.$router.push({
-                    name: 'bind-article',
+                    name: 'portfolio-manager',
                     params: {
                         id: idPortfolio
                     }

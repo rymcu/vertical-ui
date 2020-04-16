@@ -2,7 +2,7 @@
     <el-row class="wrapper">
         <el-col style="margin-bottom: 1rem;">
             <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/portfolio/' + id }">返回上一级</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/portfolio-manager/' + id }">返回上一级</el-breadcrumb-item>
                 <el-breadcrumb-item>关联文章</el-breadcrumb-item>
             </el-breadcrumb>
         </el-col>

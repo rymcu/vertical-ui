@@ -124,9 +124,21 @@ export default new Router({
                     props: true
                 },
                 {
+                    path: '/portfolio-manager/:id',
+                    name: 'portfolio-manager',
+                    component: ()=>import('../pages/portfolio/PortfolioManager'),
+                    props: true
+                },
+                {
                     path: '/post-portfolio',
                     name: 'post-portfolio',
                     component: ()=>import('../pages/portfolio/PostPortfolio')
+                },
+                {
+                    path: '/post-portfolio/:id',
+                    name: 'put-portfolio',
+                    component: ()=>import('../pages/portfolio/PostPortfolio'),
+                    props: true
                 },
                 {
                     path: '/portfolio/:id/bind-article',

@@ -1,5 +1,11 @@
 <template>
     <el-row class="wrapper">
+        <el-col v-if="isEdit" style="margin-bottom: 1rem;">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/portfolio-manager/' + id }">{{ portfolio.portfolioTitle }}</el-breadcrumb-item>
+                <el-breadcrumb-item>更新作品集</el-breadcrumb-item>
+            </el-breadcrumb>
+        </el-col>
         <el-col>
             <h1>创建作品集</h1>
         </el-col>
@@ -9,7 +15,7 @@
         <el-col>
             <el-form :model="portfolio" :rules="rules" ref="topic" label-width="100px">
                 <el-form-item label="作品集名称" prop="name">
-                    <el-input v-model="portfolio.name"></el-input>
+                    <el-input v-model="portfolio.portfolioTitle"></el-input>
                 </el-form-item>
                 <el-form-item label="图标">
                     <el-upload
@@ -27,10 +33,11 @@
                 </el-form-item>
 
                 <el-form-item label="作品集介绍" prop="description">
-                    <el-input v-model="portfolio.description" type="textarea"></el-input>
+                    <div id="contentEditor"></div>
                 </el-form-item>
                 <el-form-item class="text-right">
-                    <el-button @click="updatePortfolio" :loading="loading">提交</el-button>
+                    <el-button v-if="isEdit" @click="updatePortfolio" :loading="loading">更新</el-button>
+                    <el-button v-else @click="updatePortfolio" :loading="loading">提交</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -38,6 +45,8 @@
 </template>
 
 <script>
+    import { LazyLoadImage } from '../../plugins/utils'
+    import Vditor from 'vditor'
     export default {
         name: "PostPortfolio",
         computed: {
@@ -65,10 +74,43 @@
                     URL: '',
                     token: ''
                 },
-                headImgUrl: ''
+                headImgUrl: '',
+                isEdit: false
             }
         },
         methods: {
+            _initEditor (data) {
+                return new Vditor(data.id, {
+                    tab: '\t',
+                    cache: this.$route.query.id ? false : true,
+                    preview: {
+                        delay: 500,
+                        mode: data.mode,
+                        /*url: `${process.env.Server}/api/console/markdown`,*/
+                        parse: (element) => {
+                            if (element.style.display === 'none') {
+                                return
+                            }
+                            LazyLoadImage();
+                            Vditor.highlightRender({style:'github'}, element, document);
+                        }
+                    },
+                    upload: {
+                        max: 10 * 1024 * 1024,
+                        url: this.tokenURL.URL,
+                        linkToImgUrl: this.tokenURL.URL,
+                        token: this.tokenURL.token,
+                        filename: name => name.replace(/\?|\\|\/|:|\||<|>|\*|\[|\]|\s+/g, '-')
+                    },
+                    height: data.height,
+                    counter: 102400,
+                    resize: {
+                        enable: data.resize,
+                    },
+                    lang: this.$store.state.locale,
+                    placeholder: data.placeholder,
+                })
+            },
             handleAvatarSuccess(res) {
                 let _ts = this;
                 if (res && res.data && res.data.url) {
@@ -97,16 +139,22 @@
                 let _ts = this;
                 const responseData = await _ts.axios.get('/portfolio/detail/' + _ts.id);
                 if (responseData) {
-                    _ts.$set(_ts,'portfolio',responseData);
-                    _ts.$set(_ts,'headImgUrl',responseData.headImgUrl);
+                    _ts.$set(_ts,'portfolio',responseData.portfolio);
+                    _ts.$set(_ts,'headImgUrl',responseData.portfolio.headImgUrl);
+                    _ts.contentEditor.setValue(responseData.portfolio.portfolioDescription);
                 }
             },
-            updatePortfolio() {
+            async updatePortfolio() {
                 let _ts = this;
                 _ts.$set(_ts,'loading', true);
                 let id = _ts.portfolio.idPortfolio;
+                let portfolioDescription = _ts.contentEditor.getValue();
+                let portfolioDescriptionHtml = await _ts.contentEditor.getHTML();
+                let data = _ts.portfolio;
+                data.portfolioDescription = portfolioDescription;
+                data.portfolioDescriptionHtml = portfolioDescriptionHtml;
                 let title = id?'更新':'添加';
-                _ts.axios[id?'put':'post']('/portfolio/post', _ts.portfolio).then(function (res) {
+                _ts.axios[id?'put':'post']('/portfolio/post', data).then(function (res) {
                     if (res && res.message) {
                         _ts.$message.error(res.message);
                     } else {
@@ -132,13 +180,25 @@
                     })
                 }
             });
+
+            this.contentEditor = this._initEditor({
+                id: 'contentEditor',
+                mode: 'both',
+                height: 480,
+                placeholder: '', //this.$t('inputContent', this.$store.state.locale)
+                resize: false,
+            });
+
             if (_ts.id) {
+                _ts.$set(_ts, 'isEdit', true);
                 _ts.getData();
+            } else {
+                _ts.$set(_ts, 'isEdit', false);
             }
         }
     }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+    @import "~vditor/src/assets/scss/classic.scss";
 </style>
