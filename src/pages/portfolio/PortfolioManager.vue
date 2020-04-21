@@ -50,6 +50,13 @@
                                 <el-input-number v-model="scope.row.sortNo" @keyup.enter.native="updateArticleSortNo(scope.row)" :min="1"></el-input-number>
                             </template>
                         </el-table-column>
+                        <el-table-column
+                                label="操作"
+                                width="200">
+                            <template slot-scope="scope">
+                                <el-button @click="deletePortFolioArticle(scope.row.idArticle)">取消绑定</el-button>
+                            </template>
+                        </el-table-column>
                     </el-table>
                 </el-col>
                 <el-col>
@@ -155,6 +162,31 @@
                 } else {
                     _ts.$message("排序号不能为空");
                 }
+            },
+            deletePortFolioArticle(idArticle) {
+                let _ts = this;
+                _ts.$confirm('确定取消绑定吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    _ts.axios.delete('/portfolio/unbind-article', {
+                        params: {
+                            idArticle: idArticle,
+                            idPortfolio: _ts.portfolio.idPortfolio
+                        }
+                    }).then(function (res) {
+                        if (res) {
+                            _ts.$message(res.message);
+                            _ts.getArticleData(_ts.pagination.currentPage);
+                        }
+                    })
+                }).catch(() => {
+                    _ts.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+                });
             }
         },
         mounted() {

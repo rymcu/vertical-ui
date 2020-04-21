@@ -14,7 +14,7 @@
         </el-col>
         <el-col>
             <el-form :model="portfolio" :rules="rules" ref="topic" label-width="100px">
-                <el-form-item label="作品集名称" prop="name">
+                <el-form-item label="作品集名称" prop="portfolioTitle">
                     <el-input v-model="portfolio.portfolioTitle"></el-input>
                 </el-form-item>
                 <el-form-item label="图标">
@@ -32,10 +32,11 @@
                     </el-upload>
                 </el-form-item>
 
-                <el-form-item label="作品集介绍" prop="description">
+                <el-form-item label="作品集介绍" prop="portfolioDescription">
                     <div id="contentEditor"></div>
                 </el-form-item>
                 <el-form-item class="text-right">
+                    <el-button v-if="isEdit" @click="deletePortfolio" :loading="loading">删除</el-button>
                     <el-button v-if="isEdit" @click="updatePortfolio" :loading="loading">更新</el-button>
                     <el-button v-else @click="updatePortfolio" :loading="loading">提交</el-button>
                 </el-form-item>
@@ -59,13 +60,14 @@
         data() {
             return {
                 portfolio: {
-                    idPortfolio: 0
+                    idPortfolio: 0,
+                    portfolioDescription: ''
                 },
                 rules: {
-                    name: [
+                    portfolioTitle: [
                         {required: true, message: '请输入作品集名称', trigger: 'blur'}
                     ],
-                    description: [
+                    portfolioDescription: [
                         {required: true, message: '请输入作品集介绍', trigger: 'blur'}
                     ]
                 },
@@ -158,14 +160,45 @@
                     if (res && res.message) {
                         _ts.$message.error(res.message);
                     } else {
+                        _ts.contentEditor.setValue('');
                         _ts.$message({
                             type: 'success',
                             message: title + '成功!'
                         });
-                        _ts.$set(_ts,'loading', false);
-                        _ts.getData();
+                        _ts.$router.push({
+                            path: '/post-portfolio/' + res.idPortfolio
+                        });
                     }
                 })
+            },
+            deletePortfolio() {
+                let _ts = this;
+                _ts.$confirm('确定删除吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    _ts.axios.delete('/portfolio/delete', {
+                        params: {
+                            idPortfolio: _ts.portfolio.idPortfolio
+                        }
+                    }).then(function (res) {
+                        if (res) {
+                            if (res.message) {
+                                _ts.$message(res.message);
+                            } else {
+                                _ts.$router.push({
+                                    path: '/user/' + _ts.$store.state.nickname
+                                })
+                            }
+                        }
+                    })
+                }).catch(() => {
+                    _ts.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+                });
             }
         },
         mounted() {
