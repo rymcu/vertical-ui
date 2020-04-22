@@ -90,7 +90,7 @@
             </el-col>
             <el-col>
                 <div class="vertical-container text-center">
-                    <el-pagination v-show="portfolioPagination.total > 12" v-model="portfolioPagination"
+                    <el-pagination v-show="portfolioPagination.total > 10" v-model="portfolioPagination"
                                    layout="prev, pager, next"
                                    :current-page="portfolioPagination.currentPage"
                                    :total="portfolioPagination.total"
