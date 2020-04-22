@@ -39,7 +39,7 @@
                                         {{ tag.tagTitle }}
                                     </el-tag>
                                 </el-col>
-                                <el-col v-if="article.portfolios">
+                                <el-col v-if="article.portfolios && article.portfolios.length > 0">
                                     <el-col>
                                         <h4>所属作品集</h4>
                                     </el-col>
