@@ -6,7 +6,7 @@ import Vue from 'vue'
 export default (ctx) => {
     const customAxios = axios.create({
         baseURL: '/api',
-        timeout:'5000',
+        timeout:'10000',
         withCredentials: true
     });
 
