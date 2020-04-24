@@ -43,7 +43,7 @@
                 },
                 {
                     name: 'description',
-                    content: '嵌入式知识学习交流平台'
+                    content: 'RYMCU 致力于打造一个即严谨又活泼、专业又不失有趣，为数百万人服务的开源嵌入式知识学习交流平台。'
                 },
                 {
                     name: 'site_name',
@@ -63,7 +63,7 @@
                 },
                 {
                     name: 'og:description',
-                    content: '嵌入式知识学习交流平台'
+                    content: 'RYMCU 致力于打造一个即严谨又活泼、专业又不失有趣，为数百万人服务的开源嵌入式知识学习交流平台。'
                 },
                 {
                     name: 'og:site_name',
