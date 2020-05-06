@@ -1,9 +1,5 @@
 <template>
     <el-row class="wrapper">
-        <el-col v-if="mourn" style="padding-bottom: 1rem;">
-            <el-image :src="dy" style="height: 180px;-webkit-filter: grayscale(100%);-moz-filter: grayscale(100%);
-            -o-filter: grayscale(100%);filter: grayscale(100%);"></el-image>
-        </el-col>
         <el-col :xs="24" :sm="24" :xl="24" style="margin: 0 auto;">
             <el-col v-for="article in articles" :key="article.idArticle" style="padding-bottom: 1rem;">
                 <el-card>
@@ -55,7 +51,6 @@
 <script>
     import Vue from 'vue';
     import MetaInfo from 'vue-meta-info';
-    import Dy from "@/assets/daonian.jpg";
 
     Vue.use(MetaInfo);
     export default {
@@ -105,8 +100,6 @@
         },
         data() {
             return {
-                dy: Dy,
-                mourn: false,
                 articles: [],
                 pagination: {
                     currentPage: 1,
@@ -141,21 +134,12 @@
                         }
                     )
                 }
-            },
-            loadMourn() {
-                let mourn = false;
-                let date = new Date();
-                if (date.getMonth() == 3 && date.getDate() == 4 ) {
-                    mourn = true;
-                }
-                this.$set(this, 'mourn', mourn);
             }
         },
         mounted () {
             this.$store.commit('setActiveMenu', 'home');
             const p = this.pagination.currentPage;
             this.getData(p);
-            this.loadMourn();
         }
     }
 </script>
