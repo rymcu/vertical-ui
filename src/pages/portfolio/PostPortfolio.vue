@@ -82,10 +82,63 @@
         },
         methods: {
             _initEditor (data) {
+                let toolbar;
+                if (window.innerWidth < 768) {
+                    toolbar = [
+                        'emoji',
+                        'headings',
+                        'bold',
+                        'italic',
+                        'strike',
+                        'link',
+                        '|',
+                        'list',
+                        'ordered-list',
+                        'check',
+                        'outdent',
+                        'indent',
+                        '|',
+                        'quote',
+                        'line',
+                        'code',
+                        'inline-code',
+                        'insert-before',
+                        'insert-after',
+                        '|',
+                        'upload',
+                        'record',
+                        'table',
+                        '|',
+                        'undo',
+                        'redo',
+                        '|',
+                        'edit-mode',
+                        'content-theme',
+                        'code-theme',
+                        {
+                            name: 'more',
+                            toolbar: [
+                                'fullscreen',
+                                'both',
+                                'format',
+                                'preview',
+                                'info',
+                                'help',
+                            ],
+                        }]
+                }
                 return new Vditor(data.id, {
+                    toolbar,
+                    mode: 'sv',
                     tab: '\t',
-                    cache: this.$route.query.id ? false : true,
+                    cache: {
+                        enable: this.$route.query.id ? false : true,
+                        id: this.$route.query.id ? this.$route.query.id : '',
+                    },
                     preview: {
+                        markdown: {
+                            toc: true,
+                        },
                         delay: 500,
                         mode: data.mode,
                         /*url: `${process.env.Server}/api/console/markdown`,*/
@@ -233,5 +286,5 @@
 </script>
 
 <style lang="scss">
-    @import "~vditor/src/assets/scss/classic.scss";
+    @import "~vditor/src/assets/scss/index.scss";
 </style>

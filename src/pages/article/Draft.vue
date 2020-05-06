@@ -138,6 +138,7 @@
 </script>
 
 <style lang="scss">
+    @import "~vditor/src/assets/scss/index.scss";
     @import '../../theme/scss/basic';
     @import '../../theme/scss/github';
     .article__wrapper {

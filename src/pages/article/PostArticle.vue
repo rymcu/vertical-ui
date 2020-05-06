@@ -68,10 +68,63 @@
         },
         methods: {
             _initEditor (data) {
+                let toolbar;
+                if (window.innerWidth < 768) {
+                    toolbar = [
+                        'emoji',
+                        'headings',
+                        'bold',
+                        'italic',
+                        'strike',
+                        'link',
+                        '|',
+                        'list',
+                        'ordered-list',
+                        'check',
+                        'outdent',
+                        'indent',
+                        '|',
+                        'quote',
+                        'line',
+                        'code',
+                        'inline-code',
+                        'insert-before',
+                        'insert-after',
+                        '|',
+                        'upload',
+                        'record',
+                        'table',
+                        '|',
+                        'undo',
+                        'redo',
+                        '|',
+                        'edit-mode',
+                        'content-theme',
+                        'code-theme',
+                        {
+                            name: 'more',
+                            toolbar: [
+                                'fullscreen',
+                                'both',
+                                'format',
+                                'preview',
+                                'info',
+                                'help',
+                            ],
+                        }]
+                }
                 return new Vditor(data.id, {
+                    toolbar,
+                    mode: 'sv',
                     tab: '\t',
-                    cache: this.$route.query.id ? false : true,
+                    cache: {
+                        enable: this.$route.query.id ? false : true,
+                        id: this.$route.query.id ? this.$route.query.id : '',
+                    },
                     preview: {
+                        markdown: {
+                            toc: true,
+                        },
                         delay: 500,
                         mode: data.mode,
                         /*url: `${process.env.Server}/api/console/markdown`,*/
@@ -176,6 +229,7 @@
                 let articleContentHtml = await _ts.contentEditor.getHTML();
                 if(!(_ts.articleTitle && articleContent)){
                     _ts.$message("标题/正文不能为空！");
+                    _ts.doLoading = false;
                     return false;
                 }
                 let article = {
@@ -190,6 +244,7 @@
                     if(res) {
                         if (res.message) {
                             _ts.$message(res.message);
+                            _ts.doLoading = false;
                             return false;
                         }
                         localStorage.removeItem('article-title');
@@ -213,6 +268,7 @@
                 let articleContentHtml = await _ts.contentEditor.getHTML();
                 if(!(_ts.articleTitle && articleContent)){
                     _ts.$message("标题/正文不能为空！");
+                    _ts.doLoading = false;
                     return false;
                 }
                 let article = {
@@ -300,7 +356,7 @@
 </script>
 
 <style lang="scss">
-    @import "~vditor/src/assets/scss/classic.scss";
+    @import "~vditor/src/assets/scss/index.scss";
     .articles {
         //padding: 0 10px;
     }
