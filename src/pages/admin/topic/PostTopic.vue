@@ -56,7 +56,7 @@
                     <el-input v-model="topic.topicTagCount" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="描述">
-                    <el-input v-model="topic.topicDescription" type="textarea" :rows="5" maxlength="200" show-word-limit></el-input>
+                    <div id="contentEditor"></div>
                 </el-form-item>
                 <el-form-item class="text-right">
                     <el-button @click="updateTopic" :loading="loading">提交</el-button>
@@ -67,6 +67,9 @@
 </template>
 
 <script>
+    import { LazyLoadImage } from "../../../plugins/utils";
+    import Vditor from "vditor";
+
     export default {
         name: "PostTopic",
         computed: {
@@ -100,10 +103,105 @@
                     URL: '',
                     token: ''
                 },
-                topicIconPath: ''
+                topicIconPath: '',
+                isEdit: false
             }
         },
         methods: {
+            _initEditor (data) {
+                let _ts = this;
+                let toolbar;
+                if (window.innerWidth < 768) {
+                    toolbar = [
+                        'emoji',
+                        'headings',
+                        'bold',
+                        'italic',
+                        'strike',
+                        'link',
+                        '|',
+                        'list',
+                        'ordered-list',
+                        'check',
+                        'outdent',
+                        'indent',
+                        '|',
+                        'quote',
+                        'line',
+                        'code',
+                        'inline-code',
+                        'insert-before',
+                        'insert-after',
+                        '|',
+                        'upload',
+                        'record',
+                        'table',
+                        '|',
+                        'undo',
+                        'redo',
+                        '|',
+                        'edit-mode',
+                        'content-theme',
+                        'code-theme',
+                        {
+                            name: 'more',
+                            toolbar: [
+                                'fullscreen',
+                                'both',
+                                'format',
+                                'preview',
+                                'info',
+                                'help',
+                            ],
+                        }]
+                }
+                return new Vditor(data.id, {
+                    after: function() {
+                        if (_ts.id) {
+                            _ts.$set(_ts, 'isEdit', true);
+                            _ts.getData();
+                        } else {
+                            _ts.$set(_ts, 'isEdit', false);
+                        }
+                    },
+                    toolbar,
+                    mode: 'sv',
+                    tab: '\t',
+                    cache: {
+                        enable: _ts.id ? false : true,
+                        id: _ts.id ? _ts.id : ''
+                    },
+                    preview: {
+                        markdown: {
+                            toc: true,
+                        },
+                        delay: 500,
+                        mode: data.mode,
+                        /*url: `${process.env.Server}/api/console/markdown`,*/
+                        parse: (element) => {
+                            if (element.style.display === 'none') {
+                                return
+                            }
+                            LazyLoadImage();
+                            Vditor.highlightRender({style:'github'}, element, document);
+                        }
+                    },
+                    upload: {
+                        max: 10 * 1024 * 1024,
+                        url: this.tokenURL.URL,
+                        linkToImgUrl: this.tokenURL.URL,
+                        token: this.tokenURL.token,
+                        filename: name => name.replace(/\?|\\|\/|:|\||<|>|\*|\[|\]|\s+/g, '-')
+                    },
+                    height: data.height,
+                    counter: 102400,
+                    resize: {
+                        enable: data.resize,
+                    },
+                    lang: this.$store.state.locale,
+                    placeholder: data.placeholder,
+                })
+            },
             handleAvatarSuccess(res) {
                 let _ts = this;
                 if (res && res.data && res.data.url) {
@@ -128,12 +226,17 @@
                 }
                 return (isJPG || isPNG) && isLt2M;
             },
-            updateTopic() {
+            async updateTopic() {
                 let _ts = this;
                 _ts.$set(_ts,'loading', true);
                 let id = _ts.topic.idTopic;
+                let topicDescription = _ts.contentEditor.getValue();
+                let topicDescriptionHtml = await _ts.contentEditor.getHTML();
+                let data = _ts.topic;
+                data.topicDescription = topicDescription;
+                data.topicDescriptionHtml = topicDescriptionHtml;
                 let title = id?'更新':'添加';
-                _ts.axios[id?'put':'post']('/admin/topic/post', _ts.topic).then(function (res) {
+                _ts.axios[id?'put':'post']('/admin/topic/post', data).then(function (res) {
                     if (res && res.message) {
                         _ts.$message.error(res.message);
                     } else {
@@ -151,14 +254,19 @@
                 const responseData = await _ts.axios.get('/admin/topic/detail/' + _ts.id);
                 if (responseData) {
                     _ts.$set(_ts,'topic',responseData);
-                    _ts.$set(_ts,'topicIconPath',responseData.topicIconPath);
+                    if (responseData.topicIconPath) {
+                        _ts.$set(_ts,'topicIconPath',responseData.topicIconPath);
+                    }
+                    if (responseData.topicDescription) {
+                        _ts.contentEditor.setValue(responseData.topicDescription);
+                    }
                 }
             }
         },
         mounted() {
             let _ts = this;
             _ts.$store.commit("setActiveMenu", "admin-topic-post");
-            this.axios.get('/upload/simple/token').then(function (res) {
+            _ts.axios.get('/upload/simple/token').then(function (res) {
                 if (res) {
                     _ts.$store.commit('setUploadHeaders', res.uploadToken);
                     _ts.$set(_ts, 'tokenURL', {
@@ -167,12 +275,21 @@
                     })
                 }
             });
-            if (_ts.id) {
-                _ts.getData();
-            }
+
+            _ts.contentEditor = _ts._initEditor({
+                id: 'contentEditor',
+                mode: 'both',
+                height: 480,
+                placeholder: '', //this.$t('inputContent', this.$store.state.locale)
+                resize: false,
+            });
         }
     }
 </script>
+
+<style lang="scss">
+    @import "~vditor/src/assets/scss/index.scss";
+</style>
 
 <style>
     .avatar-uploader .el-upload {

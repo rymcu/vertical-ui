@@ -48,7 +48,7 @@
                     </el-switch>
                 </el-form-item>
                 <el-form-item label="描述">
-                    <el-input v-model="tag.tagDescription" type="textarea" :rows="5" maxlength="200" show-word-limit></el-input>
+                    <div id="contentEditor"></div>
                 </el-form-item>
                 <el-form-item class="text-right">
                     <el-button @click="updateTag" :loading="loading">提交</el-button>
@@ -59,6 +59,9 @@
 </template>
 
 <script>
+    import Vditor from "vditor";
+    import {LazyLoadImage} from "../../../plugins/utils";
+
     export default {
         name: "PostTag",
         computed: {
@@ -79,10 +82,105 @@
                     token: ''
                 },
                 tagIconPath: '',
-                loading: false
+                loading: false,
+                isEdit: false
             }
         },
         methods: {
+            _initEditor (data) {
+                let _ts = this;
+                let toolbar;
+                if (window.innerWidth < 768) {
+                    toolbar = [
+                        'emoji',
+                        'headings',
+                        'bold',
+                        'italic',
+                        'strike',
+                        'link',
+                        '|',
+                        'list',
+                        'ordered-list',
+                        'check',
+                        'outdent',
+                        'indent',
+                        '|',
+                        'quote',
+                        'line',
+                        'code',
+                        'inline-code',
+                        'insert-before',
+                        'insert-after',
+                        '|',
+                        'upload',
+                        'record',
+                        'table',
+                        '|',
+                        'undo',
+                        'redo',
+                        '|',
+                        'edit-mode',
+                        'content-theme',
+                        'code-theme',
+                        {
+                            name: 'more',
+                            toolbar: [
+                                'fullscreen',
+                                'both',
+                                'format',
+                                'preview',
+                                'info',
+                                'help',
+                            ],
+                        }]
+                }
+                return new Vditor(data.id, {
+                    after: function() {
+                        if (_ts.id) {
+                            _ts.$set(_ts, 'isEdit', true);
+                            _ts.getData();
+                        } else {
+                            _ts.$set(_ts, 'isEdit', false);
+                        }
+                    },
+                    toolbar,
+                    mode: 'sv',
+                    tab: '\t',
+                    cache: {
+                        enable: _ts.id ? false : true,
+                        id: _ts.id ? _ts.id : ''
+                    },
+                    preview: {
+                        markdown: {
+                            toc: true,
+                        },
+                        delay: 500,
+                        mode: data.mode,
+                        /*url: `${process.env.Server}/api/console/markdown`,*/
+                        parse: (element) => {
+                            if (element.style.display === 'none') {
+                                return
+                            }
+                            LazyLoadImage();
+                            Vditor.highlightRender({style:'github'}, element, document);
+                        }
+                    },
+                    upload: {
+                        max: 10 * 1024 * 1024,
+                        url: this.tokenURL.URL,
+                        linkToImgUrl: this.tokenURL.URL,
+                        token: this.tokenURL.token,
+                        filename: name => name.replace(/\?|\\|\/|:|\||<|>|\*|\[|\]|\s+/g, '-')
+                    },
+                    height: data.height,
+                    counter: 102400,
+                    resize: {
+                        enable: data.resize,
+                    },
+                    lang: this.$store.state.locale,
+                    placeholder: data.placeholder,
+                })
+            },
             handleAvatarSuccess(res) {
                 let _ts = this;
                 if (res && res.data && res.data.url) {
@@ -131,6 +229,9 @@
                 const responseData = await _ts.axios.get('/admin/tag/detail/' + _ts.id);
                 if (responseData) {
                     _ts.$set(_ts,'tag',responseData);
+                    if (typeof responseData.tagDescription !== 'undefined') {
+                        _ts.contentEditor.setValue(responseData.tagDescription);
+                    }
                     if (responseData.tagIconPath) {
                         _ts.$set(_ts,'tagIconPath',responseData.tagIconPath);
                     }
@@ -149,13 +250,18 @@
                     })
                 }
             });
-            if (_ts.id) {
-                _ts.getData();
-            }
+
+            _ts.contentEditor = _ts._initEditor({
+                id: 'contentEditor',
+                mode: 'both',
+                height: 480,
+                placeholder: '', //this.$t('inputContent', this.$store.state.locale)
+                resize: false,
+            });
         }
     }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+    @import "~vditor/src/assets/scss/index.scss";
 </style>
